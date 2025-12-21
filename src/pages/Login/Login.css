@@ -157,7 +157,11 @@
     padding: 2rem;
   }
   
-  .title {
+  .page-title {
     font-size: 1.75rem;
+  }
+
+  .page-subtitle{
+    font-size: 0.83rem;
   }
 }
