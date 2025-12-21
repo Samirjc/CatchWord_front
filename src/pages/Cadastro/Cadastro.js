@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Building2, Lock, Mail, MapPin, FileText } from 'lucide-react';
 import './Cadastro.css';
 
-function Logo() {
+export function Logo() {
   return (
     <div className="logo-container">
       <div className="logo-icon">
