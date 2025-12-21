@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { BookOpen, Users, PencilRuler, GraduationCap, BarChart3, Settings, LogOut } from 'lucide-react';
 import { Logo } from '../../Cadastro/Cadastro';
+import { TurmasContent } from '../Turmas/Turmas';
 import './Menu.css';
 
 function MenuItem({ item, isActive, onClick }) {
@@ -57,8 +58,13 @@ function Sidebar({ activeItem, onItemClick, menuItems, bottomItems }) {
   );
 }
 
-function MainContent({ activeItem, menuItems, bottomItems }) {
+function MainContent({ activeItem, menuItems, bottomItems, userProfile }) {
   const currentItem = menuItems.find(i => i.id === activeItem) || bottomItems.find(i => i.id === activeItem);
+  
+  // Renderiza o conteúdo específico da seção Turmas
+  if (activeItem === 'turmas') {
+    return <TurmasContent userProfile={userProfile} />;
+  }
   
   return (
     <div className="main-content">
@@ -76,7 +82,7 @@ function MainContent({ activeItem, menuItems, bottomItems }) {
   );
 }
 
-export default function SidebarMenu() {
+export default function SidebarMenu({ userProfile = 'coordenador' }) {
   const [activeItem, setActiveItem] = useState('meus-jogos');
 
   const menuItems = [
@@ -105,6 +111,7 @@ export default function SidebarMenu() {
           activeItem={activeItem}
           menuItems={menuItems}
           bottomItems={bottomItems}
+          userProfile={userProfile}
         />
       </div>
     </>
