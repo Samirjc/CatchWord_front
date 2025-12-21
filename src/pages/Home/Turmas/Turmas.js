@@ -1,4 +1,5 @@
-import { Pencil, Trash2, UsersRound, Users, Plus } from 'lucide-react';
+import { Pencil, Trash2, UsersRound, Users, Plus, ArrowUpDown } from 'lucide-react';
+import { useState } from 'react';
 import './Turmas.css'
 
 function TurmaCard({ turma, userProfile }) {
@@ -35,7 +36,7 @@ function TurmaCard({ turma, userProfile }) {
 
 export function TurmasContent({ userProfile }) {
   // Dados mockados por perfil
-  const turmasData = {
+  const turmasDataInitial = {
     coordenador: [
       { id: 1, nome: '6º Ano A', codigo: 'TUR001', alunos: 28},
       { id: 2, nome: '6º Ano B', codigo: 'TUR002', alunos: 30},
@@ -54,7 +55,33 @@ export function TurmasContent({ userProfile }) {
     ],
   };
 
-  const turmas = turmasData[userProfile] || [];
+  const [turmas, setTurmas] = useState(turmasDataInitial[userProfile] || []);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    
+    const sortedTurmas = [...turmas].sort((a, b) => {
+      // Extrai o número do ano (ex: "6º Ano A" -> 6)
+      const valueA = parseInt(a.nome.match(/\d+/)?.[0] || 0);
+      const valueB = parseInt(b.nome.match(/\d+/)?.[0] || 0);
+      
+      if (valueA < valueB) {
+        return direction === 'asc' ? -1 : 1;
+      }
+      if (valueA > valueB) {
+        return direction === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+    
+    setTurmas(sortedTurmas);
+    setSortConfig({ key, direction });
+  };
+
   const isCoordenador = userProfile === 'coordenador';
 
   return (
@@ -74,6 +101,21 @@ export function TurmasContent({ userProfile }) {
             <Plus size={20} />
             Criar Nova Turma
           </button>
+          
+          <div className="sort-buttons">
+            <button 
+              className={`sort-btn ${sortConfig.key === 'year' ? 'active' : ''}`}
+              onClick={() => handleSort('year')}
+            >
+              <ArrowUpDown size={18} />
+              Ordenar por Ano
+              {sortConfig.key === 'year' && (
+                <span className="sort-indicator">
+                  {sortConfig.direction === 'asc' ? ' ↑' : ' ↓'}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
       )}
 
