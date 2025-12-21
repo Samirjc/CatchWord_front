@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { BookOpen, Users, PencilRuler, GraduationCap, BarChart3, Settings, LogOut } from 'lucide-react';
 import { Logo } from '../../Cadastro/Cadastro';
 import { TurmasContent } from '../Turmas/Turmas';
+import { ProfessoresContent } from '../Professores/Professores'
 import './Menu.css';
 
 function MenuItem({ item, isActive, onClick }) {
@@ -66,6 +67,10 @@ function MainContent({ activeItem, menuItems, bottomItems, userProfile }) {
     return <TurmasContent userProfile={userProfile} />;
   }
   
+  if (activeItem === 'professores') {
+    return <ProfessoresContent/>;
+  }
+  
   return (
     <div className="main-content">
       <div className="content-wrapper">
@@ -82,7 +87,7 @@ function MainContent({ activeItem, menuItems, bottomItems, userProfile }) {
   );
 }
 
-export default function SidebarMenu({ userProfile = 'professor' }) {
+export default function SidebarMenu({ userProfile = 'coordenador' }) {
   const [activeItem, setActiveItem] = useState('meus-jogos');
 
   let menuItems;

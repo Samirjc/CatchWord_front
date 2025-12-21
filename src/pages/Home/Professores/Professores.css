@@ -1,0 +1,130 @@
+.professores-main-content {
+    flex: 1;
+    padding: 48px;
+    overflow-y: auto;
+}
+
+.professores-content-wrapper {
+    max-width: 1280px;
+}
+
+.content-title {
+    font-size: 36px;
+    font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 8px;
+}
+
+.content-subtitle {
+    color: #6b7280;
+    margin-bottom: 32px;
+}
+
+.btn-primary {
+    background-color: #22d3ee;
+    color: white;
+    font-weight: 500;
+    padding: 12px 24px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 32px;
+}
+
+.btn-primary:hover {
+    background-color: #06b6d4;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+.professor-card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    transition: box-shadow 0.2s;
+}
+
+.professor-card:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.card-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+
+.card-code {
+    font-size: 14px;
+    color: #9ca3af;
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    transition: color 0.2s;
+}
+
+.icon-btn.edit {
+    color: #3b82f6;
+}
+
+.icon-btn.edit:hover {
+    color: #2563eb;
+}
+
+.icon-btn.delete {
+    color: #ef4444;
+}
+
+.icon-btn.delete:hover {
+    color: #dc2626;
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.info-row.turmas {
+    color: #22d3ee;
+    font-weight: 500;
+}
+
+.email-icon {
+    width: 16px;
+    height: 16px;
+}
