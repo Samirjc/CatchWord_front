@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { BookOpen, Users, PencilRuler, GraduationCap, BarChart3, Settings, LogOut } from 'lucide-react';
 import { Logo } from '../../Cadastro/Cadastro';
 import { TurmasContent } from '../Turmas/Turmas';
-import { ProfessoresContent } from '../Professores/Professores'
+import { ProfessoresContent } from '../Professores/Professores';
+import { AlunosContent } from '../Alunos/Alunos';
 import './Menu.css';
 
 function MenuItem({ item, isActive, onClick }) {
@@ -70,7 +71,11 @@ function MainContent({ activeItem, menuItems, bottomItems, userProfile }) {
   if (activeItem === 'professores') {
     return <ProfessoresContent/>;
   }
-  
+
+  if (activeItem === 'alunos'){
+    return <AlunosContent/>
+  }
+
   return (
     <div className="main-content">
       <div className="content-wrapper">
@@ -97,7 +102,7 @@ export default function SidebarMenu({ userProfile = 'coordenador' }) {
         { id: 'meus-jogos', label: 'Meus Jogos', icon: BookOpen },
         { id: 'turmas', label: 'Turmas', icon: Users },
         { id: 'professores', label: 'Professores', icon: PencilRuler},
-        { id: 'aluno', label: 'Alunos', icon: GraduationCap},
+        { id: 'alunos', label: 'Alunos', icon: GraduationCap},
         { id: 'estatisticas', label: 'Estatísticas', icon: BarChart3 },
       ];
       break;
