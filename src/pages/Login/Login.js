@@ -36,7 +36,7 @@ function PasswordInput({ value, onChange }) {
           value={value}
           onChange={onChange}
           placeholder="Digite a senha"
-          className="input-field password-input"
+          className="input-field"
         />
         <button
           type="button"
@@ -53,7 +53,7 @@ function PasswordInput({ value, onChange }) {
       </div>
     </div>
   );
-} // Importar
+}
 
 function LoginButton({ onClick, disabled = false }) {
   return (
