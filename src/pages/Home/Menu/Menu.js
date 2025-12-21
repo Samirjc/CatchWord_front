@@ -82,16 +82,35 @@ function MainContent({ activeItem, menuItems, bottomItems, userProfile }) {
   );
 }
 
-export default function SidebarMenu({ userProfile = 'coordenador' }) {
+export default function SidebarMenu({ userProfile = 'professor' }) {
   const [activeItem, setActiveItem] = useState('meus-jogos');
 
-  const menuItems = [
-    { id: 'meus-jogos', label: 'Meus Jogos', icon: BookOpen },
-    { id: 'turmas', label: 'Turmas', icon: Users },
-    { id: 'professores', label: 'Professores', icon: PencilRuler},
-    { id: 'aluno', label: 'Alunos', icon: GraduationCap},
-    { id: 'estatisticas', label: 'Estatísticas', icon: BarChart3 },
-  ];
+  let menuItems;
+  switch(userProfile){
+    case 'coordenador':
+      menuItems = [
+        { id: 'meus-jogos', label: 'Meus Jogos', icon: BookOpen },
+        { id: 'turmas', label: 'Turmas', icon: Users },
+        { id: 'professores', label: 'Professores', icon: PencilRuler},
+        { id: 'aluno', label: 'Alunos', icon: GraduationCap},
+        { id: 'estatisticas', label: 'Estatísticas', icon: BarChart3 },
+      ];
+      break;
+    case 'professor':
+      menuItems = [
+        { id: 'meus-jogos', label: 'Meus Jogos', icon: BookOpen },
+        { id: 'turmas', label: 'Turmas', icon: Users },
+        { id: 'estatisticas', label: 'Estatísticas', icon: BarChart3 },
+      ];
+      break;
+    default:
+      menuItems = [
+        { id: 'meus-jogos', label: 'Meus Jogos', icon: BookOpen },
+        { id: 'turmas', label: 'Turmas', icon: Users },
+        { id: 'estatisticas', label: 'Estatísticas', icon: BarChart3 },
+      ];
+  }
+
 
   const bottomItems = [
     { id: 'configuracoes', label: 'Configurações', icon: Settings },
