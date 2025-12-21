@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Users, Plus, Pencil, Trash2 } from 'lucide-react';
+import { Users, Plus, Pencil, Trash2, ArrowUpDown } from 'lucide-react';
 import './Professores.css'
 import { initialProfessors } from './setProfessors';
 
@@ -38,6 +38,30 @@ const ProfessorCard = ({ professor, onEdit, onDelete }) => (
 
 export function ProfessoresContent() {
   const [professors, setProfessors] = useState(initialProfessors);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    
+    const sortedProfessors = [...professors].sort((a, b) => {
+      const valueA = a[key].toLowerCase();
+      const valueB = b[key].toLowerCase();
+      
+      if (valueA < valueB) {
+        return direction === 'asc' ? -1 : 1;
+      }
+      if (valueA > valueB) {
+        return direction === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+    
+    setProfessors(sortedProfessors);
+    setSortConfig({ key, direction });
+  };
 
   const handleEdit = (id) => {
     console.log('Editar professor:', id);
@@ -62,10 +86,27 @@ export function ProfessoresContent() {
             <h1 className="content-title">Professores</h1>
             <p className="content-subtitle">Gerencie todos os professores da escola</p>
 
-            <button className="btn-primary" onClick={handleCreateNew}>
-              <Plus size={20} />
-              Criar Novo Professor
-            </button>
+            <div className="professores-toolbar">
+              <button className="btn-primary" onClick={handleCreateNew}>
+                <Plus size={20} />
+                Criar Novo Professor
+              </button>
+              
+              <div className="sort-buttons">
+                <button 
+                  className={`sort-btn ${sortConfig.key === 'name' ? 'active' : ''}`}
+                  onClick={() => handleSort('name')}
+                >
+                  <ArrowUpDown size={18} />
+                  Ordenar por Nome
+                  {sortConfig.key === 'name' && (
+                    <span className="sort-indicator">
+                      {sortConfig.direction === 'asc' ? ' ↑' : ' ↓'}
+                    </span>
+                  )}
+                </button>
+              </div>
+            </div>
 
             <div className="cards-grid">
               {professors.map((professor) => (
