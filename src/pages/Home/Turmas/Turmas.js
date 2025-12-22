@@ -1,6 +1,7 @@
 import { Pencil, Trash2, UsersRound, Users, Plus, ArrowUpDown } from 'lucide-react';
 import { useState } from 'react';
 import './Turmas.css'
+import {TurmaForm} from './CriarTurma.js'
 
 function TurmaCard({ turma, userProfile }) {
   const isCoordenador = userProfile === 'coordenador';
@@ -57,6 +58,8 @@ export function TurmasContent({ userProfile }) {
 
   const [turmas, setTurmas] = useState(turmasDataInitial[userProfile] || []);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+  const [mostrarForm, setMostrarForm] = useState(false);
+  const [turmaParaEditar, setTurmaParaEditar] = useState(null);
 
   const handleSort = (key) => {
     let direction = 'asc';
@@ -82,6 +85,31 @@ export function TurmasContent({ userProfile }) {
     setSortConfig({ key, direction });
   };
 
+  const handleSave = (formData) => {
+    console.log('Dados da turma salvos:', formData);
+    // Aqui você pode adicionar a lógica para salvar a turma
+    // Por exemplo, adicionar à lista de turmas
+    const novaTurma = {
+      id: turmas.length + 1,
+      nome: formData.nomeDisciplina,
+      codigo: formData.codigo,
+      alunos: formData.alunosSelecionados.length
+    };
+    setTurmas([...turmas, novaTurma]);
+    setMostrarForm(false);
+    setTurmaParaEditar(null);
+  };
+
+  const handleCancel = () => {
+    setMostrarForm(false);
+    setTurmaParaEditar(null);
+  };
+
+  const handleCriarNovaTurma = () => {
+    setTurmaParaEditar(null);
+    setMostrarForm(true);
+  };
+
   const isCoordenador = userProfile === 'coordenador';
 
   return (
@@ -97,7 +125,7 @@ export function TurmasContent({ userProfile }) {
 
       {isCoordenador && (
         <div className="header-actions">
-          <button className="btn-primary">
+          <button className="btn-primary" onClick={handleCriarNovaTurma}>
             <Plus size={20} />
             Criar Nova Turma
           </button>
@@ -133,6 +161,14 @@ export function TurmasContent({ userProfile }) {
           <h3 style={{ color: '#6b7280', marginBottom: '0.5rem' }}>Nenhuma turma encontrada</h3>
           <p>Você ainda não está alocado em nenhuma turma.</p>
         </div>
+      )}
+
+      {mostrarForm && (
+        <TurmaForm
+          turma={turmaParaEditar}
+          onSave={handleSave}
+          onCancel={handleCancel}
+        />
       )}
     </div>
   );

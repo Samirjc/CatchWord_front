@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Building2, Lock, Mail, MapPin, FileText } from 'lucide-react';
+import { Building2, Lock, Mail, MapPin, FileText, User } from 'lucide-react';
 import './Cadastro.css';
 
 export function Logo() {
@@ -98,16 +98,77 @@ function SchoolDataSection({ formData, errors, onCNPJChange, onChange }) {
         placeholder="Digite o nome completo da escola"
         error={errors.schoolName}
       />
-      
+    </FormCard>
+  );
+}
+
+function AddressDataSection({ formData, errors, onChange, onCEPChange }) {
+  return (
+    <FormCard icon={MapPin} title="Endereço da Escola">
       <FormInput
-        label="Endereço da Escola"
+        label="CEP"
         icon={MapPin}
         type="text"
-        name="address"
-        value={formData.address}
+        name="cep"
+        value={formData.cep}
+        onChange={onCEPChange}
+        placeholder="00000-000"
+        maxLength={9}
+        error={errors.cep}
+      />
+      
+      <FormInput
+        label="Cidade"
+        icon={MapPin}
+        type="text"
+        name="cidade"
+        value={formData.cidade}
         onChange={onChange}
-        placeholder="Rua, número, bairro, cidade - UF"
-        error={errors.address}
+        placeholder="Digite a cidade"
+        error={errors.cidade}
+      />
+      
+      <FormInput
+        label="Bairro"
+        icon={MapPin}
+        type="text"
+        name="bairro"
+        value={formData.bairro}
+        onChange={onChange}
+        placeholder="Digite o bairro"
+        error={errors.bairro}
+      />
+      
+      <FormInput
+        label="Logradouro"
+        icon={MapPin}
+        type="text"
+        name="logradouro"
+        value={formData.logradouro}
+        onChange={onChange}
+        placeholder="Rua, Avenida, etc."
+        error={errors.logradouro}
+      />
+      
+      <FormInput
+        label="Número"
+        icon={FileText}
+        type="text"
+        name="numero"
+        value={formData.numero}
+        onChange={onChange}
+        placeholder="Número"
+        error={errors.numero}
+      />
+      
+      <FormInput
+        label="Complemento"
+        icon={FileText}
+        type="text"
+        name="complemento"
+        value={formData.complemento}
+        onChange={onChange}
+        placeholder="Apartamento, Sala, etc. (opcional)"
       />
     </FormCard>
   );
@@ -128,7 +189,18 @@ function ActionButtons({ onCancel, onSubmit }) {
 
 function AccessDataSection({ formData, errors, onChange }) {
   return (
-    <FormCard icon={Lock} title="Dados de Acesso">
+    <FormCard icon={Lock} title="Dados do Coordenador">
+      <FormInput
+        label="Nome do Coordenador"
+        icon={User}
+        type="text"
+        name="coordenadorNome"
+        value={formData.coordenadorNome}
+        onChange={onChange}
+        placeholder="Digite o nome completo"
+        error={errors.coordenadorNome}
+      />
+      
       <FormInput
         label="Email"
         icon={Mail}
@@ -169,7 +241,13 @@ function useSchoolRegistration() {
   const [formData, setFormData] = useState({
     cnpj: '',
     schoolName: '',
-    address: '',
+    cep: '',
+    cidade: '',
+    bairro: '',
+    logradouro: '',
+    numero: '',
+    complemento: '',
+    coordenadorNome: '',
     email: '',
     password: '',
     confirmPassword: ''
@@ -203,6 +281,14 @@ function useSchoolRegistration() {
     return value;
   };
 
+  const formatCEP = (value) => {
+    const numbers = value.replace(/\D/g, '');
+    if (numbers.length <= 8) {
+      return numbers.replace(/^(\d{5})(\d)/, '$1-$2');
+    }
+    return value;
+  };
+
   const handleCNPJChange = (e) => {
     const formatted = formatCNPJ(e.target.value);
     setFormData(prev => ({
@@ -213,6 +299,20 @@ function useSchoolRegistration() {
       setErrors(prev => ({
         ...prev,
         cnpj: ''
+      }));
+    }
+  };
+
+  const handleCEPChange = (e) => {
+    const formatted = formatCEP(e.target.value);
+    setFormData(prev => ({
+      ...prev,
+      cep: formatted
+    }));
+    if (errors.cep) {
+      setErrors(prev => ({
+        ...prev,
+        cep: ''
       }));
     }
   };
@@ -231,8 +331,31 @@ function useSchoolRegistration() {
       newErrors.schoolName = 'Nome da escola é obrigatório';
     }
 
-    if (!formData.address.trim()) {
-      newErrors.address = 'Endereço é obrigatório';
+    const cepNumbers = formData.cep.replace(/\D/g, '');
+    if (!formData.cep) {
+      newErrors.cep = 'CEP é obrigatório';
+    } else if (cepNumbers.length !== 8) {
+      newErrors.cep = 'CEP deve conter 8 dígitos';
+    }
+
+    if (!formData.cidade.trim()) {
+      newErrors.cidade = 'Cidade é obrigatória';
+    }
+
+    if (!formData.bairro.trim()) {
+      newErrors.bairro = 'Bairro é obrigatório';
+    }
+
+    if (!formData.logradouro.trim()) {
+      newErrors.logradouro = 'Logradouro é obrigatório';
+    }
+
+    if (!formData.numero.trim()) {
+      newErrors.numero = 'Número é obrigatório';
+    }
+
+    if (!formData.coordenadorNome.trim()) {
+      newErrors.coordenadorNome = 'Nome do coordenador é obrigatório';
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -258,15 +381,53 @@ function useSchoolRegistration() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validateForm()) {
-        // Mudança de página
-      alert('Cadastro realizado com sucesso!\n\nDados da escola:\n' +
-        `CNPJ: ${formData.cnpj}\n` +
-        `Nome: ${formData.schoolName}\n` +
-        `Endereço: ${formData.address}\n` +
-        `Email: ${formData.email}`
-      );
+      const requestBody = {
+        escola: {
+          nome: formData.schoolName,
+          cnpj: formData.cnpj
+        },
+        endereco: {
+          cep: formData.cep,
+          cidade: formData.cidade,
+          bairro: formData.bairro,
+          logradouro: formData.logradouro,
+          numero: formData.numero,
+          complemento: formData.complemento
+        },
+        coordenador: {
+          nome: formData.coordenadorNome,
+          email: formData.email,
+          senha: formData.password
+        }
+      };
+
+      console.log('Dados a serem enviados:', JSON.stringify(requestBody, null, 2));
+      
+      try {
+        const response = await fetch('http://localhost:3001/escola', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody)
+        });
+        
+        if (response.ok) {
+          const result = await response.json();
+          alert('Cadastro realizado com sucesso!');
+          console.log('Resposta do servidor:', result);
+          // TODO: Redirecionar para outra página
+          // window.location.href = '/login';
+        } else {
+          const errorData = await response.json();
+          alert(`Erro ao cadastrar escola: ${errorData.error || 'Erro desconhecido'}`);
+        }
+      } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao conectar com o servidor. Verifique se o backend está rodando.');
+      }
     }
   };
 
@@ -274,7 +435,13 @@ function useSchoolRegistration() {
     setFormData({
       cnpj: '',
       schoolName: '',
-      address: '',
+      cep: '',
+      cidade: '',
+      bairro: '',
+      logradouro: '',
+      numero: '',
+      complemento: '',
+      coordenadorNome: '',
       email: '',
       password: '',
       confirmPassword: ''
@@ -287,6 +454,7 @@ function useSchoolRegistration() {
     errors,
     handleChange,
     handleCNPJChange,
+    handleCEPChange,
     handleSubmit,
     handleCancel
   };
@@ -298,6 +466,7 @@ export default function SchoolRegistration() {
     errors,
     handleChange,
     handleCNPJChange,
+    handleCEPChange,
     handleSubmit,
     handleCancel
   } = useSchoolRegistration();
@@ -319,6 +488,13 @@ export default function SchoolRegistration() {
                 errors={errors}
                 onCNPJChange={handleCNPJChange}
                 onChange={handleChange}
+              />
+  
+              <AddressDataSection
+                formData={formData}
+                errors={errors}
+                onChange={handleChange}
+                onCEPChange={handleCEPChange}
               />
   
               <AccessDataSection
