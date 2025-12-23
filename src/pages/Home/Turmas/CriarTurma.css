@@ -92,6 +92,17 @@
   color: #374151;
   font-size: 14px;
 }
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #374151;
+  font-size: 14px;
+}
 
 .form-group input[type="text"] {
   width: 100%;
