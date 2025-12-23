@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { BookOpen, Users, PencilRuler, GraduationCap, BarChart3, Settings, LogOut } from 'lucide-react';
-import { Logo } from '../../Cadastro/Cadastro';
-import { TurmasContent } from '../Turmas/Turmas';
-import { ProfessoresContent } from '../Professores/Professores';
-import { AlunosContent } from '../Alunos/Alunos';
+import { Logo } from '../Logo/Logo';
+import { TurmasContent } from '../../pages/Home/Turmas/Turmas';
+import { ProfessoresContent } from '../../pages/Home/Professores/Professores';
+import { AlunosContent } from '../../pages/Home/Alunos/Alunos';
 import './Menu.css';
 
 function MenuItem({ item, isActive, onClick }) {
@@ -99,7 +99,7 @@ export default function SidebarMenu({ userProfile = 'coordenador' }) {
   switch(userProfile){
     case 'coordenador':
       menuItems = [
-        { id: 'meus-jogos', label: 'Meus Jogos', icon: BookOpen },
+        { id: 'jogos', label: 'Jogos', icon: BookOpen },
         { id: 'turmas', label: 'Turmas', icon: Users },
         { id: 'professores', label: 'Professores', icon: PencilRuler},
         { id: 'alunos', label: 'Alunos', icon: GraduationCap},
@@ -108,14 +108,14 @@ export default function SidebarMenu({ userProfile = 'coordenador' }) {
       break;
     case 'professor':
       menuItems = [
-        { id: 'meus-jogos', label: 'Meus Jogos', icon: BookOpen },
+        { id: 'ogos', label: 'Jogos', icon: BookOpen },
         { id: 'turmas', label: 'Turmas', icon: Users },
         { id: 'estatisticas', label: 'Estatísticas', icon: BarChart3 },
       ];
       break;
     default:
       menuItems = [
-        { id: 'meus-jogos', label: 'Meus Jogos', icon: BookOpen },
+        { id: 'jogos', label: 'Jogos', icon: BookOpen },
         { id: 'turmas', label: 'Turmas', icon: Users },
         { id: 'estatisticas', label: 'Estatísticas', icon: BarChart3 },
       ];
