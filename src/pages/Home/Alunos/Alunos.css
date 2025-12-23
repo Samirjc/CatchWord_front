@@ -67,7 +67,7 @@
 }
 
 .create-btn {
-    background-color: #22d3ee;
+    background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%);
     color: white;
     font-weight: 500;
     font-size: 14px;

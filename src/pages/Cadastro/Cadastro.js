@@ -1,19 +1,7 @@
 import { useState } from 'react';
 import { Building2, Lock, Mail, MapPin, FileText, User } from 'lucide-react';
 import './Cadastro.css';
-
-export function Logo() {
-  return (
-    <div className="logo-container">
-      <div className="logo-icon">
-        <span className="logo-emoji">🔍</span>
-      </div>
-      <h1 className="logo-text">
-        Caça<span className="logo-highlight">Palavras</span>
-      </h1>
-    </div>
-  );
-}
+import {Logo} from '../../components/Logo/Logo'
 
 export function Sidebar() {
   return (
