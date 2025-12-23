@@ -1,7 +1,8 @@
 import { Pencil, Trash2, UsersRound, Users, Plus, ArrowUpDown } from 'lucide-react';
 import { useState } from 'react';
-import './Turmas.css'
-import {TurmaForm} from './CriarTurma.js'
+import '../../styles/pages.css';
+import './styles/Turmas.css';
+import {TurmaForm} from './CriarTurma.js';
 
 function TurmaCard({ turma, userProfile }) {
   const isCoordenador = userProfile === 'coordenador';
@@ -113,7 +114,7 @@ export function TurmasContent({ userProfile }) {
   const isCoordenador = userProfile === 'coordenador';
 
   return (
-    <div className="turmas-main-content">
+    <div className="main-content">
       <div className="content-header">
         <h1 className="content-title">Turmas</h1>
         <p className="content-subtitle">

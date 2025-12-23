@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Pencil, Trash2, Plus, Mail, Book, ArrowUpDown } from 'lucide-react';
 import { initialAlunos } from './setAlunos';
-import './Alunos.css'
+import '../../styles/pages.css'
+import './styles/Alunos.css'
 
 const StudentCard = ({ aluno, onEdit, onDelete }) => {
   return (

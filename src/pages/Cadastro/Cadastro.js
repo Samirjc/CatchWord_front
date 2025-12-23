@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Building2, Lock, Mail, MapPin, FileText, User } from 'lucide-react';
-import './Cadastro.css';
+import '../styles/pages.css'
+import './styles/Cadastro.css';
 import {Logo} from '../../components/Logo/Logo'
 
 export function Sidebar() {
@@ -463,7 +464,7 @@ export default function SchoolRegistration() {
       <div className="registration-container">
         <Sidebar />
         
-        <div className="main-content">
+        <div className="main-content cadastro-main-content">
           <div className="content-wrapper">
             <PageHeader 
               title="Cadastro de Escola"

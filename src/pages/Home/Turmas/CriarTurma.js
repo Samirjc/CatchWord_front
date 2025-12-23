@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import './CriarTurma.css';
+import './styles/CriarTurma.css';
 
 const alunosDisponiveis = [
     { id: 1, nome: 'João Silva' },

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
-import './Login.css';
+import '../styles/pages.css';
+import './styles/Login.css';
 import {Sidebar, PageHeader} from "../Cadastro/Cadastro.js"
 
 function EmailInput({ value, onChange }) {
@@ -141,7 +142,7 @@ export default function LoginScreen() {
       <div className="login-container">
         <Sidebar />
   
-        <div className="main-content">
+        <div className="main-content login-main-content">
           <LoginCard>
             <PageHeader
               title = "Bem-vindo!"

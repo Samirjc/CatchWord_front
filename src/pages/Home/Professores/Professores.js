@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Users, Plus, Pencil, Trash2, ArrowUpDown } from 'lucide-react';
-import './Professores.css'
 import { initialProfessors } from './setProfessors';
+import '../../styles/pages.css';
+import './styles/Professores.css';
 
 const ProfessorCard = ({ professor, onEdit, onDelete }) => (
   <div className="professor-card">
@@ -81,7 +82,7 @@ export function ProfessoresContent() {
 
   return (
     <>
-        <main className="professores-main-content">
+        <main className="main-content">
           <div className="professores-content-wrapper">
             <h1 className="content-title">Professores</h1>
             <p className="content-subtitle">Gerencie todos os professores da escola</p>
