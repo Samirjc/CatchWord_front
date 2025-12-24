@@ -4,6 +4,7 @@ import { Logo } from '../Logo/Logo';
 import { TurmasContent } from '../../pages/Home/Turmas/Turmas';
 import { ProfessoresContent } from '../../pages/Home/Professores/Professores';
 import { AlunosContent } from '../../pages/Home/Alunos/Alunos';
+import { useSair } from '../../services/Sair/Sair';
 import './Menu.css';
 
 function MenuItem({ item, isActive, onClick }) {
@@ -60,7 +61,7 @@ function Sidebar({ activeItem, onItemClick, menuItems, bottomItems }) {
   );
 }
 
-function MainContent({ activeItem, menuItems, bottomItems, userProfile }) {
+function MainContent({ activeItem, menuItems, bottomItems, userProfile, onSair }) {
   const currentItem = menuItems.find(i => i.id === activeItem) || bottomItems.find(i => i.id === activeItem);
   
   // Renderiza o conteúdo específico da seção Turmas
@@ -76,6 +77,13 @@ function MainContent({ activeItem, menuItems, bottomItems, userProfile }) {
     return <AlunosContent/>
   }
 
+  if (activeItem === 'sair'){
+    const conf = window.confirm("Deseja mesmo sair dessa sessão?");
+    if(conf) {
+      onSair();
+    }
+    return null;
+  }
   return (
     <div className="main-content">
       <div className="content-wrapper">
@@ -94,6 +102,7 @@ function MainContent({ activeItem, menuItems, bottomItems, userProfile }) {
 
 export default function SidebarMenu({ userProfile = 'coordenador' }) {
   const [activeItem, setActiveItem] = useState('meus-jogos');
+  const sair = useSair();
 
   let menuItems;
   switch(userProfile){
@@ -141,6 +150,7 @@ export default function SidebarMenu({ userProfile = 'coordenador' }) {
           menuItems={menuItems}
           bottomItems={bottomItems}
           userProfile={userProfile}
+          onSair={sair}
         />
       </div>
     </>
