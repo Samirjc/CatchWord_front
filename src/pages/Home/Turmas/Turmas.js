@@ -119,7 +119,7 @@ export function TurmasContent({ userProfile }) {
         <h1 className="content-title">Turmas</h1>
         <p className="content-subtitle">
           {userProfile === 'coordenador' && 'Gerencie todas as turmas da escola'}
-          {userProfile === 'professor' && 'Suas turmas alocadas'}
+          {userProfile === 'professor' && 'Suas classes'}
           {userProfile === 'aluno' && 'Suas turmas'}
         </p>
       </div>

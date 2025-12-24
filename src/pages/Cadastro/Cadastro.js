@@ -1,25 +1,10 @@
 import { useState } from 'react';
 import { Building2, Lock, Mail, MapPin, FileText, User } from 'lucide-react';
-import '../styles/pages.css'
+import { Sidebar } from '../../components/Sidebar/Sidebar';
+import {PageHeader} from '../../components/PageHeader/PageHeader';
+import '../styles/pages.css';
 import './styles/Cadastro.css';
-import {Logo} from '../../components/Logo/Logo'
 
-export function Sidebar() {
-  return (
-    <div className="sidebar">
-      <Logo />
-    </div>
-  );
-}
-
-export function PageHeader({ title, subtitle }) {
-  return (
-    <>
-      <h2 className="page-title">{title}</h2>
-      <p className="page-subtitle">{subtitle}</p>
-    </>
-  );
-}
 
 function FormInput({ 
   label, 
@@ -461,7 +446,7 @@ export default function SchoolRegistration() {
   } = useSchoolRegistration();
 
   return (
-      <div className="registration-container">
+      <div className="cadastro-container">
         <Sidebar />
         
         <div className="main-content cadastro-main-content">

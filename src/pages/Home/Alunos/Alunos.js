@@ -95,7 +95,7 @@ export function AlunosContent(){
 
   return (
     <>
-    <main className='alunos-main-content'>
+    <main className='main-content alunos-main-content'>
         <div className="alunos-content-wrapper">
               <h1 className="content-title">Alunos</h1>
               <p className="content-subtitle">Gerencie todos os alunos da escola</p>

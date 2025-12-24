@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
+import {Sidebar} from '../../components/Sidebar/Sidebar.js';
+import {PageHeader} from '../../components/PageHeader/PageHeader.js';
+
 import '../styles/pages.css';
 import './styles/Login.css';
-import {Sidebar, PageHeader} from "../Cadastro/Cadastro.js"
 
 function EmailInput({ value, onChange }) {
   return (
