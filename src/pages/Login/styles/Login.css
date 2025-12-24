@@ -5,11 +5,9 @@
 }
 
 .login-main-content {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
 }
 
 .login-card-wrapper {
@@ -24,7 +22,7 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
-.page-title {
+.login-content-title {
   font-size: 2rem;
   font-weight: 700;
   color: #1f2937;
@@ -32,7 +30,7 @@
   text-align: center;
 }
 
-.page-subtitle {
+.login-content-subtitle {
   color: #6b7280;
   text-align: center;
   margin: 0 0 2rem;
@@ -59,12 +57,12 @@
 
 .input-field {
   width: 100%;
-  padding: 0.875rem 0.1rem;
+  padding: 0.875rem 0.875rem 1rem 0.5rem;
   border: 2px solid #e5e7eb;
   border-radius: 12px;
   font-size: 1rem;
   transition: all 0.2s;
-  outline: none;
+  outline:invert;
   background: white;
 }
 
