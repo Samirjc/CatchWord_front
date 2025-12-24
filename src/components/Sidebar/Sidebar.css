@@ -1,0 +1,11 @@
+.sidebar {
+  width: 260px;
+  background: linear-gradient(180deg, #6366f1 0%, #4f46e5 100%);
+  padding: 2rem;
+  color: white;
+  position: relative;
+  top: 0;
+  left: 0;
+  height:inherit;
+  overflow-y: auto;
+}

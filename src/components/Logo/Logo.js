@@ -7,7 +7,7 @@ export function Logo() {
         <span className="logo-emoji">🔍</span>
       </div>
       <h1 className="logo-text">
-        Caça<span className="logo-highlight">Palavras</span>
+        Catch<span className="logo-highlight">Word</span>
       </h1>
     </div>
   );
