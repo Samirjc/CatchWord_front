@@ -1,0 +1,56 @@
+/*→ Base de todos os cards*/
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+  border: 1px solid #e5e7eb;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/*→ Cabeçalho do card*/
+.card-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+/*→ Título do card*/
+.card-title{
+    font-size: 20px;
+    font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 0.25rem;
+}
+
+/* Código do card*/
+.card-code{
+  font-size: 14px;
+  color: #9ca3af;
+}
+/*→ Corpo do card*/
+.card-body{
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/*→ Ações do card*/
+.card-actions{
+  display: flex;
+  gap: 0.5rem;
+}
+
+/*→ Grid de cards*/
+.card-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
