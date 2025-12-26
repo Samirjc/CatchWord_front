@@ -138,7 +138,7 @@ export function TurmaForm({ turma = null, onSave, onCancel }){
       setFormData({
         codigo: turma.codigo || '',
         nomeDisciplina: turma.nomeDisciplina || '',
-        alunosSelecionados: turma.alunos || [],
+        alunosSelecionados: turma.alunosSelecionados || [],
         professorSelecionado: turma.professor || null
       });
     }

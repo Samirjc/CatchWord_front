@@ -4,7 +4,7 @@ import '../../styles/pages.css';
 import './styles/Turmas.css';
 import {TurmaForm} from './CriarTurma.js';
 
-function TurmaCard({ turma, userProfile }) {
+function TurmaCard({ turma, onEdit, onDelete, userProfile }) {
   const isCoordenador = userProfile === 'coordenador';
   
   return (
@@ -16,10 +16,10 @@ function TurmaCard({ turma, userProfile }) {
         </div>
         {isCoordenador && (
           <div className="turma-actions">
-            <button className="icon-btn edit" title="Editar turma">
+            <button className="icon-btn edit" title="Editar turma" onClick={() => onEdit(turma.id)}>
               <Pencil size={16} />
             </button>
-            <button className="icon-btn delete" title="Excluir turma">
+            <button className="icon-btn delete" title="Excluir turma" onClick={() => onDelete(turma.id)}>
               <Trash2 size={16} />
             </button>
           </div>
@@ -36,27 +36,137 @@ function TurmaCard({ turma, userProfile }) {
   );
 }
 
-export function TurmasContent({ userProfile }) {
-  // Dados mockados por perfil
-  const turmasDataInitial = {
-    coordenador: [
-      { id: 1, nome: '6º Ano A', codigo: 'TUR001', alunos: 28},
-      { id: 2, nome: '6º Ano B', codigo: 'TUR002', alunos: 30},
-      { id: 3, nome: '7º Ano A', codigo: 'TUR003', alunos: 25},
-      { id: 4, nome: '7º Ano B', codigo: 'TUR004', alunos: 27},
-      { id: 5, nome: '8º Ano A', codigo: 'TUR005', alunos: 32},
-      { id: 6, nome: '9º Ano A', codigo: 'TUR006', alunos: 29},
-    ],
-    professor: [
-      { id: 1, nome: '6º Ano A', codigo: 'TUR001', alunos: 28},
-      { id: 3, nome: '7º Ano A', codigo: 'TUR003', alunos: 25},
-      { id: 5, nome: '8º Ano A', codigo: 'TUR005', alunos: 32},
-    ],
-    aluno: [
-      { id: 1, nome: '6º Ano A', codigo: 'TUR001', alunos: 28 },
-    ],
-  };
+// Dados mockados por perfil
+const turmasDataInitial = {
+  coordenador: [
+    { 
+      id: 1, 
+      nome: '6º Ano A', 
+      codigo: 'TUR001', 
+      alunos: 2,
+      nomeDisciplina: '6º Ano A',
+      professor: { id: 1, nome: 'Prof. Carlos Mendes' },
+      alunosSelecionados: [
+        { id: 1, nome: 'João Silva' },
+        { id: 2, nome: 'Maria Santos' }
+      ]
+    },
+    { 
+      id: 2, 
+      nome: '6º Ano B', 
+      codigo: 'TUR002', 
+      alunos: 2,
+      nomeDisciplina: '6º Ano B',
+      professor: { id: 2, nome: 'Prof. Paula Rocha' },
+      alunosSelecionados: [
+        { id: 1, nome: 'João Silva' },
+        { id: 2, nome: 'Maria Santos' }
+      ]
+    },
+    { 
+      id: 3, 
+      nome: '7º Ano A', 
+      codigo: 'TUR003', 
+      alunos: 2,
+      nomeDisciplina: '7º Ano A',
+      professor: { id: 1, nome: 'Prof. Carlos Mendes' },
+      alunosSelecionados: [
+        { id: 1, nome: 'João Silva' },
+        { id: 2, nome: 'Maria Santos' }
+      ]
+    },
+    { 
+      id: 4, 
+      nome: '7º Ano B', 
+      codigo: 'TUR004', 
+      alunos: 2,
+      nomeDisciplina: '7º Ano B',
+      professor: { id: 3, nome: 'Prof. Roberto Lima' },
+      alunosSelecionados: [
+        { id: 1, nome: 'João Silva' },
+        { id: 2, nome: 'Maria Santos' }
+      ]
+    },
+    { 
+      id: 5, 
+      nome: '8º Ano A', 
+      codigo: 'TUR005', 
+      alunos: 2,
+      nomeDisciplina: '8º Ano A',
+      professor: { id: 2, nome: 'Prof. Paula Rocha' },
+      alunosSelecionados: [
+        { id: 1, nome: 'João Silva' },
+        { id: 2, nome: 'Maria Santos' }
+      ]
+    },
+    { 
+      id: 6, 
+      nome: '9º Ano A', 
+      codigo: 'TUR006', 
+      alunos: 2,
+      nomeDisciplina: '9º Ano A',
+      professor: { id: 1, nome: 'Prof. Carlos Mendes' },
+      alunosSelecionados: [
+        { id: 1, nome: 'João Silva' },
+        { id: 2, nome: 'Maria Santos' }
+      ]
+    },
+  ],
+  professor: [
+    { 
+      id: 1, 
+      nome: '6º Ano A', 
+      codigo: 'TUR001', 
+      alunos: 2,
+      nomeDisciplina: '6º Ano A',
+      professor: { id: 1, nome: 'Prof. Carlos Mendes' },
+      alunosSelecionados: [
+        { id: 1, nome: 'João Silva' },
+        { id: 2, nome: 'Maria Santos' }
+      ]
+    },
+    { 
+      id: 3, 
+      nome: '7º Ano A', 
+      codigo: 'TUR003', 
+      alunos: 2,
+      nomeDisciplina: '7º Ano A',
+      professor: { id: 1, nome: 'Prof. Carlos Mendes' },
+      alunosSelecionados: [
+        { id: 1, nome: 'João Silva' },
+        { id: 2, nome: 'Maria Santos' }
+      ]
+    },
+    { 
+      id: 5, 
+      nome: '8º Ano A', 
+      codigo: 'TUR005', 
+      alunos: 2,
+      nomeDisciplina: '8º Ano A',
+      professor: { id: 1, nome: 'Prof. Carlos Mendes' },
+      alunosSelecionados: [
+        { id: 1, nome: 'João Silva' },
+        { id: 2, nome: 'Maria Santos' }
+      ]
+    },
+  ],
+  aluno: [
+    { 
+      id: 1, 
+      nome: '6º Ano A', 
+      codigo: 'TUR001', 
+      alunos: 2,
+      nomeDisciplina: '6º Ano A',
+      professor: { id: 1, nome: 'Prof. Carlos Mendes' },
+      alunosSelecionados: [
+        { id: 1, nome: 'João Silva' },
+        { id: 2, nome: 'Maria Santos' }
+      ]
+    },
+  ],
+};
 
+export function TurmasContent({ userProfile }) {
   const [turmas, setTurmas] = useState(turmasDataInitial[userProfile] || []);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
   const [mostrarForm, setMostrarForm] = useState(false);
@@ -88,15 +198,37 @@ export function TurmasContent({ userProfile }) {
 
   const handleSave = (formData) => {
     console.log('Dados da turma salvos:', formData);
-    // Aqui você pode adicionar a lógica para salvar a turma
-    // Por exemplo, adicionar à lista de turmas
-    const novaTurma = {
-      id: turmas.length + 1,
-      nome: formData.nomeDisciplina,
-      codigo: formData.codigo,
-      alunos: formData.alunosSelecionados.length
-    };
-    setTurmas([...turmas, novaTurma]);
+    
+    if (turmaParaEditar) {
+      // Editando turma existente
+      const turmasAtualizadas = turmas.map(turma => 
+        turma.id === turmaParaEditar.id 
+          ? {
+              ...turma,
+              nome: formData.nomeDisciplina,
+              codigo: formData.codigo,
+              alunos: formData.alunosSelecionados.length,
+              nomeDisciplina: formData.nomeDisciplina,
+              professor: formData.professorSelecionado,
+              alunosSelecionados: formData.alunosSelecionados
+            }
+          : turma
+      );
+      setTurmas(turmasAtualizadas);
+    } else {
+      // Criando nova turma
+      const novaTurma = {
+        id: turmas.length + 1,
+        nome: formData.nomeDisciplina,
+        codigo: formData.codigo,
+        alunos: formData.alunosSelecionados.length,
+        nomeDisciplina: formData.nomeDisciplina,
+        professor: formData.professorSelecionado,
+        alunosSelecionados: formData.alunosSelecionados
+      };
+      setTurmas([...turmas, novaTurma]);
+    }
+    
     setMostrarForm(false);
     setTurmaParaEditar(null);
   };
@@ -111,10 +243,20 @@ export function TurmasContent({ userProfile }) {
     setMostrarForm(true);
   };
 
+  const handleEdit = (id) => {
+    const turma = turmas.find(turma => turma.id === id);
+    setTurmaParaEditar(turma);
+    setMostrarForm(true);
+  }
+
+  const handleDelete = (id) => {
+    const turmasAtualizadas = turmas.filter(turma => turma.id !== id);
+    setTurmas(turmasAtualizadas);
+  }
   const isCoordenador = userProfile === 'coordenador';
 
   return (
-    <div className="main-content">
+    <main className="main-content">
       <div className="content-header">
         <h1 className="content-title">Turmas</h1>
         <p className="content-subtitle">
@@ -151,7 +293,12 @@ export function TurmasContent({ userProfile }) {
       {turmas.length > 0 ? (
         <div className="turmas-grid">
           {turmas.map((turma) => (
-            <TurmaCard key={turma.id} turma={turma} userProfile={userProfile} />
+            <TurmaCard 
+              key={turma.id} 
+              turma={turma} 
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              userProfile={userProfile} />
           ))}
         </div>
       ) : (
@@ -171,6 +318,6 @@ export function TurmasContent({ userProfile }) {
           onCancel={handleCancel}
         />
       )}
-    </div>
+    </main>
   );
 }
