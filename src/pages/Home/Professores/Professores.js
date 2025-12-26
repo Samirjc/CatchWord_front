@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Users, Plus, Pencil, Trash2, ArrowUpDown } from 'lucide-react';
 import { initialProfessors } from './setProfessors';
+import { ProfessorForm } from './CriarProfessor';
 import '../../styles/pages.css';
 import './styles/Professores.css';
 
@@ -40,6 +41,8 @@ const ProfessorCard = ({ professor, onEdit, onDelete }) => (
 export function ProfessoresContent() {
   const [professors, setProfessors] = useState(initialProfessors);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+  const [mostrarForm, setMostrarForm] = useState(false);
+  const [professorParaEditar, setProfessorParaEditar] = useState(null);
 
   const handleSort = (key) => {
     let direction = 'asc';
@@ -64,6 +67,27 @@ export function ProfessoresContent() {
     setSortConfig({ key, direction });
   };
 
+  const handleSave = (formData) => {
+    console.log('Dados do professor salvos:', formData);
+    // Aqui você pode adicionar a lógica para salvar a turma
+    // Por exemplo, adicionar à lista de turmas
+    const novoProfessor = {
+      id: professors.length + 1,
+      nome: formData.nomeProfessor,
+      email: formData.email,
+      cpf: formData.cpf,
+    };
+
+    setProfessors([...professors, novoProfessor]);
+    setMostrarForm(false);
+    setProfessorParaEditar(null);
+  };
+
+  const handleCancel = () => {
+    setMostrarForm(false);
+    setProfessorParaEditar(null);
+  };
+
   const handleEdit = (id) => {
     console.log('Editar professor:', id);
     // Implementar lógica de edição
@@ -76,8 +100,8 @@ export function ProfessoresContent() {
   };
 
   const handleCreateNew = () => {
-    console.log('Criar novo professor');
-    // Implementar lógica de criação
+    setProfessorParaEditar(null);
+    setMostrarForm(true);
   };
 
   return (
@@ -120,6 +144,13 @@ export function ProfessoresContent() {
               ))}
             </div>
           </div>
+          {mostrarForm && (
+              <ProfessorForm
+                professor={professorParaEditar}
+                onSave={handleSave}
+                onCancel={handleCancel}
+              />
+          )}
         </main>
     </>
   );
