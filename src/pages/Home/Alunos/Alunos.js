@@ -1,40 +1,41 @@
 import { useState } from 'react';
 import { Pencil, Trash2, Plus, Mail, Book, ArrowUpDown } from 'lucide-react';
 import { initialAlunos } from './setAlunos';
-import '../../styles/pages.css'
-import './styles/Alunos.css'
+import { AlunoForm } from './CriarAluno';
 
-const StudentCard = ({ aluno, onEdit, onDelete }) => {
+
+const AlunoCard = ({ aluno, onEdit, onDelete }) => {
   return (
-    <div className="aluno-card">
-      <div className="aluno-card-header">
-        <h3 className="aluno-nome">{aluno.name}</h3>
-        <div className="aluno-actions">
+    <div className="card">
+      <div className="card-header">
+        <div className="card-title">
+          <h3 className='aluno-nome'>{aluno.name}</h3>
+          <p className="card-code">Código: {aluno.code}</p>
+        </div>
+        <div className="card-actions">
           <button 
-            className="action-btn edit-btn" 
-            onClick={() => onEdit(aluno)}
+            className="btn-edit icon-btn edit" 
+            onClick={() => onEdit(aluno.id)}
             aria-label="Editar aluno"
           >
             <Pencil size={18} />
           </button>
           <button 
-            className="action-btn delete-btn" 
+            className="btn-remove icon-btn remove" 
             onClick={() => onDelete(aluno.id)}
             aria-label="Excluir aluno"
           >
             <Trash2 size={18} />
           </button>
-        </div>
+        </div>  
       </div>
       
-      <p className="aluno-code">Código: {aluno.code}</p>
-      
-      <div className="aluno-info">
-        <div className="info-item">
+      <div className="card-body">
+        <div className="info-row">
           <Mail size={16} />
           <span>{aluno.email}</span>
         </div>
-        <div className="info-item turma-info">
+        <div className="info-row turmas">
           <Book size={16} />
           <span>{aluno.grade}</span>
         </div>
@@ -45,8 +46,10 @@ const StudentCard = ({ aluno, onEdit, onDelete }) => {
 
 // Componente Principal
 export function AlunosContent(){
-  const [students, setStudents] = useState(initialAlunos);
+  const [alunos, setAlunos] = useState(initialAlunos);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+  const [mostrarForm, setMostrarForm] = useState(false);
+  const [alunoParaEditar, setAlunoParaEditar] = useState(null);
 
   const handleSort = (key) => {
     let direction = 'asc';
@@ -54,7 +57,7 @@ export function AlunosContent(){
       direction = 'desc';
     }
     
-    const sortedStudents = [...students].sort((a, b) => {
+    const sortedStudents = [...alunos].sort((a, b) => {
       let valueA, valueB;
       
       if (key === 'name') {
@@ -75,40 +78,82 @@ export function AlunosContent(){
       return 0;
     });
     
-    setStudents(sortedStudents);
+    setAlunos(sortedStudents);
     setSortConfig({ key, direction });
   };
 
-  const handleCreateStudent = () => {
-    alert('Abrir modal de criação de novo aluno');
+  const handleCriarNovoAluno = () => {
+    setAlunoParaEditar(null);
+    setMostrarForm(true);
   };
 
-  const handleEditStudent = (aluno) => {
-    alert(`Editar aluno: ${aluno.name}`);
+  const handleSave = (formData) => {
+    console.log('Dados do aluno salvos:', formData);
+
+    
+    if(alunoParaEditar){
+      // Editando aluno existente
+      const alunosAtualizados = alunos.map(aluno =>
+         aluno.id === alunoParaEditar.id
+          ? {
+              ...aluno,
+              name: formData.nome,
+              email: formData.email,
+              cpf: formData.cpf,
+              code: formData.codigo,
+          }
+        : aluno
+      );
+      setAlunos(alunosAtualizados)
+    } else{
+      // Criando novo aluno
+      const novoAluno = {
+        id: alunos.length + 1,
+        name: formData.nome,
+        email: formData.email,
+        cpf: formData.cpf,
+        code: formData.codigo,
+      };
+      setAlunos([...alunos, novoAluno]);
+    }
+
+    setMostrarForm(false);
+    setAlunoParaEditar(null);
   };
 
-  const handleDeleteStudent = (alunoId) => {
+  const handleCancel = () => {
+    setMostrarForm(false);
+    setAlunoParaEditar(null);
+  }
+
+  const handleEdit = (id) => {
+    const aluno = alunos.find(aluno => aluno.id === id);
+    setAlunoParaEditar(aluno);
+    setMostrarForm(true);
+  };
+
+  const handleDelete = (id) => {
     if (window.confirm('Tem certeza que deseja excluir este aluno?')) {
-      setStudents(students.filter(s => s.id !== alunoId));
+      setAlunos(alunos.filter(s => s.id !== id));
     }
   };
 
   return (
     <>
     <main className='main-content alunos-main-content'>
-        <div className="alunos-content-wrapper">
+        <div className="content-wrapper">
               <h1 className="content-title">Alunos</h1>
               <p className="content-subtitle">Gerencie todos os alunos da escola</p>
             
-            <div className="alunos-toolbar">
-              <button className="create-btn" onClick={handleCreateStudent}>
+            <div className="toolbar">
+              <button className="btn-primary" onClick={handleCriarNovoAluno}>
                 <Plus size={20} />
                 Criar Novo Aluno
               </button>
               
               <div className="sort-buttons">
                 <button 
-                  className={`sort-btn ${sortConfig.key === 'name' ? 'active' : ''}`}
+                  className={`btn-sort ${sortConfig.key === 'name' ? 'active' : ''}`}
                   onClick={() => handleSort('name')}
                 >
                   <ArrowUpDown size={18} />
@@ -121,7 +166,7 @@ export function AlunosContent(){
                 </button>
                 
                 <button 
-                  className={`sort-btn ${sortConfig.key === 'grade' ? 'active' : ''}`}
+                  className={`btn-sort ${sortConfig.key === 'grade' ? 'active' : ''}`}
                   onClick={() => handleSort('grade')}
                 >
                   <ArrowUpDown size={18} />
@@ -135,17 +180,23 @@ export function AlunosContent(){
               </div>
             </div>
             
-          <div className="cards-grid">
-            {students.map(aluno => (
-              <StudentCard
+          <div className="card-grid">
+            {alunos.map(aluno => (
+              <AlunoCard
                 key={aluno.id}
                 aluno={aluno}
-                onEdit={handleEditStudent}
-                onDelete={handleDeleteStudent}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
               />
             ))}
           </div>
         </div>
+        {mostrarForm && (
+          <AlunoForm
+          aluno={alunoParaEditar}
+          onSave={handleSave}
+          onCancel={handleCancel}/>
+        )}
     </main>
     </>
   );

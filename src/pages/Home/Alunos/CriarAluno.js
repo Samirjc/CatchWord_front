@@ -1,35 +1,38 @@
-import './styles/CriarAluno.css';
 import { useState, useEffect } from 'react';
+import { formatCPF } from '../../../services/Formatos/formatters';
 
 export function AlunoForm({ aluno = null, onSave, onCancel }){
   const [formData, setFormData] = useState({
-    nomeAluno: '',
-    emailAluno: '',
-    cpfAluno: '',
-    matriculaAluno: '',
+    nome: '',
+    email: '',
+    cpf: '',
+    codigo: '',
   });
 
   useEffect(() => {
     if (aluno) {
       setFormData({
-        nomeAluno: aluno.nomeAluno || '',
-        emailAluno: aluno.emailAluno || '',
-        cpfAluno: aluno.cpfAluno || '',
-        matriculaAluno: aluno.matriculaAluno || '',
+        nome: aluno.name ||  '',
+        email: aluno.email || '',
+        cpf: aluno.cpf || '',
+        codigo: aluno.code || '',
       });
     }
   }, [aluno]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    const formattedValue = name === 'cpf' ? formatCPF(value) : value;
+
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: formattedValue
     }));
   };
 
   const handleSubmit = () => {
-    if (!formData.codigo || !formData.nomeDisciplina || !formData.professorSelecionado) {
+    if (!formData.codigo || !formData.nome || !formData.email || !formData.cpf) {
       alert('Por favor, preencha todos os campos obrigatórios');
       return;
     }
@@ -37,21 +40,21 @@ export function AlunoForm({ aluno = null, onSave, onCancel }){
   };
 
   return (
-    <div className="aluno-form-overlay">
-      <div className="aluno-form-container">
-        <div className="aluno-form-header">
+    <div className="modal-overlay">
+      <div className="modal-container">
+        <div className="modal-header">
           <h2>{aluno ? 'Editar Aluno' : 'Criar Novo Aluno'}</h2>
           <button type="button" className="btn-close" onClick={onCancel}>✕</button>
         </div>
 
-        <div className="aluno-form">
+        <div className="modal-form">
           <div className="form-group">
             <label htmlFor="nome">Nome do Aluno *</label>
             <input
               type="text"
               id="nome"
               name="nome"
-              value={formData.nomeAluno}
+              value={formData.nome}
               onChange={handleInputChange}
               placeholder="Ex: Ricardo Abreu"
             />
@@ -69,26 +72,27 @@ export function AlunoForm({ aluno = null, onSave, onCancel }){
             />
           </div>
 
-          <label htmlFor="codigo">Código da Turma *</label>
+          <div className="form-group">
+            <label htmlFor="cpf">CPF do Aluno *</label>
+            <input
+              type="text"
+              id="cpf"
+              name="cpf"
+              value={formData.cpf}
+              onChange={handleInputChange}
+              placeholder="Ex: xxx.xxx.xxx-xx"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="matricula">Matricula do Aluno *</label>
             <input
               type="text"
               id="codigo"
               name="codigo"
               value={formData.codigo}
               onChange={handleInputChange}
-              placeholder="Ex: TUR001"
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="nomeDisciplina">Nome da Disciplina *</label>
-            <input
-              type="text"
-              id="nomeDisciplina"
-              name="nomeDisciplina"
-              value={formData.nomeDisciplina}
-              onChange={handleInputChange}
-              placeholder="Ex: 6° Ano A"
+              placeholder="Ex: ALUNO007"
             />
           </div>
 
@@ -102,5 +106,6 @@ export function AlunoForm({ aluno = null, onSave, onCancel }){
           </div>
         </div>
       </div>
+    </div>
   );
 }

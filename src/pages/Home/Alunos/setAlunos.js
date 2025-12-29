@@ -4,6 +4,7 @@ export const initialAlunos = [
       name: 'Carlos Mendes',
       code: 'ALU001',
       email: 'carlos.mendes@escola.com',
+      cpf: '123.456.789-01',
       class: 'Turma A',
       grade: '5º Ano'
     },
@@ -12,6 +13,7 @@ export const initialAlunos = [
       name: 'Julia Santos',
       code: 'ALU002',
       email: 'julia.santos@escola.com',
+      cpf: '234.567.890-12',
       class: 'Turma B',
       grade: '6º Ano'
     },
@@ -20,6 +22,7 @@ export const initialAlunos = [
       name: 'Pedro Oliveira',
       code: 'ALU003',
       email: 'pedro.oliveira@escola.com',
+      cpf: '345.678.901-23',
       class: 'Turma C',
       grade: '7º Ano'
     },
@@ -28,6 +31,7 @@ export const initialAlunos = [
       name: 'Beatriz Lima',
       code: 'ALU004',
       email: 'beatriz.lima@escola.com',
+      cpf: '456.789.012-34',
       class: 'Turma A',
       grade: '8º Ano'
     },
@@ -36,6 +40,7 @@ export const initialAlunos = [
       name: 'Rafael Costa',
       code: 'ALU005',
       email: 'rafael.costa@escola.com',
+      cpf: '567.890.123-45',
       class: 'Turma D',
       grade: '9º Ano'
     },
@@ -44,6 +49,7 @@ export const initialAlunos = [
       name: 'Amanda Silva',
       code: 'ALU006',
       email: 'amanda.silva@escola.com',
+      cpf: '678.901.234-56',
       class: 'Turma B',
       grade: '5º Ano'
     }

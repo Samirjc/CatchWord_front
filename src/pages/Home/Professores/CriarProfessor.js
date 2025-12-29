@@ -1,7 +1,6 @@
-import './styles/CriarProfessor.css';
-
 import { useState, useEffect } from 'react';
-import './styles/CriarProfessor.css';
+import { formatCPF } from '../../../services/Formatos/formatters';
+
 
 // Componente principal do formulário
 export function ProfessorForm({ professor = null, onSave, onCancel }){
@@ -9,28 +8,34 @@ export function ProfessorForm({ professor = null, onSave, onCancel }){
     nomeProfessor: '',
     email: '',
     cpf: '',
+    code: '',
   });
 
   useEffect(() => {
     if (professor) {
       setFormData({
-        nomeProfessor: professor.nomeProfessor || '',
+        nomeProfessor: professor.name || '',
         email: professor.email || '',
         cpf: professor.cpf || '',
+        code: professor.code || '',
       });
     }
   }, [professor]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    
+    // Aplica formatação apenas para o campo CPF
+    const formattedValue = name === 'cpf' ? formatCPF(value) : value;
+    
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: formattedValue
     }));
   };
 
   const handleSubmit = () => {
-    if (!formData.nomeProfessor || !formData.email || !formData.cpf) {
+    if (!formData.nomeProfessor || !formData.email || !formData.cpf || !formData.code) {
       alert('Por favor, preencha todos os campos obrigatórios');
       return;
     }
@@ -38,20 +43,20 @@ export function ProfessorForm({ professor = null, onSave, onCancel }){
   };
 
   return (
-    <div className="professor-form-overlay">
-      <div className="professor-form-container">
-        <div className="professor-form-header">
+    <div className="modal-overlay">
+      <div className="modal-container">
+        <div className="modal-header">
           <h2>{professor ? 'Editar Professor' : 'Criar Novo Professor'}</h2>
           <button type="button" className="btn-close" onClick={onCancel}>✕</button>
         </div>
 
-        <div className="professor-form">
+        <div className="modal-form">
           <div className="form-group">
-            <label htmlFor="Nome">Nome do Professor *</label>
+            <label htmlFor="nome">Nome do Professor *</label>
             <input
               type="text"
-              id="nome"
-              name="nome"
+              id="nomeProfessor"
+              name="nomeProfessor"
               value={formData.nomeProfessor}
               onChange={handleInputChange}
               placeholder="Ex: Maria Rosa"
@@ -79,6 +84,18 @@ export function ProfessorForm({ professor = null, onSave, onCancel }){
               value={formData.cpf}
               onChange={handleInputChange}
               placeholder='Ex: xxx.xxx.xxx-xx'
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Código do Professor *</label>
+            <input
+              type="text"
+              id="code"
+              name="code"
+              value={formData.code}
+              onChange={handleInputChange}
+              placeholder='Ex: PROF000'
             />
           </div>
 

@@ -1,32 +1,28 @@
 import { useState } from 'react';
-import { Users, Plus, Pencil, Trash2, ArrowUpDown } from 'lucide-react';
+import { Users, Plus, Pencil, Trash2, ArrowUpDown, Mail } from 'lucide-react';
 import { initialProfessors } from './setProfessors';
 import { ProfessorForm } from './CriarProfessor';
-import '../../styles/pages.css';
-import './styles/Professores.css';
 
 const ProfessorCard = ({ professor, onEdit, onDelete }) => (
-  <div className="professor-card">
+  <div className="card">
     <div className="card-header">
-      <div>
-        <h3 className="card-title">{professor.name}</h3>
+      <div className="card-title">
+        <h3 className="professor-nome">{professor.name}</h3>
         <p className="card-code">Código: {professor.code}</p>
       </div>
       <div className="card-actions">
-        <button className="icon-btn edit" onClick={() => onEdit(professor.id)}>
+        <button className="btn-edit icon-btn edit" onClick={() => onEdit(professor.id)}>
           <Pencil size={18} />
         </button>
-        <button className="icon-btn delete" onClick={() => onDelete(professor.id)}>
+        <button className="btn-remove icon-btn delete" onClick={() => onDelete(professor.id)}>
           <Trash2 size={18} />
         </button>
       </div>
     </div>
 
-    <div className="card-info">
+    <div className="card-body">
       <div className="info-row">
-        <svg className="email-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-        </svg>
+        <Mail size={18}/>
         <span>{professor.email}</span>
       </div>
       
@@ -67,18 +63,39 @@ export function ProfessoresContent() {
     setSortConfig({ key, direction });
   };
 
-  const handleSave = (formData) => {
-    console.log('Dados do professor salvos:', formData);
-    // Aqui você pode adicionar a lógica para salvar a turma
-    // Por exemplo, adicionar à lista de turmas
-    const novoProfessor = {
-      id: professors.length + 1,
-      nome: formData.nomeProfessor,
-      email: formData.email,
-      cpf: formData.cpf,
-    };
+  const handleCriarNovoProf = () => {
+    setProfessorParaEditar(null);
+    setMostrarForm(true);
+  };
 
-    setProfessors([...professors, novoProfessor]);
+  const handleSave = (formData) => {
+    if(professorParaEditar){
+      // Editando professor existente
+      const professoresAtualizados = professors.map(professor =>
+         professor.id === professorParaEditar.id
+          ? {
+              ...professor,
+              name: formData.nomeProfessor,
+              email: formData.email,
+              cpf: formData.cpf,
+              code: formData.code,
+          }
+        : professor
+      );
+      setProfessors(professoresAtualizados)
+    } else {
+      // Criando novo professor
+      const novoProfessor = {
+        id: professors.length + 1,
+        name: formData.nomeProfessor,
+        email: formData.email,
+        cpf: formData.cpf,
+        code: formData.code,
+        turmas: 0
+      };
+      setProfessors([...professors, novoProfessor]);
+    }
+    
     setMostrarForm(false);
     setProfessorParaEditar(null);
   };
@@ -89,8 +106,9 @@ export function ProfessoresContent() {
   };
 
   const handleEdit = (id) => {
-    console.log('Editar professor:', id);
-    // Implementar lógica de edição
+    const professor = professors.find(professor => professor.id === id);
+    setProfessorParaEditar(professor);
+    setMostrarForm(true);
   };
 
   const handleDelete = (id) => {
@@ -99,27 +117,22 @@ export function ProfessoresContent() {
     }
   };
 
-  const handleCreateNew = () => {
-    setProfessorParaEditar(null);
-    setMostrarForm(true);
-  };
-
   return (
     <>
         <main className="main-content">
-          <div className="professores-content-wrapper">
+          <div className="content-wrapper">
             <h1 className="content-title">Professores</h1>
             <p className="content-subtitle">Gerencie todos os professores da escola</p>
 
-            <div className="professores-toolbar">
-              <button className="btn-primary" onClick={handleCreateNew}>
+            <div className="toolbar">
+              <button className="btn-primary" onClick={handleCriarNovoProf}>
                 <Plus size={20} />
                 Criar Novo Professor
               </button>
               
               <div className="sort-buttons">
                 <button 
-                  className={`sort-btn ${sortConfig.key === 'name' ? 'active' : ''}`}
+                  className={`btn-sort ${sortConfig.key === 'name' ? 'active' : ''}`}
                   onClick={() => handleSort('name')}
                 >
                   <ArrowUpDown size={18} />
@@ -133,7 +146,7 @@ export function ProfessoresContent() {
               </div>
             </div>
 
-            <div className="cards-grid">
+            <div className="card-grid">
               {professors.map((professor) => (
                 <ProfessorCard
                   key={professor.id}
