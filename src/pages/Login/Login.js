@@ -144,7 +144,7 @@ export default function LoginScreen() {
       <div className="login-container">
         <Sidebar />
   
-        <div className="main-content login-main-content">
+        <div className="login-main-content">
           <LoginCard>
             <PageHeader
               title = "Bem-vindo!"

@@ -1,34 +1,32 @@
 import { Pencil, Trash2, UsersRound, Users, Plus, ArrowUpDown } from 'lucide-react';
 import { useState } from 'react';
-import '../../styles/pages.css';
-import './styles/Turmas.css';
 import {TurmaForm} from './CriarTurma.js';
 
 function TurmaCard({ turma, onEdit, onDelete, userProfile }) {
   const isCoordenador = userProfile === 'coordenador';
   
   return (
-    <div className="turma-card">
-      <div className="turma-header">
-        <div className="turma-info">
+    <div className="card">
+      <div className="card-header">
+        <div className="card-title">
           <h3 className="turma-name">{turma.nome}</h3>
-          <p className="turma-code">Código: {turma.codigo}</p>
+          <p className="card-code">Código: {turma.codigo}</p>
         </div>
         {isCoordenador && (
-          <div className="turma-actions">
-            <button className="icon-btn edit" title="Editar turma" onClick={() => onEdit(turma.id)}>
+          <div className="card-actions">
+            <button className="btn-edit icon-btn edit" title="Editar turma" onClick={() => onEdit(turma.id)}>
               <Pencil size={16} />
             </button>
-            <button className="icon-btn delete" title="Excluir turma" onClick={() => onDelete(turma.id)}>
+            <button className="btn-remove icon-btn delete" title="Excluir turma" onClick={() => onDelete(turma.id)}>
               <Trash2 size={16} />
             </button>
           </div>
         )}
       </div>
       
-      <div className="turma-stats">
-        <div className="stat-item">
-          <UsersRound size={18} className="stat-icon" />
+      <div className="card-body">
+        <div className="info-row">
+          <UsersRound size={18} />
           <span>{turma.alunos} alunos</span>
         </div>
       </div>
@@ -196,9 +194,12 @@ export function TurmasContent({ userProfile }) {
     setSortConfig({ key, direction });
   };
 
+  const handleCriarNovaTurma = () => {
+    setTurmaParaEditar(null);
+    setMostrarForm(true);
+  };
+
   const handleSave = (formData) => {
-    console.log('Dados da turma salvos:', formData);
-    
     if (turmaParaEditar) {
       // Editando turma existente
       const turmasAtualizadas = turmas.map(turma => 
@@ -215,20 +216,8 @@ export function TurmasContent({ userProfile }) {
           : turma
       );
       setTurmas(turmasAtualizadas);
-    } else {
-      // Criando nova turma
-      const novaTurma = {
-        id: turmas.length + 1,
-        nome: formData.nomeDisciplina,
-        codigo: formData.codigo,
-        alunos: formData.alunosSelecionados.length,
-        nomeDisciplina: formData.nomeDisciplina,
-        professor: formData.professorSelecionado,
-        alunosSelecionados: formData.alunosSelecionados
-      };
-      setTurmas([...turmas, novaTurma]);
     }
-    
+
     setMostrarForm(false);
     setTurmaParaEditar(null);
   };
@@ -236,11 +225,6 @@ export function TurmasContent({ userProfile }) {
   const handleCancel = () => {
     setMostrarForm(false);
     setTurmaParaEditar(null);
-  };
-
-  const handleCriarNovaTurma = () => {
-    setTurmaParaEditar(null);
-    setMostrarForm(true);
   };
 
   const handleEdit = (id) => {
@@ -253,63 +237,64 @@ export function TurmasContent({ userProfile }) {
     const turmasAtualizadas = turmas.filter(turma => turma.id !== id);
     setTurmas(turmasAtualizadas);
   }
+  
   const isCoordenador = userProfile === 'coordenador';
 
   return (
     <main className="main-content">
-      <div className="content-header">
+      <div className='content-wrapper'>
         <h1 className="content-title">Turmas</h1>
         <p className="content-subtitle">
           {userProfile === 'coordenador' && 'Gerencie todas as turmas da escola'}
           {userProfile === 'professor' && 'Suas classes'}
           {userProfile === 'aluno' && 'Suas turmas'}
         </p>
-      </div>
 
-      {isCoordenador && (
-        <div className="header-actions">
-          <button className="btn-primary" onClick={handleCriarNovaTurma}>
-            <Plus size={20} />
-            Criar Nova Turma
-          </button>
-          
-          <div className="sort-buttons">
-            <button 
-              className={`sort-btn ${sortConfig.key === 'year' ? 'active' : ''}`}
-              onClick={() => handleSort('year')}
-            >
-              <ArrowUpDown size={18} />
-              Ordenar por Ano
-              {sortConfig.key === 'year' && (
-                <span className="sort-indicator">
-                  {sortConfig.direction === 'asc' ? ' ↑' : ' ↓'}
-                </span>
-              )}
+        {isCoordenador && (
+          <div className="toolbar">
+            <button className="btn-primary" onClick={handleCriarNovaTurma}>
+              <Plus size={20} />
+              Criar Nova Turma
             </button>
+            
+            <div className="sort-buttons">
+              <button 
+                className={`btn-sort ${sortConfig.key === 'year' ? 'active' : ''}`}
+                onClick={() => handleSort('year')}
+              >
+                <ArrowUpDown size={18} />
+                Ordenar por Ano
+                {sortConfig.key === 'year' && (
+                  <span className="sort-indicator">
+                    {sortConfig.direction === 'asc' ? ' ↑' : ' ↓'}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {turmas.length > 0 ? (
-        <div className="turmas-grid">
-          {turmas.map((turma) => (
-            <TurmaCard 
-              key={turma.id} 
-              turma={turma} 
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-              userProfile={userProfile} />
-          ))}
-        </div>
-      ) : (
-        <div className="empty-state">
-          <div className="empty-state-icon">
-            <Users size={40} />
+        {turmas.length > 0 ? (
+          <div className="card-grid">
+            {turmas.map((turma) => (
+              <TurmaCard 
+                key={turma.id} 
+                turma={turma} 
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                userProfile={userProfile} />
+            ))}
           </div>
-          <h3 style={{ color: '#6b7280', marginBottom: '0.5rem' }}>Nenhuma turma encontrada</h3>
-          <p>Você ainda não está alocado em nenhuma turma.</p>
-        </div>
-      )}
+        ) : (
+          <div className="empty-state">
+            <div className="empty-state-icon">
+              <Users size={40} />
+            </div>
+            <h3 style={{ color: '#6b7280', marginBottom: '0.5rem' }}>Nenhuma turma encontrada</h3>
+            <p>Você ainda não está alocado em nenhuma turma.</p>
+          </div>
+        )}
+      </div>
 
       {mostrarForm && (
         <TurmaForm

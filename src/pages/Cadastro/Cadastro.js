@@ -31,7 +31,7 @@ function CardHeader({ icon: Icon, title }) {
   return (
     <div className="card-header">
       <Icon className="header-icon" />
-      <h3 className="card-title">{title}</h3>
+      <h3 className="cadastro-card-title">{title}</h3>
     </div>
   );
 }
@@ -449,7 +449,7 @@ export default function SchoolRegistration() {
       <div className="cadastro-container">
         <Sidebar />
         
-        <div className="main-content cadastro-main-content">
+        <div className="cadastro-main-content">
           <div className="content-wrapper">
             <PageHeader 
               title="Cadastro de Escola"

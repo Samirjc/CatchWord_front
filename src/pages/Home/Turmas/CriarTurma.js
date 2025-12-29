@@ -199,14 +199,14 @@ export function TurmaForm({ turma = null, onSave, onCancel }){
   };
 
   return (
-    <div className="turma-form-overlay">
-      <div className="turma-form-container">
-        <div className="turma-form-header">
+    <div className="modal-overlay">
+      <div className="modal-container">
+        <div className="modal-header">
           <h2>{turma ? 'Editar Turma' : 'Criar Nova Turma'}</h2>
           <button type="button" className="btn-close" onClick={onCancel}>✕</button>
         </div>
 
-        <div className="turma-form">
+        <div className="modal-form">
           <div className="form-group">
             <label htmlFor="codigo">Código da Turma *</label>
             <input
