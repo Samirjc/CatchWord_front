@@ -1,26 +1,33 @@
 .content-wrapper {
-  max-width: 800px;
-  margin: 0 auto;
+  max-width: 100%;
+  width: 100%;
+  padding: 0 2rem;
 }
 
-.content-title{
-  font-size: 2rem;
+.content-title {
+  font-size: 1.875rem;
   font-weight: 700;
   color: #1f2937;
-  margin: 0 0 0.5rem;
-  text-align: center;
+  margin-bottom: 0.5rem;
 }
 
-.content-subtitle{
+.content-subtitle {
   color: #6b7280;
-  text-align: center;
-  margin: 0 0 2rem;
-  font-size: 0.95rem;
+  margin-bottom: 2rem;
 }
 
 .main-content{
   display: flex;
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.toolbar{
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  margin-left: 280px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 1rem;
 }

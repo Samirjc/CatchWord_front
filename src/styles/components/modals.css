@@ -13,6 +13,7 @@
   padding: 20px;
   backdrop-filter: blur(4px);
 }
+
 /*.{entidade}-form-container*/
 .modal-container{
   background: white;
@@ -24,6 +25,7 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   animation: slideIn 0.3s ease-out;
 }
+
 /*.{entidade}-form-header*/ 
 .modal-header{
   display: flex;
