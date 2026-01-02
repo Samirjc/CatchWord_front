@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import {Sidebar} from '../../components/Sidebar/Sidebar.js';
 import {PageHeader} from '../../components/PageHeader/PageHeader.js';
-
-import '../styles/pages.css';
 import './styles/Login.css';
 
 function EmailInput({ value, onChange }) {

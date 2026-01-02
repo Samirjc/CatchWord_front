@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Building2, Lock, Mail, MapPin, FileText, User } from 'lucide-react';
 import { Sidebar } from '../../components/Sidebar/Sidebar';
 import {PageHeader} from '../../components/PageHeader/PageHeader';
-import '../styles/pages.css';
 import './styles/Cadastro.css';
 
 
