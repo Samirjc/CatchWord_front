@@ -1,6 +1,7 @@
 .app-container {
     display: flex;
-    height: 100vh;
+    min-height: calc(100vh - 250px);
+    height: 100%;
     background-color: #f9fafb;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
