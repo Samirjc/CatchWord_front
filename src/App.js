@@ -3,6 +3,7 @@ import './App.css';
 import SchoolRegistration from './pages/Cadastro/Cadastro';
 import LoginScreen from './pages/Login/Login';
 import SidebarMenu from './components/Menu/Menu';
+import PasswordScreen from './pages/Cadastro/CriarSenha';
 import Footer from './components/Footer';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
             <Route path="/login" element={<LoginScreen/>}/>
             <Route path="/cadastro" element={<SchoolRegistration/>}/>
             <Route path="/home" element={<SidebarMenu/>}/>
+            <Route path='/completar-cadastro' element={<PasswordScreen/>}/>
           </Routes>
         </div>
         <Footer/>

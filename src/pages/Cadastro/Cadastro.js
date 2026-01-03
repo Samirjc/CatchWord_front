@@ -125,7 +125,7 @@ function AddressDataSection({ formData, errors, onChange, onCEPChange }) {
       
       <FormInput
         label="Número"
-        icon={FileText}
+        icon={MapPin}
         type="text"
         name="numero"
         value={formData.numero}
@@ -136,7 +136,7 @@ function AddressDataSection({ formData, errors, onChange, onCEPChange }) {
       
       <FormInput
         label="Complemento"
-        icon={FileText}
+        icon={MapPin}
         type="text"
         name="complemento"
         value={formData.complemento}
@@ -379,7 +379,7 @@ function useSchoolRegistration() {
       console.log('Dados a serem enviados:', JSON.stringify(requestBody, null, 2));
       
       try {
-        const response = await fetch('http://localhost:3001/escola', {
+        const response = await fetch('http://localhost:3001/auth/escola', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
