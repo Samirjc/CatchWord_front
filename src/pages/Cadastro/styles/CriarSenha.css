@@ -1,10 +1,10 @@
-.login-container {
+.pass-container {
   display: flex;
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.login-main-content {
+.pass-main-content {
   flex: 1;
   display: flex;
   align-items: center;
@@ -12,19 +12,19 @@
   padding: 2rem;
 }
 
-.login-card-wrapper {
+.pass-card-wrapper {
   width: 100%;
   max-width: 450px;
 }
 
-.login-card {
+.pass-card {
   background: white;
   border-radius: 24px;
   padding: 3rem;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
-.login-content-title {
+.pass-content-title {
   font-size: 2rem;
   font-weight: 700;
   color: #1f2937;
@@ -32,7 +32,7 @@
   text-align: center;
 }
 
-.login-content-subtitle {
+.pass-content-subtitle {
   color: #6b7280;
   text-align: center;
   margin: 0 0 2rem;
@@ -102,7 +102,7 @@
   height: 20px;
 }
 
-.login-button {
+.pass-button {
   width: 100%;
   padding: 1rem;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -116,16 +116,16 @@
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
 }
 
-.login-button:hover {
+.pass-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
 }
 
-.login-button:active {
+.pass-button:active {
   transform: translateY(0);
 }
 
-.login-button:disabled {
+.pass-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
@@ -149,11 +149,11 @@
 }
 
 @media (max-width: 768px) {
-  .login-container {
+  .pass-container {
     flex-direction: column;
   }
   
-  .login-card {
+  .pass-card {
     padding: 2rem;
   }
   

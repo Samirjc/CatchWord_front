@@ -62,7 +62,7 @@ function CreatePasswordButton({ onClick, disabled = false }) {
   return (
     <button 
       onClick={onClick} 
-      className="login-button"
+      className="pass-button"
       disabled={disabled}
     >
       Entrar
@@ -97,8 +97,8 @@ function PasswordForm({ email, password, confirmPassword, onPasswordChange, onCo
 
 function LoginCard({ children }) {
   return (
-    <div className="login-card-wrapper">
-      <div className="login-card">
+    <div className="pass-card-wrapper">
+      <div className="pass-card">
         {children}
       </div>
     </div>
@@ -219,9 +219,9 @@ export default function PasswordScreen() {
 
   if (loading) {
     return (
-      <div className="login-container">
+      <div className="pass-container">
         <Sidebar />
-        <div className="login-main-content">
+        <div className="pass-main-content">
           <LoginCard>
             <PageHeader
               title="Carregando..."
@@ -235,9 +235,9 @@ export default function PasswordScreen() {
 
   if (error) {
     return (
-      <div className="login-container">
+      <div className="pass-container">
         <Sidebar />
-        <div className="login-main-content">
+        <div className="pass-main-content">
           <LoginCard>
             <PageHeader
               title="Erro"
@@ -253,10 +253,10 @@ export default function PasswordScreen() {
   }
 
   return (
-      <div className="login-container">
+      <div className="pass-container">
         <Sidebar />
   
-        <div className="login-main-content">
+        <div className="pass-main-content">
           <LoginCard>
             <PageHeader
               title = "Bem-vindo!"
