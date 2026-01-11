@@ -15,11 +15,13 @@ export default function SuccessScreen() {
         <Sidebar />
         <div className="success-main-content">
           <div className="success-wrapper">
-            <PageHeader 
-              title="Inscrição Bem-Sucedida"
-              subtitle="Logo abaixo segue o botão de acesso"
-            />
-            <button onClick={handleAccess} className='success-button'> Acessar </button>
+            <div className='success-card'>
+              <PageHeader
+                title="Inscrição Bem-Sucedida"
+                subtitle="Logo abaixo segue o botão de acesso"
+              />
+              <button onClick={handleAccess} className='success-button'> Acessar </button>
+            </div>
             </div>
           </div>
         </div>
