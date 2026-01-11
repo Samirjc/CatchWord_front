@@ -5,6 +5,7 @@ import LoginScreen from './pages/Login/Login';
 import SidebarMenu from './components/Menu/Menu';
 import PasswordScreen from './pages/Cadastro/CriarSenha';
 import Footer from './components/Footer';
+import SuccessScreen from './pages/Cadastro/Sucesso';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/cadastro" element={<SchoolRegistration/>}/>
             <Route path="/home" element={<SidebarMenu/>}/>
             <Route path='/completar-cadastro' element={<PasswordScreen/>}/>
+            <Route path='/sucesso' element={<SuccessScreen/>}/>
           </Routes>
         </div>
         <Footer/>

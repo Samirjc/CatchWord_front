@@ -1,28 +1,9 @@
-import { useState, useEffect } from 'react';
-import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { useState } from 'react';
+import { Lock, Eye, EyeOff } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { Sidebar } from '../../components/Sidebar/Sidebar.js';
 import { PageHeader } from '../../components/PageHeader/PageHeader.js';
 import './styles/CriarSenha.css';
-
-function EmailInput({ value }) {
-  return (
-    <div className="input-group">
-      <label htmlFor="email" className="input-label">
-        Email
-      </label>
-      <input
-        id="email"
-        type="email"
-        value={value}
-        placeholder="seu@email.com"
-        className="input-field"
-        readOnly
-        disabled
-      />
-    </div>
-  );
-}
 
 function PasswordInput({ value, onChange, id, label, placeholder }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -70,10 +51,9 @@ function CreatePasswordButton({ onClick, disabled = false }) {
   );
 }
 
-function PasswordForm({ email, password, confirmPassword, onPasswordChange, onConfirmPasswordChange, onCreate}) {
+function PasswordForm({ password, confirmPassword, onPasswordChange, onConfirmPasswordChange, onCreate}) {
   return (
     <div className="form-container">
-      <EmailInput icon={Mail} value={email}/>
       <PasswordInput 
         id="password"
         label="Senha"
@@ -106,42 +86,8 @@ function LoginCard({ children }) {
 }
 
 function usePasswordCreation(token) {
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    // Busca os dados do usuário usando o token
-    const fetchUserData = async () => {
-      if (!token) {
-        setError('Token inválido');
-        setLoading(false);
-        return;
-      }
-
-      try {
-        // Substitua pela URL da sua API
-        const response = await fetch(`http://localhost:8080/api/usuarios/validar-token?token=${token}`);
-        
-        if (!response.ok) {
-          throw new Error('Token inválido ou expirado');
-        }
-
-        const data = await response.json();
-        setEmail(data.email || '');
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-        console.error('Erro ao buscar dados do usuário:', err);
-      }
-    };
-
-    fetchUserData();
-  }, [token]);
-
   const handlePasswordChange = (e) => setPassword(e.target.value);
   const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
 
@@ -188,11 +134,8 @@ function usePasswordCreation(token) {
   };
 
   return {
-    email,
     password,
     confirmPassword,
-    loading,
-    error,
     handlePasswordChange,
     handleConfirmPasswordChange,
     handleCreatePassword,
@@ -207,7 +150,6 @@ export default function PasswordScreen() {
   const token = queryParams.get('token');
 
   const {
-    email,
     password,
     confirmPassword,
     loading,
@@ -263,7 +205,6 @@ export default function PasswordScreen() {
               subtitle = "Defina sua senha"
             />
             <PasswordForm
-              email={email}
               password={password}
               confirmPassword={confirmPassword}
               onPasswordChange={handlePasswordChange}
