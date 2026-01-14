@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Pencil, Trash2, Plus, Mail, Book, ArrowUpDown, Users, RefreshCw } from 'lucide-react';
+import { Pencil, Trash2, Plus, Mail, ArrowUpDown, Users, RefreshCw } from 'lucide-react';
 import { AlunoForm } from './CriarAluno';
 import { endpoints } from '../../../services/API/api';
 
@@ -42,15 +42,10 @@ const AlunoCard = ({ aluno, onEdit, onDelete, onReenviarConvite }) => {
           </button>
         </div>  
       </div>
-      
-      <div className="card-body">
+        <div className="card-body">
         <div className="info-row">
           <Mail size={16} />
           <span>{aluno.email}</span>
-        </div>
-        <div className="info-row turmas">
-          <Book size={16} />
-          <span>{aluno.turmasAluno?.length || 0} turmas</span>
         </div>
       </div>
     </div>

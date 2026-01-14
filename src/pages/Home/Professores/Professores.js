@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Users, Plus, Pencil, Trash2, ArrowUpDown, Mail, RefreshCw } from 'lucide-react';
+import { Plus, Pencil, Trash2, ArrowUpDown, Mail, RefreshCw, Users } from 'lucide-react';
 import { ProfessorForm } from './CriarProfessor';
 import { endpoints } from '../../../services/API/api';
 
@@ -32,17 +32,10 @@ const ProfessorCard = ({ professor, onEdit, onDelete, onReenviarConvite }) => (
           <Trash2 size={18} />
         </button>
       </div>
-    </div>
-
-    <div className="card-body">
+    </div>    <div className="card-body">
       <div className="info-row">
         <Mail size={18}/>
         <span>{professor.email}</span>
-      </div>
-      
-      <div className="info-row turmas">
-        <Users size={18} />
-        <span>{professor.turmasProfessor?.length || 0} turmas</span>
       </div>
     </div>
   </div>
