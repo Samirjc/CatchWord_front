@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Lock, Eye, EyeOff } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Sidebar } from '../../components/Sidebar/Sidebar.js';
 import { PageHeader } from '../../components/PageHeader/PageHeader.js';
 import './styles/CriarSenha.css';
@@ -85,7 +85,7 @@ function LoginCard({ children }) {
   );
 }
 
-function usePasswordCreation(token) {
+function usePasswordCreation(token, navigate) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const handlePasswordChange = (e) => setPassword(e.target.value);
@@ -117,15 +117,12 @@ function usePasswordCreation(token) {
           token: token,
           senha: password,
         }),
-      });
-
-      if (!response.ok) {
+      });      if (!response.ok) {
         throw new Error('Erro ao criar senha');
       }
 
-      alert('Senha criada com sucesso!');
-      // Redirecionar para login ou outra página
-      // navigate('/login');
+      // Redirecionar para tela de sucesso
+      navigate('/sucesso');
     } catch (err) {
       alert('Erro ao criar senha: ' + err.message);
       console.error('Erro ao criar senha:', err);
@@ -143,6 +140,7 @@ function usePasswordCreation(token) {
 
 export default function PasswordScreen() {
   const location = useLocation();
+  const navigate = useNavigate();
   
   // Obtém o token da query string
   const queryParams = new URLSearchParams(location.search);
@@ -156,7 +154,7 @@ export default function PasswordScreen() {
     handlePasswordChange,
     handleConfirmPasswordChange,
     handleCreatePassword,
-  } = usePasswordCreation(token);
+  } = usePasswordCreation(token, navigate);
 
   if (loading) {
     return (

@@ -51,7 +51,6 @@ export function TurmasContent({ userProfile }) {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
   const [mostrarForm, setMostrarForm] = useState(false);
   const [turmaParaEditar, setTurmaParaEditar] = useState(null);
-
   const getAuthHeaders = () => {
     const token = localStorage.getItem('authToken');
     return {
@@ -60,9 +59,8 @@ export function TurmasContent({ userProfile }) {
     };
   };
 
-  const getEscolaId = () => {
-    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
-    return usuario.escolaId;
+  const getUsuario = () => {
+    return JSON.parse(localStorage.getItem('usuario') || '{}');
   };
 
   const carregarTurmas = async () => {
@@ -70,12 +68,30 @@ export function TurmasContent({ userProfile }) {
       setLoading(true);
       setError(null);
       
-      const escolaId = getEscolaId();
+      const usuario = getUsuario();
+      const escolaId = usuario.escolaId;
+      const usuarioId = usuario.id;
+      const role = usuario.role?.toLowerCase();
+
       if (!escolaId) {
         throw new Error('Escola não encontrada');
       }
 
-      const response = await fetch(endpoints.turma.getByEscola(escolaId), {
+      let url;
+      // Coordenador vê todas as turmas da escola
+      // Professor vê apenas as turmas que leciona
+      // Aluno vê apenas as turmas em que está matriculado
+      if (role === 'coordenador') {
+        url = endpoints.turma.getByEscola(escolaId);
+      } else if (role === 'professor') {
+        url = endpoints.turma.getByProfessor(usuarioId);
+      } else if (role === 'aluno') {
+        url = endpoints.turma.getByAluno(usuarioId);
+      } else {
+        url = endpoints.turma.getByEscola(escolaId);
+      }
+
+      const response = await fetch(url, {
         method: 'GET',
         headers: getAuthHeaders()
       });
@@ -129,7 +145,8 @@ export function TurmasContent({ userProfile }) {
   };
   const handleSave = async (formData) => {
     try {
-      const escolaId = getEscolaId();
+      const usuario = getUsuario();
+      const escolaId = usuario.escolaId;
       
       if (turmaParaEditar) {
         // Editando turma existente
