@@ -3,6 +3,7 @@ import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { Sidebar } from '../../components/Sidebar/Sidebar.js';
 import { PageHeader } from '../../components/PageHeader/PageHeader.js';
 import './styles/Login.css';
+import { endpoints } from '../../services/API/api.js';
 
 function FormInput({ 
   label, 
@@ -118,49 +119,48 @@ function useAuth() {
   };
 
   const handleLogin = async () => {
-    if (validateForm()) {
-      setIsLoading(true);
-      const requestBody = {
-        email: formData.email,
-        senha: formData.password
-      };
+    if (!validateForm()) {
+      return;
+    }
 
-      console.log('Dados de login:', JSON.stringify(requestBody, null, 2));
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch(endpoints.auth.login, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          senha: formData.password
+        })
+      });
+
+      const data = await response.json();
       
-      try {
-        const response = await fetch('http://localhost:3001/auth/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestBody)
-        });
+      if (response.ok) {
+        alert('Login realizado com sucesso!');
+        console.log('Resposta do servidor:', data);
         
-        if (response.ok) {
-          const result = await response.json();
-          alert('Login realizado com sucesso!');
-          console.log('Resposta do servidor:', result);
-          
-          // Armazenar token ou dados do usuário
-          if (result.token) {
-            localStorage.setItem('authToken', result.token);
-          }
-          if (result.usuario) {
-            localStorage.setItem('usuario', JSON.stringify(result.usuario));
-          }
-          
-          // TODO: Redirecionar para a página principal
-          // window.location.href = '/home';
-        } else {
-          const errorData = await response.json();
-          alert(`Erro ao fazer login: ${errorData.error || 'Credenciais inválidas'}`);
+        // Armazenar token ou dados do usuário
+        if (data.token) {
+          localStorage.setItem('authToken', data.token);
         }
-      } catch (error) {
-        console.error('Erro:', error);
-        alert('Erro ao conectar com o servidor. Verifique se o backend está rodando.');
-      } finally {
-        setIsLoading(false);
+        if (data.usuario) {
+          localStorage.setItem('usuario', JSON.stringify(data.usuario));
+        }
+        
+        // TODO: Redirecionar para a página principal
+       window.location.href = '/home';
+      } else {
+        alert(`Erro ao fazer login: ${data.error || 'Credenciais inválidas'}`);
       }
+    } catch (error) {
+      console.error(error);
+      alert('Erro ao conectar com o servidor');
+    } finally {
+      setIsLoading(false);
     }
   };
 

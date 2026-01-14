@@ -108,8 +108,7 @@ function usePasswordCreation(token) {
     }
 
     try {
-      // Substitua pela URL da sua API
-      const response = await fetch('http://localhost:8080/api/usuarios/definir-senha', {
+      const response = await fetch('http://localhost:3001/usuario/completar-cadastro', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

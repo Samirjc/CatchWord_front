@@ -379,7 +379,7 @@ function useSchoolRegistration() {
       console.log('Dados a serem enviados:', JSON.stringify(requestBody, null, 2));
       
       try {
-        const response = await fetch('http://localhost:3001/auth/escola', {
+        const response = await fetch('http://localhost:3001/escola', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

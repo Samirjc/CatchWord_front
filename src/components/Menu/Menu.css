@@ -12,7 +12,7 @@
     color: white;
     border-right: 1px solid #e5e7eb;
     padding: 2rem;
-    display: flex;
+    display: fixed;
     flex-direction: column;
 }
 
