@@ -6,16 +6,17 @@ export function AlunoForm({ aluno = null, onSave, onCancel }){
     nome: '',
     email: '',
     cpf: '',
-    codigo: '',
+    matricula: '',
   });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (aluno) {
       setFormData({
-        nome: aluno.name ||  '',
+        nome: aluno.nome || '',
         email: aluno.email || '',
         cpf: aluno.cpf || '',
-        codigo: aluno.code || '',
+        matricula: aluno.matricula || '',
       });
     }
   }, [aluno]);
@@ -31,12 +32,24 @@ export function AlunoForm({ aluno = null, onSave, onCancel }){
     }));
   };
 
-  const handleSubmit = () => {
-    if (!formData.codigo || !formData.nome || !formData.email || !formData.cpf) {
-      alert('Por favor, preencha todos os campos obrigatórios');
+  const handleSubmit = async () => {
+    if (!formData.nome || !formData.cpf) {
+      alert('Por favor, preencha nome e CPF');
       return;
     }
-    onSave(formData);
+
+    // Email é obrigatório apenas na criação
+    if (!aluno && !formData.email) {
+      alert('Por favor, preencha o email');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await onSave(formData);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -61,15 +74,19 @@ export function AlunoForm({ aluno = null, onSave, onCancel }){
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Email do Aluno *</label>
+            <label htmlFor="email">Email do Aluno {!aluno && '*'}</label>
             <input
-              type="text"
+              type="email"
               id="email"
               name="email"
               value={formData.email}
               onChange={handleInputChange}
               placeholder="Ex: ricardo.abreu@estudante.escola.br"
+              disabled={!!aluno}
             />
+            {aluno && (
+              <small className="form-hint">O email não pode ser alterado após a criação</small>
+            )}
           </div>
 
           <div className="form-group">
@@ -81,27 +98,28 @@ export function AlunoForm({ aluno = null, onSave, onCancel }){
               value={formData.cpf}
               onChange={handleInputChange}
               placeholder="Ex: xxx.xxx.xxx-xx"
+              maxLength={14}
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="matricula">Matricula do Aluno *</label>
+            <label htmlFor="matricula">Matrícula do Aluno</label>
             <input
               type="text"
-              id="codigo"
-              name="codigo"
-              value={formData.codigo}
+              id="matricula"
+              name="matricula"
+              value={formData.matricula}
               onChange={handleInputChange}
-              placeholder="Ex: ALUNO007"
+              placeholder="Ex: 2024001234"
             />
           </div>
 
           <div className="form-actions">
-            <button type="button" className="btn-cancel" onClick={onCancel}>
+            <button type="button" className="btn-cancel" onClick={onCancel} disabled={loading}>
               Cancelar
             </button>
-            <button type="button" className="btn-save" onClick={handleSubmit}>
-              {aluno ? 'Salvar Alterações' : 'Criar Aluno'}
+            <button type="button" className="btn-save" onClick={handleSubmit} disabled={loading}>
+              {loading ? 'Salvando...' : (aluno ? 'Salvar Alterações' : 'Criar Aluno')}
             </button>
           </div>
         </div>
