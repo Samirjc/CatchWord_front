@@ -100,36 +100,29 @@ function MainContent({ activeItem, menuItems, bottomItems, userProfile, onSair }
   );
 }
 
-export default function SidebarMenu({ userProfile = 'coordenador' }) {
-  const [activeItem, setActiveItem] = useState('meus-jogos');
+export default function SidebarMenu() {
   const sair = useSair();
 
-  let menuItems;
-  switch(userProfile){
-    case 'coordenador':
-      menuItems = [
-        { id: 'jogos', label: 'Jogos', icon: BookOpen },
-        { id: 'turmas', label: 'Turmas', icon: Users },
-        { id: 'professores', label: 'Professores', icon: PencilRuler},
-        { id: 'alunos', label: 'Alunos', icon: GraduationCap},
-        { id: 'estatisticas', label: 'Estatísticas', icon: BarChart3 },
-      ];
-      break;
-    case 'professor':
-      menuItems = [
-        { id: 'ogos', label: 'Jogos', icon: BookOpen },
-        { id: 'turmas', label: 'Turmas', icon: Users },
-        { id: 'estatisticas', label: 'Estatísticas', icon: BarChart3 },
-      ];
-      break;
-    default:
-      menuItems = [
-        { id: 'jogos', label: 'Jogos', icon: BookOpen },
-        { id: 'turmas', label: 'Turmas', icon: Users },
-        { id: 'estatisticas', label: 'Estatísticas', icon: BarChart3 },
-      ];
-  }
+  // Obtém o perfil do usuário do localStorage
+  const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+  const userProfile = usuario.role?.toLowerCase() || 'professor';
+  
+  const menuItems = [
+    // Jogos só aparece para professores
+    ...(userProfile === 'professor' ? [
+      { id: 'jogos', label: 'Jogos', icon: BookOpen },
+    ] : []),
+    { id: 'turmas', label: 'Turmas', icon: Users },
+    // Professores e Alunos só aparecem para coordenadores
+    ...(userProfile === 'coordenador' ? [
+      { id: 'professores', label: 'Professores', icon: PencilRuler },
+      { id: 'alunos', label: 'Alunos', icon: GraduationCap },
+    ] : []),
+    { id: 'estatisticas', label: 'Estatísticas', icon: BarChart3 },
+  ];
 
+  // Inicializa com o primeiro item do menu
+  const [activeItem, setActiveItem] = useState(menuItems[0]?.id || 'turmas');
 
   const bottomItems = [
     { id: 'configuracoes', label: 'Configurações', icon: Settings },
@@ -137,22 +130,20 @@ export default function SidebarMenu({ userProfile = 'coordenador' }) {
   ];
 
   return (
-    <>
-      <div className="app-container">
-        <Sidebar
-          activeItem={activeItem}
-          onItemClick={setActiveItem}
-          menuItems={menuItems}
-          bottomItems={bottomItems}
-        />
-        <MainContent
-          activeItem={activeItem}
-          menuItems={menuItems}
-          bottomItems={bottomItems}
-          userProfile={userProfile}
-          onSair={sair}
-        />
-      </div>
-    </>
+    <div className="app-container">
+      <Sidebar
+        activeItem={activeItem}
+        onItemClick={setActiveItem}
+        menuItems={menuItems}
+        bottomItems={bottomItems}
+      />
+      <MainContent
+        activeItem={activeItem}
+        menuItems={menuItems}
+        bottomItems={bottomItems}
+        userProfile={userProfile}
+        onSair={sair}
+      />
+    </div>
   );
 }
