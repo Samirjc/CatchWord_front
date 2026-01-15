@@ -248,7 +248,19 @@ export function ConfiguracoesContent() {
                   disabled
                 />
               </div>
-
+            
+              <div className="config-field">
+                <label className="config-label">
+                    <IdCard size={16} />
+                    CPF
+                </label>
+                <input
+                  type='text'
+                  value={usuario.cpf}
+                  className='config-input'
+                  disabled
+                  />
+              </div>
               <div className="config-field">
                 <label className="config-label">
                   <IdCard size={16} />
