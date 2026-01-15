@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import { Sidebar } from '../../components/Sidebar/Sidebar.js';
 import { PageHeader } from '../../components/PageHeader/PageHeader.js';
 import './styles/Login.css';
 import { endpoints } from '../../services/API/api.js';
@@ -193,11 +192,8 @@ export default function LoginScreen() {
     handleLogin,
     handleForgotPassword
   } = useAuth();
-
   return (
     <div className="login-container">
-      <Sidebar />
-
       <div className="login-main-content">
         <LoginCard>
           <PageHeader

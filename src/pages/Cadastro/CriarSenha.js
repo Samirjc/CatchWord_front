@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Lock, Eye, EyeOff } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Sidebar } from '../../components/Sidebar/Sidebar.js';
 import { PageHeader } from '../../components/PageHeader/PageHeader.js';
 import './styles/CriarSenha.css';
 
@@ -155,11 +154,9 @@ export default function PasswordScreen() {
     handleConfirmPasswordChange,
     handleCreatePassword,
   } = usePasswordCreation(token, navigate);
-
   if (loading) {
     return (
       <div className="pass-container">
-        <Sidebar />
         <div className="pass-main-content">
           <LoginCard>
             <PageHeader
@@ -175,7 +172,6 @@ export default function PasswordScreen() {
   if (error) {
     return (
       <div className="pass-container">
-        <Sidebar />
         <div className="pass-main-content">
           <LoginCard>
             <PageHeader
@@ -193,8 +189,6 @@ export default function PasswordScreen() {
 
   return (
       <div className="pass-container">
-        <Sidebar />
-  
         <div className="pass-main-content">
           <LoginCard>
             <PageHeader

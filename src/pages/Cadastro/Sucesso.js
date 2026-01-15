@@ -1,4 +1,3 @@
-import { Sidebar } from '../../components/Sidebar/Sidebar';
 import {PageHeader} from '../../components/PageHeader/PageHeader';
 import { useNavigate } from 'react-router-dom';
 import './styles/Sucesso.css';
@@ -12,7 +11,6 @@ export default function SuccessScreen() {
 
   return (
       <div className="success-container">
-        <Sidebar />
         <div className="success-main-content">
           <div className="success-wrapper">
             <div className='success-card'>
