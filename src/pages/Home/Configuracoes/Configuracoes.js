@@ -30,10 +30,13 @@ export function ConfiguracoesContent() {
     confirmarSenha: ''
   });
 
-  // Carrega informações do usuário
+  // Carrega informações do usuário e configurações
   useEffect(() => {
     const dadosUsuario = JSON.parse(localStorage.getItem('usuario') || '{}');
     const fotoSalva = localStorage.getItem('fotoPerfil');
+    const tamanhoTextoSalvo = localStorage.getItem('tamanhoTexto') || 'medio';
+    const notificacoesSalvas = localStorage.getItem('notificacoes');
+    
     setUsuario({
       nome: dadosUsuario.nome || '',
       email: dadosUsuario.email || '',
@@ -41,7 +44,23 @@ export function ConfiguracoesContent() {
       role: dadosUsuario.role || '',
       fotoPerfil: fotoSalva
     });
+    
+    setConfiguracoes({
+      notificacoes: notificacoesSalvas !== null ? notificacoesSalvas === 'true' : true,
+      tamanhoTexto: tamanhoTextoSalvo
+    });
+    
+    // Aplica o tamanho de texto salvo
+    aplicarTamanhoTexto(tamanhoTextoSalvo);
   }, []);
+
+  // Aplica tamanho de texto no body
+  const aplicarTamanhoTexto = (tamanho) => {
+    // Remove classes anteriores
+    document.body.classList.remove('texto-pequeno', 'texto-medio', 'texto-grande');
+    // Adiciona a nova classe
+    document.body.classList.add(`texto-${tamanho}`);
+  };
 
   // Gerencia upload de foto
   const handleFotoChange = (e) => {
@@ -80,18 +99,31 @@ export function ConfiguracoesContent() {
 
   // Atualiza tamanho do texto
   const handleTamanhoTextoChange = (e) => {
+    const novoTamanho = e.target.value;
     setConfiguracoes({
       ...configuracoes,
-      tamanhoTexto: e.target.value
+      tamanhoTexto: novoTamanho
     });
+    // Aplica imediatamente
+    aplicarTamanhoTexto(novoTamanho);
+    // Salva no localStorage
+    localStorage.setItem('tamanhoTexto', novoTamanho);
+    setMensagem({ tipo: 'sucesso', texto: 'Tamanho do texto alterado!' });
+    setTimeout(() => setMensagem({ tipo: '', texto: '' }), 2000);
   };
 
   // Salva alterações
   const handleSalvarAlteracoes = async () => {
     setLoading(true);
     try {
+      // Salva no localStorage
+      localStorage.setItem('notificacoes', configuracoes.notificacoes.toString());
+      localStorage.setItem('tamanhoTexto', configuracoes.tamanhoTexto);
+      
+      // Aplica o tamanho de texto
+      aplicarTamanhoTexto(configuracoes.tamanhoTexto);
+      
       // Aqui você implementaria a chamada à API para salvar as configurações
-      // Por enquanto, apenas simula o salvamento
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       setMensagem({ tipo: 'sucesso', texto: 'Configurações salvas com sucesso!' });
