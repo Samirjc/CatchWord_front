@@ -4,6 +4,7 @@ import { Logo } from '../Logo/Logo';
 import { TurmasContent } from '../../pages/Home/Turmas/Turmas';
 import { ProfessoresContent } from '../../pages/Home/Professores/Professores';
 import { AlunosContent } from '../../pages/Home/Alunos/Alunos';
+import { JogosContent } from '../../pages/Home/Jogos/Jogos';
 import { ConfirmModal } from '../ConfirmModal/ConfirmModal';
 import { useSair } from '../../services/Sair/Sair';
 import './Menu.css';
@@ -65,6 +66,11 @@ function Sidebar({ activeItem, onItemClick, menuItems, bottomItems }) {
 function MainContent({ activeItem, menuItems, bottomItems, userProfile }) {
   const currentItem = menuItems.find(i => i.id === activeItem) || bottomItems.find(i => i.id === activeItem);
   
+  // Renderiza o conteúdo específico da seção Jogos
+  if (activeItem === 'jogos') {
+    return <JogosContent />;
+  }
+
   // Renderiza o conteúdo específico da seção Turmas
   if (activeItem === 'turmas') {
     return <TurmasContent userProfile={userProfile} />;
