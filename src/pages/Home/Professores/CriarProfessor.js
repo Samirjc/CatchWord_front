@@ -8,16 +8,15 @@ export function ProfessorForm({ professor = null, onSave, onCancel }){
     nomeProfessor: '',
     email: '',
     cpf: '',
-    code: '',
   });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (professor) {
       setFormData({
-        nomeProfessor: professor.name || '',
+        nomeProfessor: professor.nome || '',
         email: professor.email || '',
         cpf: professor.cpf || '',
-        code: professor.code || '',
       });
     }
   }, [professor]);
@@ -34,12 +33,24 @@ export function ProfessorForm({ professor = null, onSave, onCancel }){
     }));
   };
 
-  const handleSubmit = () => {
-    if (!formData.nomeProfessor || !formData.email || !formData.cpf || !formData.code) {
-      alert('Por favor, preencha todos os campos obrigatórios');
+  const handleSubmit = async () => {
+    if (!formData.nomeProfessor || !formData.cpf) {
+      alert('Por favor, preencha nome e CPF');
       return;
     }
-    onSave(formData);
+
+    // Email é obrigatório apenas na criação
+    if (!professor && !formData.email) {
+      alert('Por favor, preencha o email');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await onSave(formData);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -64,15 +75,19 @@ export function ProfessorForm({ professor = null, onSave, onCancel }){
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Email do Professor *</label>
+            <label htmlFor="email">Email do Professor {!professor && '*'}</label>
             <input
-              type="text"
+              type="email"
               id="email"
               name="email"
               value={formData.email}
               onChange={handleInputChange}
               placeholder="Ex: maria.rosa@escola.br"
+              disabled={!!professor}
             />
+            {professor && (
+              <small className="form-hint">O email não pode ser alterado após a criação</small>
+            )}
           </div>
 
           <div className="form-group">
@@ -84,27 +99,16 @@ export function ProfessorForm({ professor = null, onSave, onCancel }){
               value={formData.cpf}
               onChange={handleInputChange}
               placeholder='Ex: xxx.xxx.xxx-xx'
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Código do Professor *</label>
-            <input
-              type="text"
-              id="code"
-              name="code"
-              value={formData.code}
-              onChange={handleInputChange}
-              placeholder='Ex: PROF000'
+              maxLength={14}
             />
           </div>
 
           <div className="form-actions">
-            <button type="button" className="btn-cancel" onClick={onCancel}>
+            <button type="button" className="btn-cancel" onClick={onCancel} disabled={loading}>
               Cancelar
             </button>
-            <button type="button" className="btn-save" onClick={handleSubmit}>
-              {professor ? 'Salvar Alterações' : 'Criar Novo Professor'}
+            <button type="button" className="btn-save" onClick={handleSubmit} disabled={loading}>
+              {loading ? 'Salvando...' : (professor ? 'Salvar Alterações' : 'Criar Novo Professor')}
             </button>
           </div>
         </div>

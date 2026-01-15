@@ -21,10 +21,11 @@ export const endpoints = {
     delete: (id) => `${API_BASE_URL}/usuario/${id}`,
     reenviarConvite: (id) => `${API_BASE_URL}/usuario/${id}/reenviar-convite`,
   },
-  
-  turma: {
+    turma: {
     list: `${API_BASE_URL}/turma`,
     getByEscola: (escolaId) => `${API_BASE_URL}/turma/escola/${escolaId}`,
+    getByProfessor: (professorId) => `${API_BASE_URL}/turma/professor/${professorId}`,
+    getByAluno: (alunoId) => `${API_BASE_URL}/turma/aluno/${alunoId}`,
     getById: (id) => `${API_BASE_URL}/turma/${id}`,
     create: `${API_BASE_URL}/turma`,
     update: (id) => `${API_BASE_URL}/turma/${id}`,

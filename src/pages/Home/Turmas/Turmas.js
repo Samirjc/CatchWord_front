@@ -1,20 +1,24 @@
 import { Pencil, Trash2, UsersRound, Users, Plus, ArrowUpDown } from 'lucide-react';
-import { useState } from 'react';
-import {TurmaForm} from './CriarTurma.js';
+import { useState, useEffect } from 'react';
+import { TurmaForm } from './CriarTurma.js';
+import { endpoints } from '../../../services/API/api';
 
 function TurmaCard({ turma, onEdit, onDelete, userProfile }) {
   const isCoordenador = userProfile === 'coordenador';
+  
+  // Conta o número de alunos na turma
+  const numAlunos = turma.alunos?.length || 0;
   
   return (
     <div className="card">
       <div className="card-header">
         <div className="card-title">
-          <h3 className="turma-name">{turma.nome}</h3>
+          <h3 className="turma-name">{turma.disciplina}</h3>
           <p className="card-code">Código: {turma.codigo}</p>
         </div>
         {isCoordenador && (
           <div className="card-actions">
-            <button className="btn-edit icon-btn edit" title="Editar turma" onClick={() => onEdit(turma.id)}>
+            <button className="btn-edit icon-btn edit" title="Editar turma" onClick={() => onEdit(turma)}>
               <Pencil size={16} />
             </button>
             <button className="btn-remove icon-btn delete" title="Excluir turma" onClick={() => onDelete(turma.id)}>
@@ -27,148 +31,90 @@ function TurmaCard({ turma, onEdit, onDelete, userProfile }) {
       <div className="card-body">
         <div className="info-row">
           <UsersRound size={18} />
-          <span>{turma.alunos} alunos</span>
+          <span>{numAlunos} alunos</span>
         </div>
+        {turma.professor && (
+          <div className="info-row">
+            <Users size={18} />
+            <span>{turma.professor.nome}</span>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-// Dados mockados por perfil
-const turmasDataInitial = {
-  coordenador: [
-    { 
-      id: 1, 
-      nome: '6º Ano A', 
-      codigo: 'TUR001', 
-      alunos: 2,
-      nomeDisciplina: '6º Ano A',
-      professor: { id: 1, nome: 'Prof. Carlos Mendes' },
-      alunosSelecionados: [
-        { id: 1, nome: 'João Silva' },
-        { id: 2, nome: 'Maria Santos' }
-      ]
-    },
-    { 
-      id: 2, 
-      nome: '6º Ano B', 
-      codigo: 'TUR002', 
-      alunos: 2,
-      nomeDisciplina: '6º Ano B',
-      professor: { id: 2, nome: 'Prof. Paula Rocha' },
-      alunosSelecionados: [
-        { id: 1, nome: 'João Silva' },
-        { id: 2, nome: 'Maria Santos' }
-      ]
-    },
-    { 
-      id: 3, 
-      nome: '7º Ano A', 
-      codigo: 'TUR003', 
-      alunos: 2,
-      nomeDisciplina: '7º Ano A',
-      professor: { id: 1, nome: 'Prof. Carlos Mendes' },
-      alunosSelecionados: [
-        { id: 1, nome: 'João Silva' },
-        { id: 2, nome: 'Maria Santos' }
-      ]
-    },
-    { 
-      id: 4, 
-      nome: '7º Ano B', 
-      codigo: 'TUR004', 
-      alunos: 2,
-      nomeDisciplina: '7º Ano B',
-      professor: { id: 3, nome: 'Prof. Roberto Lima' },
-      alunosSelecionados: [
-        { id: 1, nome: 'João Silva' },
-        { id: 2, nome: 'Maria Santos' }
-      ]
-    },
-    { 
-      id: 5, 
-      nome: '8º Ano A', 
-      codigo: 'TUR005', 
-      alunos: 2,
-      nomeDisciplina: '8º Ano A',
-      professor: { id: 2, nome: 'Prof. Paula Rocha' },
-      alunosSelecionados: [
-        { id: 1, nome: 'João Silva' },
-        { id: 2, nome: 'Maria Santos' }
-      ]
-    },
-    { 
-      id: 6, 
-      nome: '9º Ano A', 
-      codigo: 'TUR006', 
-      alunos: 2,
-      nomeDisciplina: '9º Ano A',
-      professor: { id: 1, nome: 'Prof. Carlos Mendes' },
-      alunosSelecionados: [
-        { id: 1, nome: 'João Silva' },
-        { id: 2, nome: 'Maria Santos' }
-      ]
-    },
-  ],
-  professor: [
-    { 
-      id: 1, 
-      nome: '6º Ano A', 
-      codigo: 'TUR001', 
-      alunos: 2,
-      nomeDisciplina: '6º Ano A',
-      professor: { id: 1, nome: 'Prof. Carlos Mendes' },
-      alunosSelecionados: [
-        { id: 1, nome: 'João Silva' },
-        { id: 2, nome: 'Maria Santos' }
-      ]
-    },
-    { 
-      id: 3, 
-      nome: '7º Ano A', 
-      codigo: 'TUR003', 
-      alunos: 2,
-      nomeDisciplina: '7º Ano A',
-      professor: { id: 1, nome: 'Prof. Carlos Mendes' },
-      alunosSelecionados: [
-        { id: 1, nome: 'João Silva' },
-        { id: 2, nome: 'Maria Santos' }
-      ]
-    },
-    { 
-      id: 5, 
-      nome: '8º Ano A', 
-      codigo: 'TUR005', 
-      alunos: 2,
-      nomeDisciplina: '8º Ano A',
-      professor: { id: 1, nome: 'Prof. Carlos Mendes' },
-      alunosSelecionados: [
-        { id: 1, nome: 'João Silva' },
-        { id: 2, nome: 'Maria Santos' }
-      ]
-    },
-  ],
-  aluno: [
-    { 
-      id: 1, 
-      nome: '6º Ano A', 
-      codigo: 'TUR001', 
-      alunos: 2,
-      nomeDisciplina: '6º Ano A',
-      professor: { id: 1, nome: 'Prof. Carlos Mendes' },
-      alunosSelecionados: [
-        { id: 1, nome: 'João Silva' },
-        { id: 2, nome: 'Maria Santos' }
-      ]
-    },
-  ],
-};
-
 export function TurmasContent({ userProfile }) {
-  const [turmas, setTurmas] = useState(turmasDataInitial[userProfile] || []);
+  const [turmas, setTurmas] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
   const [mostrarForm, setMostrarForm] = useState(false);
   const [turmaParaEditar, setTurmaParaEditar] = useState(null);
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem('authToken');
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+  };
+
+  const getUsuario = () => {
+    return JSON.parse(localStorage.getItem('usuario') || '{}');
+  };
+
+  const carregarTurmas = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const usuario = getUsuario();
+      const escolaId = usuario.escolaId;
+      const usuarioId = usuario.id;
+      const role = usuario.role?.toLowerCase();
+
+      if (!escolaId) {
+        throw new Error('Escola não encontrada');
+      }
+
+      let url;
+      // Coordenador vê todas as turmas da escola
+      // Professor vê apenas as turmas que leciona
+      // Aluno vê apenas as turmas em que está matriculado
+      if (role === 'coordenador') {
+        url = endpoints.turma.getByEscola(escolaId);
+      } else if (role === 'professor') {
+        url = endpoints.turma.getByProfessor(usuarioId);
+      } else if (role === 'aluno') {
+        url = endpoints.turma.getByAluno(usuarioId);
+      } else {
+        url = endpoints.turma.getByEscola(escolaId);
+      }
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Erro ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      setTurmas(data);
+    } catch (err) {
+      setError(err.message);
+      console.error('Erro ao carregar turmas:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    carregarTurmas();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSort = (key) => {
     let direction = 'asc';
@@ -177,9 +123,8 @@ export function TurmasContent({ userProfile }) {
     }
     
     const sortedTurmas = [...turmas].sort((a, b) => {
-      // Extrai o número do ano (ex: "6º Ano A" -> 6)
-      const valueA = parseInt(a.nome.match(/\d+/)?.[0] || 0);
-      const valueB = parseInt(b.nome.match(/\d+/)?.[0] || 0);
+      const valueA = (a.disciplina || '').toLowerCase();
+      const valueB = (b.disciplina || '').toLowerCase();
       
       if (valueA < valueB) {
         return direction === 'asc' ? -1 : 1;
@@ -198,28 +143,122 @@ export function TurmasContent({ userProfile }) {
     setTurmaParaEditar(null);
     setMostrarForm(true);
   };
+  const handleSave = async (formData) => {
+    try {
+      const usuario = getUsuario();
+      const escolaId = usuario.escolaId;
+      
+      if (turmaParaEditar) {
+        // Editando turma existente
+        const response = await fetch(endpoints.turma.update(turmaParaEditar.id), {
+          method: 'PUT',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({
+            codigo: formData.codigo,
+            disciplina: formData.nomeDisciplina
+          })
+        });
 
-  const handleSave = (formData) => {
-    if (turmaParaEditar) {
-      // Editando turma existente
-      const turmasAtualizadas = turmas.map(turma => 
-        turma.id === turmaParaEditar.id 
-          ? {
-              ...turma,
-              nome: formData.nomeDisciplina,
-              codigo: formData.codigo,
-              alunos: formData.alunosSelecionados.length,
-              nomeDisciplina: formData.nomeDisciplina,
-              professor: formData.professorSelecionado,
-              alunosSelecionados: formData.alunosSelecionados
-            }
-          : turma
-      );
-      setTurmas(turmasAtualizadas);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Erro ao atualizar turma');
+        }
+
+        // Atualizar professor se foi selecionado
+        if (formData.professorSelecionado) {
+          await fetch(endpoints.turma.atualizarProfessor(turmaParaEditar.id), {
+            method: 'PUT',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({
+              professorId: formData.professorSelecionado.id
+            })
+          });
+        } else if (turmaParaEditar.professor) {
+          // Remover professor se foi desmarcado
+          await fetch(endpoints.turma.removerProfessor(turmaParaEditar.id), {
+            method: 'DELETE',
+            headers: getAuthHeaders()
+          });
+        }
+
+        // Sincronizar alunos da turma
+        const alunosAtuais = turmaParaEditar.alunos?.map(ta => ta.aluno.id) || [];
+        const alunosNovos = formData.alunosSelecionados.map(a => a.id);
+
+        // Remover alunos que foram desmarcados
+        for (const alunoId of alunosAtuais) {
+          if (!alunosNovos.includes(alunoId)) {
+            await fetch(endpoints.turma.removerAluno(turmaParaEditar.id, alunoId), {
+              method: 'DELETE',
+              headers: getAuthHeaders()
+            });
+          }
+        }
+
+        // Adicionar alunos novos
+        for (const alunoId of alunosNovos) {
+          if (!alunosAtuais.includes(alunoId)) {
+            await fetch(endpoints.turma.adicionarAluno(turmaParaEditar.id), {
+              method: 'POST',
+              headers: getAuthHeaders(),
+              body: JSON.stringify({
+                alunoId: alunoId
+              })
+            });
+          }
+        }
+
+        await carregarTurmas();
+      } else {
+        // Criando nova turma
+        const response = await fetch(endpoints.turma.create, {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({
+            codigo: formData.codigo,
+            disciplina: formData.nomeDisciplina,
+            escolaId: escolaId
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Erro ao criar turma');
+        }
+
+        const novaTurma = await response.json();
+
+        // Adicionar professor se foi selecionado
+        if (formData.professorSelecionado) {
+          await fetch(endpoints.turma.atualizarProfessor(novaTurma.id), {
+            method: 'PUT',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({
+              professorId: formData.professorSelecionado.id
+            })
+          });
+        }
+
+        // Adicionar alunos selecionados
+        for (const aluno of formData.alunosSelecionados) {
+          await fetch(endpoints.turma.adicionarAluno(novaTurma.id), {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({
+              alunoId: aluno.id
+            })
+          });
+        }
+
+        await carregarTurmas();
+      }
+
+      setMostrarForm(false);
+      setTurmaParaEditar(null);
+    } catch (err) {
+      alert(err.message);
+      console.error('Erro ao salvar turma:', err);
     }
-
-    setMostrarForm(false);
-    setTurmaParaEditar(null);
   };
 
   const handleCancel = () => {
@@ -227,18 +266,58 @@ export function TurmasContent({ userProfile }) {
     setTurmaParaEditar(null);
   };
 
-  const handleEdit = (id) => {
-    const turma = turmas.find(turma => turma.id === id);
+  const handleEdit = (turma) => {
     setTurmaParaEditar(turma);
     setMostrarForm(true);
-  }
+  };
 
-  const handleDelete = (id) => {
-    const turmasAtualizadas = turmas.filter(turma => turma.id !== id);
-    setTurmas(turmasAtualizadas);
-  }
+  const handleDelete = async (id) => {
+    if (window.confirm('Tem certeza que deseja excluir esta turma?')) {
+      try {
+        const response = await fetch(endpoints.turma.delete(id), {
+          method: 'DELETE',
+          headers: getAuthHeaders()
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Erro ao excluir turma');
+        }
+
+        await carregarTurmas();
+      } catch (err) {
+        alert(err.message);
+        console.error('Erro ao excluir turma:', err);
+      }
+    }
+  };
   
   const isCoordenador = userProfile === 'coordenador';
+
+  if (loading) {
+    return (
+      <main className="main-content">
+        <div className="content-wrapper">
+          <h1 className="content-title">Turmas</h1>
+          <p className="content-subtitle">Carregando...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="main-content">
+        <div className="content-wrapper">
+          <h1 className="content-title">Turmas</h1>
+          <p className="content-subtitle error-message">Erro: {error}</p>
+          <button className="btn-primary" onClick={carregarTurmas}>
+            Tentar novamente
+          </button>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="main-content">
@@ -259,12 +338,12 @@ export function TurmasContent({ userProfile }) {
             
             <div className="sort-buttons">
               <button 
-                className={`btn-sort ${sortConfig.key === 'year' ? 'active' : ''}`}
-                onClick={() => handleSort('year')}
+                className={`btn-sort ${sortConfig.key === 'disciplina' ? 'active' : ''}`}
+                onClick={() => handleSort('disciplina')}
               >
                 <ArrowUpDown size={18} />
-                Ordenar por Ano
-                {sortConfig.key === 'year' && (
+                Ordenar por Nome
+                {sortConfig.key === 'disciplina' && (
                   <span className="sort-indicator">
                     {sortConfig.direction === 'asc' ? ' ↑' : ' ↓'}
                   </span>
@@ -282,16 +361,20 @@ export function TurmasContent({ userProfile }) {
                 turma={turma} 
                 onEdit={handleEdit}
                 onDelete={handleDelete}
-                userProfile={userProfile} />
+                userProfile={userProfile} 
+              />
             ))}
           </div>
         ) : (
           <div className="empty-state">
-            <div className="empty-state-icon">
-              <Users size={40} />
-            </div>
-            <h3 style={{ color: '#6b7280', marginBottom: '0.5rem' }}>Nenhuma turma encontrada</h3>
-            <p>Você ainda não está alocado em nenhuma turma.</p>
+            <Users size={48} />
+            <p>Nenhuma turma cadastrada</p>
+            {isCoordenador && (
+              <button className="btn-primary" onClick={handleCriarNovaTurma}>
+                <Plus size={20} />
+                Criar Primeira Turma
+              </button>
+            )}
           </div>
         )}
       </div>

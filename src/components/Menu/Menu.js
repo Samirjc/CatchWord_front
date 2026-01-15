@@ -4,6 +4,7 @@ import { Logo } from '../Logo/Logo';
 import { TurmasContent } from '../../pages/Home/Turmas/Turmas';
 import { ProfessoresContent } from '../../pages/Home/Professores/Professores';
 import { AlunosContent } from '../../pages/Home/Alunos/Alunos';
+import { ConfirmModal } from '../ConfirmModal/ConfirmModal';
 import { useSair } from '../../services/Sair/Sair';
 import './Menu.css';
 
@@ -61,7 +62,7 @@ function Sidebar({ activeItem, onItemClick, menuItems, bottomItems }) {
   );
 }
 
-function MainContent({ activeItem, menuItems, bottomItems, userProfile, onSair }) {
+function MainContent({ activeItem, menuItems, bottomItems, userProfile }) {
   const currentItem = menuItems.find(i => i.id === activeItem) || bottomItems.find(i => i.id === activeItem);
   
   // Renderiza o conteúdo específico da seção Turmas
@@ -72,18 +73,10 @@ function MainContent({ activeItem, menuItems, bottomItems, userProfile, onSair }
   if (activeItem === 'professores') {
     return <ProfessoresContent/>;
   }
-
   if (activeItem === 'alunos'){
     return <AlunosContent/>
   }
 
-  if (activeItem === 'sair'){
-    const conf = window.confirm("Deseja mesmo sair dessa sessão?");
-    if(conf) {
-      onSair();
-    }
-    return null;
-  }
   return (
     <div className="main-content">
       <div className="content-wrapper">
@@ -100,59 +93,79 @@ function MainContent({ activeItem, menuItems, bottomItems, userProfile, onSair }
   );
 }
 
-export default function SidebarMenu({ userProfile = 'coordenador' }) {
-  const [activeItem, setActiveItem] = useState('meus-jogos');
+export default function SidebarMenu() {
   const sair = useSair();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-  let menuItems;
-  switch(userProfile){
-    case 'coordenador':
-      menuItems = [
-        { id: 'jogos', label: 'Jogos', icon: BookOpen },
-        { id: 'turmas', label: 'Turmas', icon: Users },
-        { id: 'professores', label: 'Professores', icon: PencilRuler},
-        { id: 'alunos', label: 'Alunos', icon: GraduationCap},
-        { id: 'estatisticas', label: 'Estatísticas', icon: BarChart3 },
-      ];
-      break;
-    case 'professor':
-      menuItems = [
-        { id: 'ogos', label: 'Jogos', icon: BookOpen },
-        { id: 'turmas', label: 'Turmas', icon: Users },
-        { id: 'estatisticas', label: 'Estatísticas', icon: BarChart3 },
-      ];
-      break;
-    default:
-      menuItems = [
-        { id: 'jogos', label: 'Jogos', icon: BookOpen },
-        { id: 'turmas', label: 'Turmas', icon: Users },
-        { id: 'estatisticas', label: 'Estatísticas', icon: BarChart3 },
-      ];
-  }
+  // Obtém o perfil do usuário do localStorage
+  const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+  const userProfile = usuario.role?.toLowerCase() || 'professor';
+  
+  const menuItems = [
+    // Jogos só aparece para professores
+    ...(userProfile === 'professor' ? [
+      { id: 'jogos', label: 'Jogos', icon: BookOpen },
+    ] : []),
+    { id: 'turmas', label: 'Turmas', icon: Users },
+    // Professores e Alunos só aparecem para coordenadores
+    ...(userProfile === 'coordenador' ? [
+      { id: 'professores', label: 'Professores', icon: PencilRuler },
+      { id: 'alunos', label: 'Alunos', icon: GraduationCap },
+    ] : []),
+    { id: 'estatisticas', label: 'Estatísticas', icon: BarChart3 },
+  ];
 
+  // Inicializa com o primeiro item do menu
+  const [activeItem, setActiveItem] = useState(menuItems[0]?.id || 'turmas');
 
   const bottomItems = [
     { id: 'configuracoes', label: 'Configurações', icon: Settings },
     { id: 'sair', label: 'Sair', icon: LogOut },
   ];
 
+  const handleItemClick = (itemId) => {
+    if (itemId === 'sair') {
+      setShowLogoutModal(true);
+    } else {
+      setActiveItem(itemId);
+    }
+  };
+
+  const handleConfirmLogout = () => {
+    setShowLogoutModal(false);
+    sair();
+  };
+
+  const handleCancelLogout = () => {
+    setShowLogoutModal(false);
+  };
+
   return (
-    <>
-      <div className="app-container">
-        <Sidebar
-          activeItem={activeItem}
-          onItemClick={setActiveItem}
-          menuItems={menuItems}
-          bottomItems={bottomItems}
-        />
-        <MainContent
-          activeItem={activeItem}
-          menuItems={menuItems}
-          bottomItems={bottomItems}
-          userProfile={userProfile}
-          onSair={sair}
-        />
-      </div>
-    </>
+    <div className="app-container">
+      <Sidebar
+        activeItem={activeItem}
+        onItemClick={handleItemClick}
+        menuItems={menuItems}
+        bottomItems={bottomItems}
+      />
+      <MainContent
+        activeItem={activeItem}
+        menuItems={menuItems}
+        bottomItems={bottomItems}
+        userProfile={userProfile}
+      />
+      
+      <ConfirmModal
+        isOpen={showLogoutModal}
+        onConfirm={handleConfirmLogout}
+        onCancel={handleCancelLogout}
+        title="Sair da conta"
+        message="Tem certeza que deseja encerrar sua sessão?"
+        confirmText="Sair"
+        cancelText="Cancelar"
+        icon={LogOut}
+        variant="danger"
+      />
+    </div>
   );
 }

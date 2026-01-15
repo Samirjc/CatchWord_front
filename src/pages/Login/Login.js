@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import { Sidebar } from '../../components/Sidebar/Sidebar.js';
+import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '../../components/PageHeader/PageHeader.js';
 import './styles/Login.css';
 import { endpoints } from '../../services/API/api.js';
@@ -53,7 +53,7 @@ function LoginCard({ children }) {
   );
 }
 
-function ActionButtons({ onLogin, onForgotPassword, isLoading }) {
+function ActionButtons({ onLogin, onCadastro, isLoading }) {
   return (
     <div className="button-group">
       <button 
@@ -64,25 +64,26 @@ function ActionButtons({ onLogin, onForgotPassword, isLoading }) {
         {isLoading ? 'Entrando...' : 'Entrar'}
       </button>
       <button
-        onClick={onForgotPassword}
-        className="forgot-password-buttom"
+        onClick={onCadastro}
+        className="cadastro-link"
         type="button"
       >
-        Esqueci minha senha
+        É coordenador? Cadastre sua escola
       </button>
     </div>
   );
 }
 
 function useAuth() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
-
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [loginError, setLoginError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -90,11 +91,15 @@ function useAuth() {
       ...prev,
       [name]: value
     }));
+    // Limpa erros ao digitar
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
         [name]: ''
       }));
+    }
+    if (loginError) {
+      setLoginError('');
     }
   };
 
@@ -135,14 +140,9 @@ function useAuth() {
           email: formData.email,
           senha: formData.password
         })
-      });
-
-      const data = await response.json();
+      });      const data = await response.json();
       
       if (response.ok) {
-        alert('Login realizado com sucesso!');
-        console.log('Resposta do servidor:', data);
-        
         // Armazenar token ou dados do usuário
         if (data.token) {
           localStorage.setItem('authToken', data.token);
@@ -151,23 +151,21 @@ function useAuth() {
           localStorage.setItem('usuario', JSON.stringify(data.usuario));
         }
         
-        // TODO: Redirecionar para a página principal
-       window.location.href = '/home';
+        // Redirecionar para a página principal
+        window.location.href = '/home';
       } else {
-        alert(`Erro ao fazer login: ${data.error || 'Credenciais inválidas'}`);
+        setLoginError(data.error || 'Email ou senha incorretos');
       }
     } catch (error) {
       console.error(error);
-      alert('Erro ao conectar com o servidor');
+      setLoginError('Erro ao conectar com o servidor. Tente novamente.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleForgotPassword = () => {
-    console.log('Recuperação de senha para:', formData.email);
-    // TODO: Implementar lógica de recuperação de senha
-    alert('Funcionalidade de recuperação de senha em desenvolvimento.');
+  const handleCadastro = () => {
+    navigate('/cadastro');
   };
 
   return {
@@ -175,10 +173,11 @@ function useAuth() {
     errors,
     showPassword,
     isLoading,
+    loginError,
     handleChange,
     setShowPassword,
     handleLogin,
-    handleForgotPassword
+    handleCadastro
   };
 }
 
@@ -188,16 +187,14 @@ export default function LoginScreen() {
     errors,
     showPassword,
     isLoading,
+    loginError,
     handleChange,
     setShowPassword,
     handleLogin,
-    handleForgotPassword
+    handleCadastro
   } = useAuth();
-
   return (
     <div className="login-container">
-      <Sidebar />
-
       <div className="login-main-content">
         <LoginCard>
           <PageHeader
@@ -206,6 +203,12 @@ export default function LoginScreen() {
           />
           
           <div className="form-fields">
+            {loginError && (
+              <div className="login-error-banner">
+                {loginError}
+              </div>
+            )}
+            
             <FormInput
               label="Email"
               icon={Mail}
@@ -233,7 +236,7 @@ export default function LoginScreen() {
 
             <ActionButtons
               onLogin={handleLogin}
-              onForgotPassword={handleForgotPassword}
+              onCadastro={handleCadastro}
               isLoading={isLoading}
             />
           </div>

@@ -1,21 +1,34 @@
-import { useState } from 'react';
-import { Pencil, Trash2, Plus, Mail, Book, ArrowUpDown } from 'lucide-react';
-import { initialAlunos } from './setAlunos';
+import { useState, useEffect } from 'react';
+import { Pencil, Trash2, Plus, Mail, ArrowUpDown, Users, RefreshCw } from 'lucide-react';
 import { AlunoForm } from './CriarAluno';
+import { endpoints } from '../../../services/API/api';
 
-
-const AlunoCard = ({ aluno, onEdit, onDelete }) => {
+const AlunoCard = ({ aluno, onEdit, onDelete, onReenviarConvite }) => {
   return (
     <div className="card">
       <div className="card-header">
         <div className="card-title">
-          <h3 className='aluno-nome'>{aluno.name}</h3>
-          <p className="card-code">Código: {aluno.code}</p>
+          <h3 className='aluno-nome'>{aluno.nome}</h3>
+          <p className="card-code">
+            {aluno.matricula ? `Matrícula: ${aluno.matricula}` : 'Matrícula não informada'}
+          </p>
+          {!aluno.ativo && (
+            <span className="status-badge pendente">Convite pendente</span>
+          )}
         </div>
         <div className="card-actions">
+          {!aluno.ativo && (
+            <button 
+              className="btn-edit icon-btn" 
+              onClick={() => onReenviarConvite(aluno.id)}
+              title="Reenviar convite"
+            >
+              <RefreshCw size={18} />
+            </button>
+          )}
           <button 
             className="btn-edit icon-btn edit" 
-            onClick={() => onEdit(aluno.id)}
+            onClick={() => onEdit(aluno)}
             aria-label="Editar aluno"
           >
             <Pencil size={18} />
@@ -29,15 +42,10 @@ const AlunoCard = ({ aluno, onEdit, onDelete }) => {
           </button>
         </div>  
       </div>
-      
-      <div className="card-body">
+        <div className="card-body">
         <div className="info-row">
           <Mail size={16} />
           <span>{aluno.email}</span>
-        </div>
-        <div className="info-row turmas">
-          <Book size={16} />
-          <span>{aluno.grade}</span>
         </div>
       </div>
     </div>
@@ -46,10 +54,50 @@ const AlunoCard = ({ aluno, onEdit, onDelete }) => {
 
 // Componente Principal
 export function AlunosContent(){
-  const [alunos, setAlunos] = useState(initialAlunos);
+  const [alunos, setAlunos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
   const [mostrarForm, setMostrarForm] = useState(false);
   const [alunoParaEditar, setAlunoParaEditar] = useState(null);
+
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem('authToken');
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+  };
+
+  const carregarAlunos = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await fetch(`${endpoints.usuario.list}?role=ALUNO`, {
+        method: 'GET',
+        headers: getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Erro ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      setAlunos(data);
+    } catch (err) {
+      setError(err.message);
+      console.error('Erro ao carregar alunos:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    carregarAlunos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSort = (key) => {
     let direction = 'asc';
@@ -60,13 +108,12 @@ export function AlunosContent(){
     const sortedStudents = [...alunos].sort((a, b) => {
       let valueA, valueB;
       
-      if (key === 'name') {
-        valueA = a.name.toLowerCase();
-        valueB = b.name.toLowerCase();
-      } else if (key === 'grade') {
-        // Extrai o número do ano (ex: "5º Ano" -> 5)
-        valueA = parseInt(a.grade.match(/\d+/)?.[0] || 0);
-        valueB = parseInt(b.grade.match(/\d+/)?.[0] || 0);
+      if (key === 'nome') {
+        valueA = (a.nome || '').toLowerCase();
+        valueB = (b.nome || '').toLowerCase();
+      } else if (key === 'matricula') {
+        valueA = (a.matricula || '').toLowerCase();
+        valueB = (b.matricula || '').toLowerCase();
       }
       
       if (valueA < valueB) {
@@ -87,117 +134,204 @@ export function AlunosContent(){
     setMostrarForm(true);
   };
 
-  const handleSave = (formData) => {
-    console.log('Dados do aluno salvos:', formData);
+  const handleSave = async (formData) => {
+    try {
+      if (alunoParaEditar) {
+        // Editando aluno existente
+        const response = await fetch(endpoints.usuario.update(alunoParaEditar.id), {
+          method: 'PUT',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({
+            nome: formData.nome,
+            cpf: formData.cpf,
+            matricula: formData.matricula
+          })
+        });
 
-    
-    if(alunoParaEditar){
-      // Editando aluno existente
-      const alunosAtualizados = alunos.map(aluno =>
-         aluno.id === alunoParaEditar.id
-          ? {
-              ...aluno,
-              name: formData.nome,
-              email: formData.email,
-              cpf: formData.cpf,
-              code: formData.codigo,
-          }
-        : aluno
-      );
-      setAlunos(alunosAtualizados)
-    } else{
-      // Criando novo aluno
-      const novoAluno = {
-        id: alunos.length + 1,
-        name: formData.nome,
-        email: formData.email,
-        cpf: formData.cpf,
-        code: formData.codigo,
-      };
-      setAlunos([...alunos, novoAluno]);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Erro ao atualizar aluno');
+        }
+
+        await carregarAlunos();
+      } else {
+        // Criando novo aluno
+        const response = await fetch(endpoints.usuario.create, {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({
+            nome: formData.nome,
+            email: formData.email,
+            cpf: formData.cpf,
+            matricula: formData.matricula,
+            role: 'ALUNO'
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Erro ao criar aluno');
+        }
+
+        await carregarAlunos();
+      }
+
+      setMostrarForm(false);
+      setAlunoParaEditar(null);
+    } catch (err) {
+      alert(err.message);
+      console.error('Erro ao salvar aluno:', err);
     }
-
-    setMostrarForm(false);
-    setAlunoParaEditar(null);
   };
 
   const handleCancel = () => {
     setMostrarForm(false);
     setAlunoParaEditar(null);
-  }
+  };
 
-  const handleEdit = (id) => {
-    const aluno = alunos.find(aluno => aluno.id === id);
+  const handleEdit = (aluno) => {
     setAlunoParaEditar(aluno);
     setMostrarForm(true);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm('Tem certeza que deseja excluir este aluno?')) {
-      setAlunos(alunos.filter(s => s.id !== id));
+      try {
+        const response = await fetch(endpoints.usuario.delete(id), {
+          method: 'DELETE',
+          headers: getAuthHeaders()
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Erro ao excluir aluno');
+        }
+
+        await carregarAlunos();
+      } catch (err) {
+        alert(err.message);
+        console.error('Erro ao excluir aluno:', err);
+      }
     }
   };
+
+  const handleReenviarConvite = async (id) => {
+    try {
+      const response = await fetch(endpoints.usuario.reenviarConvite(id), {
+        method: 'POST',
+        headers: getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erro ao reenviar convite');
+      }
+
+      alert('Convite reenviado com sucesso!');
+    } catch (err) {
+      alert(err.message);
+      console.error('Erro ao reenviar convite:', err);
+    }
+  };
+
+  if (loading) {
+    return (
+      <main className="main-content">
+        <div className="content-wrapper">
+          <h1 className="content-title">Alunos</h1>
+          <p className="content-subtitle">Carregando...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="main-content">
+        <div className="content-wrapper">
+          <h1 className="content-title">Alunos</h1>
+          <p className="content-subtitle error-message">Erro: {error}</p>
+          <button className="btn-primary" onClick={carregarAlunos}>
+            Tentar novamente
+          </button>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <>
     <main className='main-content alunos-main-content'>
         <div className="content-wrapper">
-              <h1 className="content-title">Alunos</h1>
-              <p className="content-subtitle">Gerencie todos os alunos da escola</p>
+          <h1 className="content-title">Alunos</h1>
+          <p className="content-subtitle">Gerencie todos os alunos da escola</p>
             
-            <div className="toolbar">
-              <button className="btn-primary" onClick={handleCriarNovoAluno}>
-                <Plus size={20} />
-                Criar Novo Aluno
+          <div className="toolbar">
+            <button className="btn-primary" onClick={handleCriarNovoAluno}>
+              <Plus size={20} />
+              Criar Novo Aluno
+            </button>
+            
+            <div className="sort-buttons">
+              <button 
+                className={`btn-sort ${sortConfig.key === 'nome' ? 'active' : ''}`}
+                onClick={() => handleSort('nome')}
+              >
+                <ArrowUpDown size={18} />
+                Ordenar por Nome
+                {sortConfig.key === 'nome' && (
+                  <span className="sort-indicator">
+                    {sortConfig.direction === 'asc' ? ' ↑' : ' ↓'}
+                  </span>
+                )}
               </button>
               
-              <div className="sort-buttons">
-                <button 
-                  className={`btn-sort ${sortConfig.key === 'name' ? 'active' : ''}`}
-                  onClick={() => handleSort('name')}
-                >
-                  <ArrowUpDown size={18} />
-                  Ordenar por Nome
-                  {sortConfig.key === 'name' && (
-                    <span className="sort-indicator">
-                      {sortConfig.direction === 'asc' ? ' ↑' : ' ↓'}
-                    </span>
-                  )}
-                </button>
-                
-                <button 
-                  className={`btn-sort ${sortConfig.key === 'grade' ? 'active' : ''}`}
-                  onClick={() => handleSort('grade')}
-                >
-                  <ArrowUpDown size={18} />
-                  Ordenar por Ano
-                  {sortConfig.key === 'grade' && (
-                    <span className="sort-indicator">
-                      {sortConfig.direction === 'asc' ? ' ↑' : ' ↓'}
-                    </span>
-                  )}
-                </button>
-              </div>
+              <button 
+                className={`btn-sort ${sortConfig.key === 'matricula' ? 'active' : ''}`}
+                onClick={() => handleSort('matricula')}
+              >
+                <ArrowUpDown size={18} />
+                Ordenar por Matrícula
+                {sortConfig.key === 'matricula' && (
+                  <span className="sort-indicator">
+                    {sortConfig.direction === 'asc' ? ' ↑' : ' ↓'}
+                  </span>
+                )}
+              </button>
             </div>
-            
-          <div className="card-grid">
-            {alunos.map(aluno => (
-              <AlunoCard
-                key={aluno.id}
-                aluno={aluno}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-              />
-            ))}
           </div>
+
+          {alunos.length === 0 ? (
+            <div className="empty-state">
+              <Users size={48} />
+              <p>Nenhum aluno cadastrado</p>
+              <button className="btn-primary" onClick={handleCriarNovoAluno}>
+                <Plus size={20} />
+                Criar Primeiro Aluno
+              </button>
+            </div>
+          ) : (
+            <div className="card-grid">
+              {alunos.map(aluno => (
+                <AlunoCard
+                  key={aluno.id}
+                  aluno={aluno}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                  onReenviarConvite={handleReenviarConvite}
+                />
+              ))}
+            </div>
+          )}
         </div>
         {mostrarForm && (
           <AlunoForm
-          aluno={alunoParaEditar}
-          onSave={handleSave}
-          onCancel={handleCancel}/>
+            aluno={alunoParaEditar}
+            onSave={handleSave}
+            onCancel={handleCancel}
+          />
         )}
     </main>
     </>
   );
-};
+}

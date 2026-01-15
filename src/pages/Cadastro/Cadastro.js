@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { Building2, Lock, Mail, MapPin, FileText, User } from 'lucide-react';
-import { Sidebar } from '../../components/Sidebar/Sidebar';
-import {PageHeader} from '../../components/PageHeader/PageHeader';
+import { Building2, Lock, Mail, MapPin, FileText, User, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { PageHeader } from '../../components/PageHeader/PageHeader';
 import './styles/Cadastro.css';
-
 
 function FormInput({ 
   label, 
@@ -26,191 +25,240 @@ function FormInput({
   );
 }
 
-function CardHeader({ icon: Icon, title }) {
+function StepIndicator({ currentStep, totalSteps }) {
   return (
-    <div className="card-header">
-      <Icon className="header-icon" />
-      <h3 className="cadastro-card-title">{title}</h3>
+    <div className="step-indicator">
+      {[...Array(totalSteps)].map((_, index) => (
+        <div 
+          key={index} 
+          className={`step-dot ${index + 1 === currentStep ? 'active' : ''} ${index + 1 < currentStep ? 'completed' : ''}`}
+        />
+      ))}
     </div>
   );
 }
 
-function FormCard({ icon, title, children }) {
+function CadastroCard({ children }) {
   return (
-    <div className="form-card">
-      <CardHeader icon={icon} title={title} />
-      <div className="form-fields">
+    <div className="cadastro-card-wrapper">
+      <div className="cadastro-card">
         {children}
       </div>
     </div>
   );
 }
 
-function SchoolDataSection({ formData, errors, onCNPJChange, onChange }) {
+// Step 1: Dados da Escola
+function Step1({ formData, errors, onCNPJChange, onChange }) {
   return (
-    <FormCard icon={Building2} title="Dados da Escola">
-      <FormInput
-        label="CNPJ da Escola"
-        icon={FileText}
-        type="text"
-        name="cnpj"
-        value={formData.cnpj}
-        onChange={onCNPJChange}
-        placeholder="00.000.000/0000-00"
-        maxLength={18}
-        error={errors.cnpj}
-      />
+    <div className="step-content">
+      <div className="step-header">
+        <Building2 size={24} className="step-icon" />
+        <h3 className="step-title">Dados da Escola</h3>
+      </div>
       
-      <FormInput
-        label="Nome da Escola"
-        icon={Building2}
-        type="text"
-        name="schoolName"
-        value={formData.schoolName}
-        onChange={onChange}
-        placeholder="Digite o nome completo da escola"
-        error={errors.schoolName}
-      />
-    </FormCard>
-  );
-}
-
-function AddressDataSection({ formData, errors, onChange, onCEPChange }) {
-  return (
-    <FormCard icon={MapPin} title="Endereço da Escola">
-      <FormInput
-        label="CEP"
-        icon={MapPin}
-        type="text"
-        name="cep"
-        value={formData.cep}
-        onChange={onCEPChange}
-        placeholder="00000-000"
-        maxLength={9}
-        error={errors.cep}
-      />
-      
-      <FormInput
-        label="Cidade"
-        icon={MapPin}
-        type="text"
-        name="cidade"
-        value={formData.cidade}
-        onChange={onChange}
-        placeholder="Digite a cidade"
-        error={errors.cidade}
-      />
-      
-      <FormInput
-        label="Bairro"
-        icon={MapPin}
-        type="text"
-        name="bairro"
-        value={formData.bairro}
-        onChange={onChange}
-        placeholder="Digite o bairro"
-        error={errors.bairro}
-      />
-      
-      <FormInput
-        label="Logradouro"
-        icon={MapPin}
-        type="text"
-        name="logradouro"
-        value={formData.logradouro}
-        onChange={onChange}
-        placeholder="Rua, Avenida, etc."
-        error={errors.logradouro}
-      />
-      
-      <FormInput
-        label="Número"
-        icon={MapPin}
-        type="text"
-        name="numero"
-        value={formData.numero}
-        onChange={onChange}
-        placeholder="Número"
-        error={errors.numero}
-      />
-      
-      <FormInput
-        label="Complemento"
-        icon={MapPin}
-        type="text"
-        name="complemento"
-        value={formData.complemento}
-        onChange={onChange}
-        placeholder="Apartamento, Sala, etc. (opcional)"
-      />
-    </FormCard>
-  );
-}
-
-function ActionButtons({ onCancel, onSubmit }) {
-  return (
-    <div className="button-group">
-      <button onClick={onCancel} className="btn-cancel">
-        Cancelar
-      </button>
-      <button onClick={onSubmit} className="btn-submit">
-        Cadastrar Escola
-      </button>
+      <div className="form-fields">
+        <FormInput
+          label="CNPJ da Escola"
+          icon={FileText}
+          type="text"
+          name="cnpj"
+          value={formData.cnpj}
+          onChange={onCNPJChange}
+          placeholder="00.000.000/0000-00"
+          maxLength={18}
+          error={errors.cnpj}
+        />
+        
+        <FormInput
+          label="Nome da Escola"
+          icon={Building2}
+          type="text"
+          name="schoolName"
+          value={formData.schoolName}
+          onChange={onChange}
+          placeholder="Digite o nome completo da escola"
+          error={errors.schoolName}
+        />
+      </div>
     </div>
   );
 }
 
-function AccessDataSection({ formData, errors, onChange }) {
+// Step 2: Endereço
+function Step2({ formData, errors, onChange, onCEPChange }) {
   return (
-    <FormCard icon={Lock} title="Dados do Coordenador">
-      <FormInput
-        label="Nome do Coordenador"
-        icon={User}
-        type="text"
-        name="coordenadorNome"
-        value={formData.coordenadorNome}
-        onChange={onChange}
-        placeholder="Digite o nome completo"
-        error={errors.coordenadorNome}
-      />
+    <div className="step-content">
+      <div className="step-header">
+        <MapPin size={24} className="step-icon" />
+        <h3 className="step-title">Endereço da Escola</h3>
+      </div>
       
-      <FormInput
-        label="Email"
-        icon={Mail}
-        type="email"
-        name="email"
-        value={formData.email}
-        onChange={onChange}
-        placeholder="email@escola.com.br"
-        error={errors.email}
-      />
+      <div className="form-fields">
+        <div className="form-row">
+          <FormInput
+            label="CEP"
+            icon={MapPin}
+            type="text"
+            name="cep"
+            value={formData.cep}
+            onChange={onCEPChange}
+            placeholder="00000-000"
+            maxLength={9}
+            error={errors.cep}
+          />
+          
+          <FormInput
+            label="Cidade"
+            icon={MapPin}
+            type="text"
+            name="cidade"
+            value={formData.cidade}
+            onChange={onChange}
+            placeholder="Digite a cidade"
+            error={errors.cidade}
+          />
+        </div>
+        
+        <div className="form-row">
+          <FormInput
+            label="Bairro"
+            icon={MapPin}
+            type="text"
+            name="bairro"
+            value={formData.bairro}
+            onChange={onChange}
+            placeholder="Digite o bairro"
+            error={errors.bairro}
+          />
+          
+          <FormInput
+            label="Logradouro"
+            icon={MapPin}
+            type="text"
+            name="logradouro"
+            value={formData.logradouro}
+            onChange={onChange}
+            placeholder="Rua, Avenida, etc."
+            error={errors.logradouro}
+          />
+        </div>
+        
+        <div className="form-row">
+          <FormInput
+            label="Número"
+            icon={MapPin}
+            type="text"
+            name="numero"
+            value={formData.numero}
+            onChange={onChange}
+            placeholder="Número"
+            error={errors.numero}
+          />
+          
+          <FormInput
+            label="Complemento (opcional)"
+            icon={MapPin}
+            type="text"
+            name="complemento"
+            value={formData.complemento}
+            onChange={onChange}
+            placeholder="Apt, Sala, etc."
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Step 3: Dados do Coordenador
+function Step3({ formData, errors, onChange }) {
+  return (
+    <div className="step-content">
+      <div className="step-header">
+        <User size={24} className="step-icon" />
+        <h3 className="step-title">Dados do Coordenador</h3>
+      </div>
       
-      <FormInput
-        label="Senha"
-        icon={Lock}
-        type="password"
-        name="password"
-        value={formData.password}
-        onChange={onChange}
-        placeholder="Mínimo 6 caracteres"
-        error={errors.password}
-      />
+      <div className="form-fields">
+        <FormInput
+          label="Nome do Coordenador"
+          icon={User}
+          type="text"
+          name="coordenadorNome"
+          value={formData.coordenadorNome}
+          onChange={onChange}
+          placeholder="Digite o nome completo"
+          error={errors.coordenadorNome}
+        />
+        
+        <FormInput
+          label="Email"
+          icon={Mail}
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={onChange}
+          placeholder="email@escola.com.br"
+          error={errors.email}
+        />
+        
+        <FormInput
+          label="Senha"
+          icon={Lock}
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={onChange}
+          placeholder="Mínimo 6 caracteres"
+          error={errors.password}
+        />
+        
+        <FormInput
+          label="Confirmar Senha"
+          icon={Lock}
+          type="password"
+          name="confirmPassword"
+          value={formData.confirmPassword}
+          onChange={onChange}
+          placeholder="Digite a senha novamente"
+          error={errors.confirmPassword}
+        />
+      </div>
+    </div>
+  );
+}
+
+function NavigationButtons({ currentStep, totalSteps, onPrev, onNext, onSubmit, isLoading }) {
+  return (
+    <div className="navigation-buttons">
+      {currentStep > 1 ? (
+        <button onClick={onPrev} className="btn-nav btn-prev">
+          <ChevronLeft size={20} />
+          Voltar
+        </button>
+      ) : (
+        <div></div>
+      )}
       
-      <FormInput
-        label="Confirmar Senha"
-        icon={Lock}
-        type="password"
-        name="confirmPassword"
-        value={formData.confirmPassword}
-        onChange={onChange}
-        placeholder="Digite a senha novamente"
-        error={errors.confirmPassword}
-      />
-    </FormCard>
+      {currentStep < totalSteps ? (
+        <button onClick={onNext} className="btn-nav btn-next">
+          Continuar
+          <ChevronRight size={20} />
+        </button>
+      ) : (
+        <button onClick={onSubmit} className="btn-nav btn-submit" disabled={isLoading}>
+          {isLoading ? 'Cadastrando...' : 'Cadastrar Escola'}
+        </button>
+      )}
+    </div>
   );
 }
 
 function useSchoolRegistration() {
+  const navigate = useNavigate();
+  const [currentStep, setCurrentStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     cnpj: '',
     schoolName: '',
@@ -225,8 +273,9 @@ function useSchoolRegistration() {
     password: '',
     confirmPassword: ''
   });
-
   const [errors, setErrors] = useState({});
+
+  const totalSteps = 3;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -269,10 +318,7 @@ function useSchoolRegistration() {
       cnpj: formatted
     }));
     if (errors.cnpj) {
-      setErrors(prev => ({
-        ...prev,
-        cnpj: ''
-      }));
+      setErrors(prev => ({ ...prev, cnpj: '' }));
     }
   };
 
@@ -283,206 +329,222 @@ function useSchoolRegistration() {
       cep: formatted
     }));
     if (errors.cep) {
-      setErrors(prev => ({
-        ...prev,
-        cep: ''
-      }));
+      setErrors(prev => ({ ...prev, cep: '' }));
     }
   };
 
-  const validateForm = () => {
+  const validateStep = (step) => {
     const newErrors = {};
 
-    const cnpjNumbers = formData.cnpj.replace(/\D/g, '');
-    if (!formData.cnpj) {
-      newErrors.cnpj = 'CNPJ é obrigatório';
-    } else if (cnpjNumbers.length !== 14) {
-      newErrors.cnpj = 'CNPJ deve conter 14 dígitos';
+    if (step === 1) {
+      const cnpjNumbers = formData.cnpj.replace(/\D/g, '');
+      if (!formData.cnpj) {
+        newErrors.cnpj = 'CNPJ é obrigatório';
+      } else if (cnpjNumbers.length !== 14) {
+        newErrors.cnpj = 'CNPJ deve conter 14 dígitos';
+      }
+      if (!formData.schoolName.trim()) {
+        newErrors.schoolName = 'Nome da escola é obrigatório';
+      }
     }
 
-    if (!formData.schoolName.trim()) {
-      newErrors.schoolName = 'Nome da escola é obrigatório';
+    if (step === 2) {
+      const cepNumbers = formData.cep.replace(/\D/g, '');
+      if (!formData.cep) {
+        newErrors.cep = 'CEP é obrigatório';
+      } else if (cepNumbers.length !== 8) {
+        newErrors.cep = 'CEP deve conter 8 dígitos';
+      }
+      if (!formData.cidade.trim()) {
+        newErrors.cidade = 'Cidade é obrigatória';
+      }
+      if (!formData.bairro.trim()) {
+        newErrors.bairro = 'Bairro é obrigatório';
+      }
+      if (!formData.logradouro.trim()) {
+        newErrors.logradouro = 'Logradouro é obrigatório';
+      }
+      if (!formData.numero.trim()) {
+        newErrors.numero = 'Número é obrigatório';
+      }
     }
 
-    const cepNumbers = formData.cep.replace(/\D/g, '');
-    if (!formData.cep) {
-      newErrors.cep = 'CEP é obrigatório';
-    } else if (cepNumbers.length !== 8) {
-      newErrors.cep = 'CEP deve conter 8 dígitos';
-    }
-
-    if (!formData.cidade.trim()) {
-      newErrors.cidade = 'Cidade é obrigatória';
-    }
-
-    if (!formData.bairro.trim()) {
-      newErrors.bairro = 'Bairro é obrigatório';
-    }
-
-    if (!formData.logradouro.trim()) {
-      newErrors.logradouro = 'Logradouro é obrigatório';
-    }
-
-    if (!formData.numero.trim()) {
-      newErrors.numero = 'Número é obrigatório';
-    }
-
-    if (!formData.coordenadorNome.trim()) {
-      newErrors.coordenadorNome = 'Nome do coordenador é obrigatório';
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email) {
-      newErrors.email = 'Email é obrigatório';
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = 'Email inválido';
-    }
-
-    if (!formData.password) {
-      newErrors.password = 'Senha é obrigatória';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Senha deve ter no mínimo 6 caracteres';
-    }
-
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Confirmação de senha é obrigatória';
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'As senhas não coincidem';
+    if (step === 3) {
+      if (!formData.coordenadorNome.trim()) {
+        newErrors.coordenadorNome = 'Nome do coordenador é obrigatório';
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!formData.email) {
+        newErrors.email = 'Email é obrigatório';
+      } else if (!emailRegex.test(formData.email)) {
+        newErrors.email = 'Email inválido';
+      }
+      if (!formData.password) {
+        newErrors.password = 'Senha é obrigatória';
+      } else if (formData.password.length < 6) {
+        newErrors.password = 'Senha deve ter no mínimo 6 caracteres';
+      }
+      if (!formData.confirmPassword) {
+        newErrors.confirmPassword = 'Confirmação de senha é obrigatória';
+      } else if (formData.password !== formData.confirmPassword) {
+        newErrors.confirmPassword = 'As senhas não coincidem';
+      }
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async () => {
-    if (validateForm()) {
-      const requestBody = {
-        escola: {
-          nome: formData.schoolName,
-          cnpj: formData.cnpj
-        },
-        endereco: {
-          cep: formData.cep,
-          cidade: formData.cidade,
-          bairro: formData.bairro,
-          logradouro: formData.logradouro,
-          numero: formData.numero,
-          complemento: formData.complemento
-        },
-        coordenador: {
-          nome: formData.coordenadorNome,
-          email: formData.email,
-          senha: formData.password
-        }
-      };
-
-      console.log('Dados a serem enviados:', JSON.stringify(requestBody, null, 2));
-      
-      try {
-        const response = await fetch('http://localhost:3001/escola', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestBody)
-        });
-        
-        if (response.ok) {
-          const result = await response.json();
-          alert('Cadastro realizado com sucesso!');
-          console.log('Resposta do servidor:', result);
-          // TODO: Redirecionar para outra página
-          // window.location.href = '/login';
-        } else {
-          const errorData = await response.json();
-          alert(`Erro ao cadastrar escola: ${errorData.error || 'Erro desconhecido'}`);
-        }
-      } catch (error) {
-        console.error('Erro:', error);
-        alert('Erro ao conectar com o servidor. Verifique se o backend está rodando.');
-      }
+  const handleNext = () => {
+    if (validateStep(currentStep)) {
+      setCurrentStep(prev => Math.min(prev + 1, totalSteps));
     }
   };
 
-  const handleCancel = () => {
-    setFormData({
-      cnpj: '',
-      schoolName: '',
-      cep: '',
-      cidade: '',
-      bairro: '',
-      logradouro: '',
-      numero: '',
-      complemento: '',
-      coordenadorNome: '',
-      email: '',
-      password: '',
-      confirmPassword: ''
-    });
-    setErrors({});
+  const handlePrev = () => {
+    setCurrentStep(prev => Math.max(prev - 1, 1));
+  };
+
+  const handleSubmit = async () => {
+    if (!validateStep(currentStep)) return;
+
+    setIsLoading(true);
+    
+    const requestBody = {
+      escola: {
+        nome: formData.schoolName,
+        cnpj: formData.cnpj
+      },
+      endereco: {
+        cep: formData.cep,
+        cidade: formData.cidade,
+        bairro: formData.bairro,
+        logradouro: formData.logradouro,
+        numero: formData.numero,
+        complemento: formData.complemento
+      },
+      coordenador: {
+        nome: formData.coordenadorNome,
+        email: formData.email,
+        senha: formData.password
+      }
+    };
+    
+    try {
+      const response = await fetch('http://localhost:3001/escola', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody)
+      });
+      
+      if (response.ok) {
+        navigate('/sucesso');
+      } else {
+        const errorData = await response.json();
+        setErrors({ submit: errorData.error || 'Erro ao cadastrar escola' });
+      }
+    } catch (error) {
+      console.error('Erro:', error);
+      setErrors({ submit: 'Erro ao conectar com o servidor' });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return {
     formData,
     errors,
+    currentStep,
+    totalSteps,
+    isLoading,
     handleChange,
     handleCNPJChange,
     handleCEPChange,
-    handleSubmit,
-    handleCancel
+    handleNext,
+    handlePrev,
+    handleSubmit
   };
 }
 
 export default function SchoolRegistration() {
-    const {
+  const {
     formData,
     errors,
+    currentStep,
+    totalSteps,
+    isLoading,
     handleChange,
     handleCNPJChange,
     handleCEPChange,
-    handleSubmit,
-    handleCancel
+    handleNext,
+    handlePrev,
+    handleSubmit
   } = useSchoolRegistration();
 
+  const renderStep = () => {
+    switch (currentStep) {
+      case 1:
+        return (
+          <Step1
+            formData={formData}
+            errors={errors}
+            onCNPJChange={handleCNPJChange}
+            onChange={handleChange}
+          />
+        );
+      case 2:
+        return (
+          <Step2
+            formData={formData}
+            errors={errors}
+            onChange={handleChange}
+            onCEPChange={handleCEPChange}
+          />
+        );
+      case 3:
+        return (
+          <Step3
+            formData={formData}
+            errors={errors}
+            onChange={handleChange}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
-      <div className="cadastro-container">
-        <Sidebar />
-        
-        <div className="cadastro-main-content">
-          <div className="content-wrapper">
-            <PageHeader 
-              title="Cadastro de Escola"
-              subtitle="Preencha os dados abaixo para cadastrar sua escola"
-            />
-  
-            <div className="form-sections">
-              <SchoolDataSection
-                formData={formData}
-                errors={errors}
-                onCNPJChange={handleCNPJChange}
-                onChange={handleChange}
-              />
-  
-              <AddressDataSection
-                formData={formData}
-                errors={errors}
-                onChange={handleChange}
-                onCEPChange={handleCEPChange}
-              />
-  
-              <AccessDataSection
-                formData={formData}
-                errors={errors}
-                onChange={handleChange}
-              />
-  
-              <ActionButtons
-                onCancel={handleCancel}
-                onSubmit={handleSubmit}
-              />
+    <div className="cadastro-container">
+      <div className="cadastro-main-content">
+        <CadastroCard>
+          <PageHeader
+            title="Cadastro de Escola"
+            subtitle={`Passo ${currentStep} de ${totalSteps}`}
+          />
+          
+          <StepIndicator currentStep={currentStep} totalSteps={totalSteps} />
+          
+          {errors.submit && (
+            <div className="submit-error-banner">
+              {errors.submit}
             </div>
-          </div>
-        </div>
+          )}
+          
+          {renderStep()}
+          
+          <NavigationButtons
+            currentStep={currentStep}
+            totalSteps={totalSteps}
+            onPrev={handlePrev}
+            onNext={handleNext}
+            onSubmit={handleSubmit}
+            isLoading={isLoading}
+          />
+        </CadastroCard>
       </div>
-    );
+    </div>
+  );
 }

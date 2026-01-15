@@ -1,22 +1,9 @@
 import { useState, useEffect } from 'react';
+import { endpoints } from '../../../services/API/api';
 import './styles/CriarTurma.css';
 
-const alunosDisponiveis = [
-    { id: 1, nome: 'João Silva' },
-    { id: 2, nome: 'Maria Santos' },
-    { id: 3, nome: 'Pedro Oliveira' },
-    { id: 4, nome: 'Ana Costa' },
-    { id: 5, nome: 'Lucas Pereira' }
-];
-
-const professoresDisponiveis = [
-    { id: 1, nome: 'Prof. Carlos Mendes' },
-    { id: 2, nome: 'Prof. Paula Rocha' },
-    { id: 3, nome: 'Prof. Roberto Lima' }
-];
-
 // Componente para seleção de professor
-function ProfessorSelector({ professorSelecionado, onSelecionarProfessor, onRemoverProfessor }) {
+function ProfessorSelector({ professorSelecionado, onSelecionarProfessor, onRemoverProfessor, professoresDisponiveis }) {
   const [mostrarLista, setMostrarLista] = useState(false);
 
   const handleSelecionar = (professor) => {
@@ -49,15 +36,19 @@ function ProfessorSelector({ professorSelecionado, onSelecionarProfessor, onRemo
 
       {mostrarLista && (
         <div className="dropdown-list">
-          {professoresDisponiveis.map(prof => (
-            <div
-              key={prof.id}
-              className="dropdown-item"
-              onClick={() => handleSelecionar(prof)}
-            >
-              {prof.nome}
-            </div>
-          ))}
+          {professoresDisponiveis.length === 0 ? (
+            <div className="dropdown-item disabled">Nenhum professor disponível</div>
+          ) : (
+            professoresDisponiveis.map(prof => (
+              <div
+                key={prof.id}
+                className="dropdown-item"
+                onClick={() => handleSelecionar(prof)}
+              >
+                {prof.nome}
+              </div>
+            ))
+          )}
         </div>
       )}
     </div>
@@ -65,7 +56,7 @@ function ProfessorSelector({ professorSelecionado, onSelecionarProfessor, onRemo
 }
 
 // Componente para seleção de alunos
-function AlunosSelector({ alunosSelecionados, onToggleAluno, onRemoverAluno }) {
+function AlunosSelector({ alunosSelecionados, onToggleAluno, onRemoverAluno, alunosDisponiveis }) {
   const [mostrarLista, setMostrarLista] = useState(false);
 
   return (
@@ -80,24 +71,28 @@ function AlunosSelector({ alunosSelecionados, onToggleAluno, onRemoverAluno }) {
 
       {mostrarLista && (
         <div className="dropdown-list" style={{ position: 'relative', zIndex: 1000 }}>
-          {alunosDisponiveis.map(aluno => {
-            const jaSelecionado = alunosSelecionados.find(a => a.id === aluno.id);
-            return (
-              <div
-                key={aluno.id}
-                className={`dropdown-item ${jaSelecionado ? 'selected' : ''}`}
-                onClick={() => onToggleAluno(aluno)}
-              >
-                <input
-                  type="checkbox"
-                  checked={!!jaSelecionado}
-                  onChange={() => onToggleAluno(aluno)}
-                  onClick={(e) => e.stopPropagation()}
-                />
-                <span>{aluno.nome}</span>
-              </div>
-            );
-          })}
+          {alunosDisponiveis.length === 0 ? (
+            <div className="dropdown-item disabled">Nenhum aluno disponível</div>
+          ) : (
+            alunosDisponiveis.map(aluno => {
+              const jaSelecionado = alunosSelecionados.find(a => a.id === aluno.id);
+              return (
+                <div
+                  key={aluno.id}
+                  className={`dropdown-item ${jaSelecionado ? 'selected' : ''}`}
+                  onClick={() => onToggleAluno(aluno)}
+                >
+                  <input
+                    type="checkbox"
+                    checked={!!jaSelecionado}
+                    onChange={() => onToggleAluno(aluno)}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                  <span>{aluno.nome}</span>
+                </div>
+              );
+            })
+          )}
         </div>
       )}
 
@@ -132,13 +127,63 @@ export function TurmaForm({ turma = null, onSave, onCancel }){
     alunosSelecionados: [],
     professorSelecionado: null
   });
+  const [professoresDisponiveis, setProfessoresDisponiveis] = useState([]);
+  const [alunosDisponiveis, setAlunosDisponiveis] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [loadingDados, setLoadingDados] = useState(true);
+
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem('authToken');
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+  };
+
+  // Carregar professores e alunos da API
+  useEffect(() => {
+    const carregarDados = async () => {
+      try {
+        setLoadingDados(true);
+        
+        // Carregar professores
+        const resProfessores = await fetch(`${endpoints.usuario.list}?role=PROFESSOR`, {
+          method: 'GET',
+          headers: getAuthHeaders()
+        });
+        if (resProfessores.ok) {
+          const professores = await resProfessores.json();
+          setProfessoresDisponiveis(professores);
+        }
+
+        // Carregar alunos
+        const resAlunos = await fetch(`${endpoints.usuario.list}?role=ALUNO`, {
+          method: 'GET',
+          headers: getAuthHeaders()
+        });
+        if (resAlunos.ok) {
+          const alunos = await resAlunos.json();
+          setAlunosDisponiveis(alunos);
+        }
+      } catch (err) {
+        console.error('Erro ao carregar dados:', err);
+      } finally {
+        setLoadingDados(false);
+      }
+    };
+
+    carregarDados();
+  }, []);
 
   useEffect(() => {
     if (turma) {
+      // Mapear alunos da turma para o formato esperado
+      const alunosDaTurma = turma.alunos?.map(ta => ta.aluno) || [];
+      
       setFormData({
         codigo: turma.codigo || '',
-        nomeDisciplina: turma.nomeDisciplina || '',
-        alunosSelecionados: turma.alunosSelecionados || [],
+        nomeDisciplina: turma.disciplina || '',
+        alunosSelecionados: alunosDaTurma,
         professorSelecionado: turma.professor || null
       });
     }
@@ -190,13 +235,31 @@ export function TurmaForm({ turma = null, onSave, onCancel }){
     }));
   };
 
-  const handleSubmit = () => {
-    if (!formData.codigo || !formData.nomeDisciplina || !formData.professorSelecionado) {
-      alert('Por favor, preencha todos os campos obrigatórios');
+  const handleSubmit = async () => {
+    if (!formData.codigo || !formData.nomeDisciplina) {
+      alert('Por favor, preencha código e nome da disciplina');
       return;
     }
-    onSave(formData);
+
+    setLoading(true);
+    try {
+      await onSave(formData);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  if (loadingDados) {
+    return (
+      <div className="modal-overlay">
+        <div className="modal-container">
+          <div className="modal-header">
+            <h2>Carregando...</h2>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="modal-overlay">
@@ -232,11 +295,12 @@ export function TurmaForm({ turma = null, onSave, onCancel }){
           </div>
 
           <div className="form-group">
-            <label>Professor *</label>
+            <label>Professor</label>
             <ProfessorSelector
               professorSelecionado={formData.professorSelecionado}
               onSelecionarProfessor={selecionarProfessor}
               onRemoverProfessor={removerProfessor}
+              professoresDisponiveis={professoresDisponiveis}
             />
           </div>
 
@@ -246,15 +310,16 @@ export function TurmaForm({ turma = null, onSave, onCancel }){
               alunosSelecionados={formData.alunosSelecionados}
               onToggleAluno={toggleAluno}
               onRemoverAluno={removerAluno}
+              alunosDisponiveis={alunosDisponiveis}
             />
           </div>
 
           <div className="form-actions">
-            <button type="button" className="btn-cancel" onClick={onCancel}>
+            <button type="button" className="btn-cancel" onClick={onCancel} disabled={loading}>
               Cancelar
             </button>
-            <button type="button" className="btn-save" onClick={handleSubmit}>
-              {turma ? 'Salvar Alterações' : 'Criar Turma'}
+            <button type="button" className="btn-save" onClick={handleSubmit} disabled={loading}>
+              {loading ? 'Salvando...' : (turma ? 'Salvar Alterações' : 'Criar Turma')}
             </button>
           </div>
         </div>
