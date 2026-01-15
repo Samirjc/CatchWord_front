@@ -1,0 +1,451 @@
+/* Container principal */
+.configuracoes-wrapper {
+  max-width: 800px;
+}
+
+.configuracoes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Seção de foto do perfil */
+.perfil-foto-section {
+  background: white;
+  padding: 0;
+  overflow: hidden;
+}
+
+.perfil-foto-container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%);
+  padding: 2rem;
+  color: white;
+}
+
+.foto-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.foto-perfil,
+.foto-placeholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.foto-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.btn-camera {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: white;
+  color: #22d3ee;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.btn-camera:hover {
+  background-color: #f0f9ff;
+  transform: scale(1.1);
+}
+
+.foto-info {
+  flex: 1;
+}
+
+.foto-info h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: white;
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.foto-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.btn-remover-foto {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-remover-foto:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.foto-hint {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+/* Seção de informações do perfil dentro do card */
+.perfil-info-section {
+  padding: 2rem;
+  background: white;
+}
+
+/* Seções de configuração */
+.config-section {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.config-section:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Cabeçalho da seção */
+.config-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.config-section-header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.config-section-header svg {
+  color: #22d3ee;
+}
+
+/* Campos de configuração */
+.config-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.config-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.config-label svg {
+  color: #6b7280;
+}
+
+.config-input,
+.config-select {
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  background-color: white;
+}
+
+.config-input:disabled {
+  background-color: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.config-input:not(:disabled):focus,
+.config-select:focus {
+  outline: none;
+  border-color: #22d3ee;
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.1);
+}
+
+.config-select {
+  cursor: pointer;
+}
+
+/* Checkbox */
+.config-checkbox-field {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  margin-bottom: 1rem;
+}
+
+.config-checkbox-field:hover {
+  background-color: #f9fafb;
+}
+
+.config-checkbox {
+  width: 1.25rem;
+  height: 1.25rem;
+  cursor: pointer;
+  accent-color: #22d3ee;
+}
+
+.config-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  margin: 0;
+}
+
+.config-checkbox-label svg {
+  color: #6b7280;
+}
+
+/* Botão de alterar senha */
+.btn-alterar-senha {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background-color: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-alterar-senha:hover {
+  background-color: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+.btn-alterar-senha svg {
+  color: #6b7280;
+}
+
+/* Formulário de alteração de senha */
+.form-alterar-senha {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.form-senha-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn-cancelar,
+.btn-confirmar {
+  flex: 1;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancelar {
+  background-color: white;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.btn-cancelar:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.btn-confirmar {
+  background-color: #22d3ee;
+  color: white;
+  border: 1px solid #22d3ee;
+}
+
+.btn-confirmar:hover {
+  background-color: #06b6d4;
+  border-color: #06b6d4;
+}
+
+.btn-confirmar:disabled {
+  background-color: #e5e7eb;
+  border-color: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Ações principais */
+.config-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.btn-salvar-config {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  background-color: #22d3ee;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(34, 211, 238, 0.2);
+}
+
+.btn-salvar-config:hover {
+  background-color: #06b6d4;
+  box-shadow: 0 4px 8px rgba(34, 211, 238, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-salvar-config:disabled {
+  background-color: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Mensagens */
+.mensagem {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mensagem.sucesso {
+  background-color: #d1fae5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.mensagem.erro {
+  background-color: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .configuracoes-wrapper {
+    max-width: 100%;
+  }
+
+  .perfil-foto-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  .foto-info h3 {
+    font-size: 1.25rem;
+  }
+
+  .foto-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .perfil-info-section {
+    padding: 1.5rem;
+  }
+
+  .config-section {
+    padding: 1rem;
+  }
+
+  .form-senha-actions {
+    flex-direction: column;
+  }
+
+  .btn-cancelar,
+  .btn-confirmar {
+    width: 100%;
+  }
+
+  .config-actions {
+    justify-content: stretch;
+  }
+
+  .btn-salvar-config {
+    width: 100%;
+    justify-content: center;
+  }
+}

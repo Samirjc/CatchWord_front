@@ -5,6 +5,7 @@ import { TurmasContent } from '../../pages/Home/Turmas/Turmas';
 import { ProfessoresContent } from '../../pages/Home/Professores/Professores';
 import { AlunosContent } from '../../pages/Home/Alunos/Alunos';
 import { JogosContent } from '../../pages/Home/Jogos/Jogos';
+import { ConfiguracoesContent } from '../../pages/Home/Configuracoes/Configuracoes';
 import { ConfirmModal } from '../ConfirmModal/ConfirmModal';
 import { useSair } from '../../services/Sair/Sair';
 import './Menu.css';
@@ -81,6 +82,11 @@ function MainContent({ activeItem, menuItems, bottomItems, userProfile }) {
   }
   if (activeItem === 'alunos'){
     return <AlunosContent/>
+  }
+
+  // Renderiza o conteúdo específico da seção Configurações
+  if (activeItem === 'configuracoes') {
+    return <ConfiguracoesContent />;
   }
 
   return (
