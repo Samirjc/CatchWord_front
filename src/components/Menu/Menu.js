@@ -4,6 +4,7 @@ import { Logo } from '../Logo/Logo';
 import { TurmasContent } from '../../pages/Home/Turmas/Turmas';
 import { ProfessoresContent } from '../../pages/Home/Professores/Professores';
 import { AlunosContent } from '../../pages/Home/Alunos/Alunos';
+import { ConfirmModal } from '../ConfirmModal/ConfirmModal';
 import { useSair } from '../../services/Sair/Sair';
 import './Menu.css';
 
@@ -61,7 +62,7 @@ function Sidebar({ activeItem, onItemClick, menuItems, bottomItems }) {
   );
 }
 
-function MainContent({ activeItem, menuItems, bottomItems, userProfile, onSair }) {
+function MainContent({ activeItem, menuItems, bottomItems, userProfile }) {
   const currentItem = menuItems.find(i => i.id === activeItem) || bottomItems.find(i => i.id === activeItem);
   
   // Renderiza o conteúdo específico da seção Turmas
@@ -72,18 +73,10 @@ function MainContent({ activeItem, menuItems, bottomItems, userProfile, onSair }
   if (activeItem === 'professores') {
     return <ProfessoresContent/>;
   }
-
   if (activeItem === 'alunos'){
     return <AlunosContent/>
   }
 
-  if (activeItem === 'sair'){
-    const conf = window.confirm("Deseja mesmo sair dessa sessão?");
-    if(conf) {
-      onSair();
-    }
-    return null;
-  }
   return (
     <div className="main-content">
       <div className="content-wrapper">
@@ -102,6 +95,7 @@ function MainContent({ activeItem, menuItems, bottomItems, userProfile, onSair }
 
 export default function SidebarMenu() {
   const sair = useSair();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   // Obtém o perfil do usuário do localStorage
   const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
@@ -129,11 +123,28 @@ export default function SidebarMenu() {
     { id: 'sair', label: 'Sair', icon: LogOut },
   ];
 
+  const handleItemClick = (itemId) => {
+    if (itemId === 'sair') {
+      setShowLogoutModal(true);
+    } else {
+      setActiveItem(itemId);
+    }
+  };
+
+  const handleConfirmLogout = () => {
+    setShowLogoutModal(false);
+    sair();
+  };
+
+  const handleCancelLogout = () => {
+    setShowLogoutModal(false);
+  };
+
   return (
     <div className="app-container">
       <Sidebar
         activeItem={activeItem}
-        onItemClick={setActiveItem}
+        onItemClick={handleItemClick}
         menuItems={menuItems}
         bottomItems={bottomItems}
       />
@@ -142,7 +153,18 @@ export default function SidebarMenu() {
         menuItems={menuItems}
         bottomItems={bottomItems}
         userProfile={userProfile}
-        onSair={sair}
+      />
+      
+      <ConfirmModal
+        isOpen={showLogoutModal}
+        onConfirm={handleConfirmLogout}
+        onCancel={handleCancelLogout}
+        title="Sair da conta"
+        message="Tem certeza que deseja encerrar sua sessão?"
+        confirmText="Sair"
+        cancelText="Cancelar"
+        icon={LogOut}
+        variant="danger"
       />
     </div>
   );

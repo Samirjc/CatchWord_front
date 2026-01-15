@@ -79,10 +79,10 @@ function useAuth() {
     email: '',
     password: ''
   });
-
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [loginError, setLoginError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -90,11 +90,15 @@ function useAuth() {
       ...prev,
       [name]: value
     }));
+    // Limpa erros ao digitar
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
         [name]: ''
       }));
+    }
+    if (loginError) {
+      setLoginError('');
     }
   };
 
@@ -135,14 +139,9 @@ function useAuth() {
           email: formData.email,
           senha: formData.password
         })
-      });
-
-      const data = await response.json();
+      });      const data = await response.json();
       
       if (response.ok) {
-        alert('Login realizado com sucesso!');
-        console.log('Resposta do servidor:', data);
-        
         // Armazenar token ou dados do usuário
         if (data.token) {
           localStorage.setItem('authToken', data.token);
@@ -151,14 +150,14 @@ function useAuth() {
           localStorage.setItem('usuario', JSON.stringify(data.usuario));
         }
         
-        // TODO: Redirecionar para a página principal
-       window.location.href = '/home';
+        // Redirecionar para a página principal
+        window.location.href = '/home';
       } else {
-        alert(`Erro ao fazer login: ${data.error || 'Credenciais inválidas'}`);
+        setLoginError(data.error || 'Email ou senha incorretos');
       }
     } catch (error) {
       console.error(error);
-      alert('Erro ao conectar com o servidor');
+      setLoginError('Erro ao conectar com o servidor. Tente novamente.');
     } finally {
       setIsLoading(false);
     }
@@ -169,12 +168,12 @@ function useAuth() {
     // TODO: Implementar lógica de recuperação de senha
     alert('Funcionalidade de recuperação de senha em desenvolvimento.');
   };
-
   return {
     formData,
     errors,
     showPassword,
     isLoading,
+    loginError,
     handleChange,
     setShowPassword,
     handleLogin,
@@ -188,6 +187,7 @@ export default function LoginScreen() {
     errors,
     showPassword,
     isLoading,
+    loginError,
     handleChange,
     setShowPassword,
     handleLogin,
@@ -206,6 +206,12 @@ export default function LoginScreen() {
           />
           
           <div className="form-fields">
+            {loginError && (
+              <div className="login-error-banner">
+                {loginError}
+              </div>
+            )}
+            
             <FormInput
               label="Email"
               icon={Mail}
