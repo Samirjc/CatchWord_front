@@ -6,6 +6,7 @@ import SidebarMenu from './components/Menu/Menu';
 import PasswordScreen from './pages/Cadastro/CriarSenha';
 import Footer from './components/Footer';
 import SuccessScreen from './pages/Cadastro/Sucesso';
+import ErrorScreen from './pages/Erro/Erro_404';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/home" element={<SidebarMenu/>}/>
             <Route path='/completar-cadastro' element={<PasswordScreen/>}/>
             <Route path='/sucesso' element={<SuccessScreen/>}/>
+            <Route path='/erro' element={<ErrorScreen/>}/>
           </Routes>
         </div>
         <Footer/>
