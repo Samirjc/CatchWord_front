@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '../../components/PageHeader/PageHeader.js';
 import './styles/Login.css';
 import { endpoints } from '../../services/API/api.js';
@@ -52,7 +53,7 @@ function LoginCard({ children }) {
   );
 }
 
-function ActionButtons({ onLogin, onForgotPassword, isLoading }) {
+function ActionButtons({ onLogin, onCadastro, isLoading }) {
   return (
     <div className="button-group">
       <button 
@@ -63,17 +64,18 @@ function ActionButtons({ onLogin, onForgotPassword, isLoading }) {
         {isLoading ? 'Entrando...' : 'Entrar'}
       </button>
       <button
-        onClick={onForgotPassword}
-        className="forgot-password-buttom"
+        onClick={onCadastro}
+        className="cadastro-link"
         type="button"
       >
-        Esqueci minha senha
+        É coordenador? Cadastre sua escola
       </button>
     </div>
   );
 }
 
 function useAuth() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -162,11 +164,10 @@ function useAuth() {
     }
   };
 
-  const handleForgotPassword = () => {
-    console.log('Recuperação de senha para:', formData.email);
-    // TODO: Implementar lógica de recuperação de senha
-    alert('Funcionalidade de recuperação de senha em desenvolvimento.');
+  const handleCadastro = () => {
+    navigate('/cadastro');
   };
+
   return {
     formData,
     errors,
@@ -176,7 +177,7 @@ function useAuth() {
     handleChange,
     setShowPassword,
     handleLogin,
-    handleForgotPassword
+    handleCadastro
   };
 }
 
@@ -190,7 +191,7 @@ export default function LoginScreen() {
     handleChange,
     setShowPassword,
     handleLogin,
-    handleForgotPassword
+    handleCadastro
   } = useAuth();
   return (
     <div className="login-container">
@@ -235,7 +236,7 @@ export default function LoginScreen() {
 
             <ActionButtons
               onLogin={handleLogin}
-              onForgotPassword={handleForgotPassword}
+              onCadastro={handleCadastro}
               isLoading={isLoading}
             />
           </div>

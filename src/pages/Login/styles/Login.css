@@ -236,7 +236,7 @@
   transform: none;
 }
 
-.forgot-password-buttom {
+.cadastro-link {
   background: none;
   border: none;
   color: #667eea;
@@ -248,7 +248,7 @@
   text-align: center;
 }
 
-.forgot-password-buttom:hover {
+.cadastro-link:hover {
   color: #764ba2;
   text-decoration: underline;
 }
