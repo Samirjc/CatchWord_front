@@ -44,4 +44,15 @@ export const endpoints = {
     delete: (id) => `${API_BASE_URL}/jogo/${id}`,
     getTabuleiro: (id) => `${API_BASE_URL}/jogo/${id}/tabuleiro`,
   },
+
+  partida: {
+    create: `${API_BASE_URL}/partida`,
+    getByTurma: (turmaId) => `${API_BASE_URL}/partida/turma/${turmaId}`,
+    getById: (id) => `${API_BASE_URL}/partida/${id}`,
+    update: (id) => `${API_BASE_URL}/partida/${id}`,
+    delete: (id) => `${API_BASE_URL}/partida/${id}`,
+    registrarEstatistica: (partidaId) => `${API_BASE_URL}/partida/${partidaId}/estatistica`,
+    getEstatisticas: (partidaId) => `${API_BASE_URL}/partida/${partidaId}/estatisticas`,
+    getMinhaEstatistica: (partidaId) => `${API_BASE_URL}/partida/${partidaId}/minha-estatistica`,
+  },
 };

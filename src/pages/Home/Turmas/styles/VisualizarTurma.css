@@ -1,0 +1,514 @@
+
+/* Overlay */
+.visualizar-turma-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+
+/* Container */
+.visualizar-turma-container {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header */
+.visualizar-turma-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 24px 28px;
+  border-bottom: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%);
+  color: white;
+}
+
+.turma-info-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.turma-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.turma-codigo {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.turma-professor {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.visualizar-turma-header .btn-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.visualizar-turma-header .btn-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Tabs */
+.turma-tabs {
+  display: flex;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0 28px;
+  background: #f9fafb;
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 24px;
+  border: none;
+  background: none;
+  color: #6b7280;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  color: #374151;
+  background: rgba(34, 211, 238, 0.05);
+}
+
+.tab-btn.active {
+  color: #0891b2;
+  border-bottom-color: #22d3ee;
+  background: white;
+}
+
+.tab-count {
+  background: #e5e7eb;
+  color: #6b7280;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tab-btn.active .tab-count {
+  background: #cffafe;
+  color: #0891b2;
+}
+
+/* Content */
+.visualizar-turma-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 28px;
+}
+
+/* Alunos Section */
+.alunos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.aluno-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s;
+}
+
+.aluno-card:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.aluno-avatar {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.aluno-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.aluno-nome {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 6px 0;
+}
+
+.aluno-detalhes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.aluno-email,
+.aluno-matricula {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Partidas Section */
+.partidas-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.partida-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s;
+}
+
+.partida-card:hover {
+  border-color: #22d3ee;
+  box-shadow: 0 4px 12px rgba(34, 211, 238, 0.15);
+}
+
+.partida-card.encerrada {
+  opacity: 0.7;
+  background: #f9fafb;
+}
+
+.partida-card.encerrada:hover {
+  border-color: #d1d5db;
+  box-shadow: none;
+}
+
+.partida-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.partida-titulo {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+  flex: 1;
+}
+
+.dificuldade-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.partida-body {
+  flex: 1;
+  margin-bottom: 16px;
+}
+
+.partida-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.partida-tema,
+.partida-data,
+.partida-pontuacao,
+.partida-jogadas,
+.partida-tema-secundario {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.partida-tema-secundario {
+  font-size: 13px;
+  color: #9ca3af;
+  padding-left: 24px;
+}
+
+.partida-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-delete-partida {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.btn-delete-partida:hover {
+  background: #fee2e2;
+}
+
+.partida-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 12px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.btn-jogar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-jogar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(34, 211, 238, 0.4);
+}
+
+.btn-ver-resultados {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: #f3f4f6;
+  color: #374151;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-ver-resultados:hover {
+  background: #e5e7eb;
+}
+
+.status-badge {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.status-badge.encerrada {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.status-badge.nao-iniciada {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-badge.ja-jogou {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #dcfce7;
+  color: #166534;
+}
+
+/* Card de partida não iniciada */
+.partida-card.nao-iniciada {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border-color: #fcd34d;
+}
+
+.partida-card.nao-iniciada:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+}
+
+/* Card de partida já jogada */
+.partida-card.ja-jogou {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-color: #86efac;
+}
+
+.partida-card.ja-jogou:hover {
+  border-color: #22c55e;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.15);
+}
+
+/* Empty State */
+.visualizar-turma-content .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #9ca3af;
+}
+
+.visualizar-turma-content .empty-state p {
+  margin-top: 16px;
+  font-size: 16px;
+}
+
+.visualizar-turma-content .loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: #6b7280;
+}
+
+/* Partidas Toolbar */
+.partidas-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.btn-criar-partida,
+.btn-criar-partida-empty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-criar-partida:hover,
+.btn-criar-partida-empty:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(34, 211, 238, 0.4);
+}
+
+.btn-criar-partida-empty {
+  margin-top: 16px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .visualizar-turma-container {
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .visualizar-turma-header {
+    padding: 20px;
+  }
+
+  .turma-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .turma-tabs {
+    padding: 0 16px;
+  }
+
+  .tab-btn {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .visualizar-turma-content {
+    padding: 20px;
+  }
+
+  .partidas-list {
+    grid-template-columns: 1fr;
+  }
+
+  .aluno-detalhes {
+    flex-direction: column;
+    gap: 4px;
+  }
+}

@@ -1,23 +1,27 @@
-import { Pencil, Trash2, UsersRound, Users, Plus, ArrowUpDown } from 'lucide-react';
+import { Pencil, Trash2, UsersRound, Users, Plus, ArrowUpDown, Eye } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { TurmaForm } from './CriarTurma.js';
+import { VisualizarTurma } from './VisualizarTurma.js';
 import { endpoints } from '../../../services/API/api';
 
-function TurmaCard({ turma, onEdit, onDelete, userProfile }) {
+function TurmaCard({ turma, onEdit, onDelete, onView, userProfile }) {
   const isCoordenador = userProfile === 'coordenador';
   
   // Conta o número de alunos na turma
   const numAlunos = turma.alunos?.length || 0;
   
   return (
-    <div className="card">
+    <div className="card turma-card-clickable" onClick={() => onView(turma)}>
       <div className="card-header">
         <div className="card-title">
           <h3 className="turma-name">{turma.disciplina}</h3>
           <p className="card-code">Código: {turma.codigo}</p>
         </div>
         {isCoordenador && (
-          <div className="card-actions">
+          <div className="card-actions" onClick={(e) => e.stopPropagation()}>
+            <button className="btn-view icon-btn view" title="Visualizar turma" onClick={() => onView(turma)}>
+              <Eye size={16} />
+            </button>
             <button className="btn-edit icon-btn edit" title="Editar turma" onClick={() => onEdit(turma)}>
               <Pencil size={16} />
             </button>
@@ -51,6 +55,7 @@ export function TurmasContent({ userProfile }) {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
   const [mostrarForm, setMostrarForm] = useState(false);
   const [turmaParaEditar, setTurmaParaEditar] = useState(null);
+  const [turmaParaVisualizar, setTurmaParaVisualizar] = useState(null);
   const getAuthHeaders = () => {
     const token = localStorage.getItem('authToken');
     return {
@@ -143,6 +148,15 @@ export function TurmasContent({ userProfile }) {
     setTurmaParaEditar(null);
     setMostrarForm(true);
   };
+
+  const handleView = (turma) => {
+    setTurmaParaVisualizar(turma);
+  };
+
+  const handleCloseView = () => {
+    setTurmaParaVisualizar(null);
+  };
+
   const handleSave = async (formData) => {
     try {
       const usuario = getUsuario();
@@ -361,6 +375,7 @@ export function TurmasContent({ userProfile }) {
                 turma={turma} 
                 onEdit={handleEdit}
                 onDelete={handleDelete}
+                onView={handleView}
                 userProfile={userProfile} 
               />
             ))}
@@ -384,6 +399,14 @@ export function TurmasContent({ userProfile }) {
           turma={turmaParaEditar}
           onSave={handleSave}
           onCancel={handleCancel}
+        />
+      )}
+
+      {turmaParaVisualizar && (
+        <VisualizarTurma
+          turma={turmaParaVisualizar}
+          onClose={handleCloseView}
+          userProfile={userProfile}
         />
       )}
     </main>

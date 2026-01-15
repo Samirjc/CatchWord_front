@@ -13,6 +13,16 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
+/*→ Cards clicáveis (turmas) */
+.card.turma-card-clickable {
+  cursor: pointer;
+}
+
+.card.turma-card-clickable:hover {
+  border-color: #22d3ee;
+  box-shadow: 0 4px 16px rgba(34, 211, 238, 0.2);
+}
+
 /*→ Cabeçalho do card*/
 .card-header{
   display: flex;

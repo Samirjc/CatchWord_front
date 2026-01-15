@@ -75,6 +75,14 @@
     background: #fee2e2;
 }
 
+.icon-btn.view {
+    color: #22d3ee;
+}
+
+.icon-btn.view:hover {
+    background: #cffafe;
+}
+
 /* Botão de ordenação*/
 .sort-buttons {
     display: flex;
