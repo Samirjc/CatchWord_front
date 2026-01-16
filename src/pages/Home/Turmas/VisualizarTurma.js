@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { X, Users, Gamepad2, Clock, User, Mail, Calendar, Play, ChevronRight, Plus, Trash2, CheckCircle } from 'lucide-react';
+import { X, Users, Gamepad2, Clock, User, Mail, Calendar, Play, ChevronRight, Plus, Trash2, CheckCircle, Trophy, Medal, Award } from 'lucide-react';
 import { endpoints } from '../../../services/API/api';
 import { CriarPartida } from './CriarPartida';
 import { JogarPartida } from './JogarPartida';
@@ -45,7 +45,158 @@ function AlunoCard({ aluno }) {
   );
 }
 
-function PartidaCard({ partida, onJogar, onDelete, userProfile, jaJogou }) {
+// Componente de Ranking de uma partida
+function RankingPartida({ partida, onClose }) {
+  const [estatisticas, setEstatisticas] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const carregarEstatisticas = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(endpoints.partida.getEstatisticas(partida.id), {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setEstatisticas(data);
+        }
+      } catch (err) {
+        console.error('Erro ao carregar estatísticas:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    carregarEstatisticas();
+  }, [partida.id]);
+
+  const formatarTempo = (inicio, fim) => {
+    if (!inicio || !fim) return '-';
+    const segundos = Math.floor((new Date(fim) - new Date(inicio)) / 1000);
+    const mins = Math.floor(segundos / 60);
+    const secs = segundos % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const getMedalha = (posicao) => {
+    switch (posicao) {
+      case 1:
+        return <Medal size={24} className="medalha ouro" />;
+      case 2:
+        return <Medal size={24} className="medalha prata" />;
+      case 3:
+        return <Medal size={24} className="medalha bronze" />;
+      default:
+        return <span className="posicao-numero">{posicao}º</span>;
+    }
+  };
+
+  return (
+    <div className="ranking-overlay">
+      <div className="ranking-container">
+        <div className="ranking-header">
+          <div className="ranking-title">
+            <Trophy size={24} />
+            <div>
+              <h2>Ranking</h2>
+              <span className="ranking-partida-nome">{partida.nome}</span>
+            </div>
+          </div>
+          <button className="btn-close" onClick={onClose}>
+            <X size={24} />
+          </button>
+        </div>
+
+        <div className="ranking-content">
+          {loading ? (
+            <div className="ranking-loading">
+              <p>Carregando ranking...</p>
+            </div>
+          ) : estatisticas.length === 0 ? (
+            <div className="ranking-empty">
+              <Award size={48} />
+              <p>Nenhum aluno jogou esta partida ainda</p>
+            </div>
+          ) : (
+            <>
+              {/* Pódio para os 3 primeiros */}
+              {estatisticas.length >= 1 && (
+                <div className="ranking-podio">
+                  {estatisticas.length >= 2 && (
+                    <div className="podio-item segundo">
+                      <div className="podio-avatar">
+                        <User size={28} />
+                      </div>
+                      <Medal size={32} className="medalha prata" />
+                      <span className="podio-nome">{estatisticas[1].aluno.nome}</span>
+                      <span className="podio-pontos">{estatisticas[1].pontuacao} pts</span>
+                    </div>
+                  )}
+                  <div className="podio-item primeiro">
+                    <div className="podio-avatar">
+                      <User size={36} />
+                    </div>
+                    <Medal size={40} className="medalha ouro" />
+                    <span className="podio-nome">{estatisticas[0].aluno.nome}</span>
+                    <span className="podio-pontos">{estatisticas[0].pontuacao} pts</span>
+                  </div>
+                  {estatisticas.length >= 3 && (
+                    <div className="podio-item terceiro">
+                      <div className="podio-avatar">
+                        <User size={24} />
+                      </div>
+                      <Medal size={28} className="medalha bronze" />
+                      <span className="podio-nome">{estatisticas[2].aluno.nome}</span>
+                      <span className="podio-pontos">{estatisticas[2].pontuacao} pts</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Tabela completa */}
+              <div className="ranking-tabela">
+                <div className="ranking-tabela-header">
+                  <span className="col-posicao">Pos.</span>
+                  <span className="col-nome">Aluno</span>
+                  <span className="col-palavras">Palavras</span>
+                  <span className="col-tempo">Tempo</span>
+                  <span className="col-pontos">Pontos</span>
+                </div>
+                <div className="ranking-tabela-body">
+                  {estatisticas.map((est, index) => (
+                    <div key={est.id} className={`ranking-row ${index < 3 ? `top-${index + 1}` : ''}`}>
+                      <span className="col-posicao">{getMedalha(index + 1)}</span>
+                      <span className="col-nome">
+                        <User size={16} />
+                        {est.aluno.nome}
+                      </span>
+                      <span className="col-palavras">{est.palavrasAchadas}</span>
+                      <span className="col-tempo">{formatarTempo(est.inicio, est.fim)}</span>
+                      <span className="col-pontos">{est.pontuacao}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="ranking-footer">
+          <button className="btn-fechar-ranking" onClick={onClose}>
+            Fechar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PartidaCard({ partida, onJogar, onDelete, onRanking, userProfile, jaJogou }) {
   const formatarDataHora = (data) => {
     if (!data) return '-';
     return new Date(data).toLocaleString('pt-BR', {
@@ -66,10 +217,10 @@ function PartidaCard({ partida, onJogar, onDelete, userProfile, jaJogou }) {
   
   // Pegar dificuldade do jogo associado
   const dificuldade = partida.jogo?.dificuldade || 'FACIL';
-  const dificuldadeCor = DIFICULDADE_CORES[dificuldade] || DIFICULDADE_CORES.FACIL;
-  const isProfessor = userProfile === 'professor';
+  const dificuldadeCor = DIFICULDADE_CORES[dificuldade] || DIFICULDADE_CORES.FACIL;  const isProfessor = userProfile === 'professor';
   const isCoordenador = userProfile === 'coordenador';
   const canDelete = (isProfessor || isCoordenador) && partida._count?.estatisticas === 0;
+  const hasEstatisticas = partida._count?.estatisticas > 0;
   const isAluno = userProfile === 'aluno';
 
   return (
@@ -123,9 +274,13 @@ function PartidaCard({ partida, onJogar, onDelete, userProfile, jaJogou }) {
             </span>
           )}
         </div>
-      </div>
-
-      <div className="partida-footer">
+      </div>      <div className="partida-footer">
+        {/* Botão de Ranking - sempre visível */}
+        <button className="btn-ranking" onClick={() => onRanking(partida)}>
+          <Trophy size={16} />
+          Ver Ranking
+        </button>
+        
         {isEncerrada ? (
           <span className="status-badge encerrada">
             Partida Encerrada
@@ -164,6 +319,7 @@ export function VisualizarTurma({ turma, onClose, userProfile }) {
   const [loadingPartidas, setLoadingPartidas] = useState(false);
   const [mostrarCriarPartida, setMostrarCriarPartida] = useState(false);
   const [partidaParaJogar, setPartidaParaJogar] = useState(null);
+  const [partidaParaRanking, setPartidaParaRanking] = useState(null);
   const [partidasJogadas, setPartidasJogadas] = useState({}); // {partidaId: boolean}
 
   const getAuthHeaders = useCallback(() => {
@@ -233,6 +389,10 @@ export function VisualizarTurma({ turma, onClose, userProfile }) {
 
   const handleJogar = (partida) => {
     setPartidaParaJogar(partida);
+  };
+
+  const handleRanking = (partida) => {
+    setPartidaParaRanking(partida);
   };
 
   const handleCriarPartida = async (novaPartida) => {
@@ -349,6 +509,7 @@ export function VisualizarTurma({ turma, onClose, userProfile }) {
                       partida={partida} 
                       onJogar={handleJogar}
                       onDelete={handleDeletePartida}
+                      onRanking={handleRanking}
                       userProfile={userProfile}
                       jaJogou={partidasJogadas[partida.id]}
                     />
@@ -386,6 +547,13 @@ export function VisualizarTurma({ turma, onClose, userProfile }) {
           onClose={() => setPartidaParaJogar(null)}
           onFinish={carregarPartidas}
           userProfile={userProfile}
+        />
+      )}
+
+      {partidaParaRanking && (
+        <RankingPartida
+          partida={partidaParaRanking}
+          onClose={() => setPartidaParaRanking(null)}
         />
       )}
     </div>
