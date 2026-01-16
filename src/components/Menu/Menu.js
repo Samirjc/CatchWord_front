@@ -86,7 +86,7 @@ function MainContent({ activeItem, menuItems, bottomItems, userProfile }) {
   }
 
   if (activeItem === 'estatisticas') {
-    return <EstatisticasContent userProfile={userProfile} />;
+    return <EstatisticasContent />;
   }
 
   // Renderiza o conteúdo específico da seção Configurações
@@ -129,7 +129,10 @@ export default function SidebarMenu() {
       { id: 'professores', label: 'Professores', icon: PencilRuler },
       { id: 'alunos', label: 'Alunos', icon: GraduationCap },
     ] : []),
-    { id: 'estatisticas', label: 'Estatísticas', icon: BarChart3 },
+    // Estatísticas só aparece para coordenador
+    ...(userProfile === 'coordenador' ? [
+      { id: 'estatisticas', label: 'Estatísticas', icon: BarChart3 },
+    ] : []),
   ];
 
   // Inicializa com o primeiro item do menu
