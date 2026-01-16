@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { User, Mail, IdCard, Bell, Type, Lock, Save, Camera } from 'lucide-react';
 import './Configuracoes.css';
 
-export function ConfiguracoesContent() {
+export function ConfiguracoesContent({userProfile}) {
   const [loading, setLoading] = useState(false);
   const [mensagem, setMensagem] = useState({ tipo: '', texto: '' });
   const fileInputRef = useRef(null);
@@ -12,6 +12,7 @@ export function ConfiguracoesContent() {
     nome: '',
     email: '',
     matricula: '',
+    cpf: '',
     role: '',
     fotoPerfil: null
   });
@@ -41,6 +42,7 @@ export function ConfiguracoesContent() {
       nome: dadosUsuario.nome || '',
       email: dadosUsuario.email || '',
       matricula: dadosUsuario.matricula || '',
+      cpf: dadosUsuario.cpf || '',
       role: dadosUsuario.role || '',
       fotoPerfil: fotoSalva
     });
@@ -261,6 +263,7 @@ export function ConfiguracoesContent() {
                   disabled
                   />
               </div>
+              {userProfile === 'aluno' &&
               <div className="config-field">
                 <label className="config-label">
                   <IdCard size={16} />
@@ -273,6 +276,7 @@ export function ConfiguracoesContent() {
                   disabled
                 />
               </div>
+            }
             </div>
           </div>
 
