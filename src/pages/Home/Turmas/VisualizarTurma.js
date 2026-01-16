@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { X, Users, Gamepad2, Clock, User, Mail, Calendar, Play, ChevronRight, Plus, Trash2, CheckCircle, Trophy, Medal, Award } from 'lucide-react';
 import { endpoints } from '../../../services/API/api';
+import { Toast } from '../../../components/Toast/Toast';
 import { CriarPartida } from './CriarPartida';
 import { JogarPartida } from './JogarPartida';
 import './styles/VisualizarTurma.css';
@@ -215,12 +216,12 @@ function PartidaCard({ partida, onJogar, onDelete, onRanking, userProfile, jaJog
   const isEncerrada = dataFim && dataFim < agora;
   const naoIniciada = dataInicio && dataInicio > agora;
   
-  // Pegar dificuldade do jogo associado
+    // Pegar dificuldade do jogo associado
   const dificuldade = partida.jogo?.dificuldade || 'FACIL';
-  const dificuldadeCor = DIFICULDADE_CORES[dificuldade] || DIFICULDADE_CORES.FACIL;  const isProfessor = userProfile === 'professor';
+  const dificuldadeCor = DIFICULDADE_CORES[dificuldade] || DIFICULDADE_CORES.FACIL;
+  const isProfessor = userProfile === 'professor';
   const isCoordenador = userProfile === 'coordenador';
   const canDelete = (isProfessor || isCoordenador) && partida._count?.estatisticas === 0;
-  const hasEstatisticas = partida._count?.estatisticas > 0;
   const isAluno = userProfile === 'aluno';
 
   return (
@@ -321,6 +322,7 @@ export function VisualizarTurma({ turma, onClose, userProfile }) {
   const [partidaParaJogar, setPartidaParaJogar] = useState(null);
   const [partidaParaRanking, setPartidaParaRanking] = useState(null);
   const [partidasJogadas, setPartidasJogadas] = useState({}); // {partidaId: boolean}
+  const [toast, setToast] = useState({ mensagem: '', tipo: '' });
 
   const getAuthHeaders = useCallback(() => {
     const token = localStorage.getItem('authToken');
@@ -394,10 +396,10 @@ export function VisualizarTurma({ turma, onClose, userProfile }) {
   const handleRanking = (partida) => {
     setPartidaParaRanking(partida);
   };
-
   const handleCriarPartida = async (novaPartida) => {
     setMostrarCriarPartida(false);
     await carregarPartidas();
+    setToast({ mensagem: 'Partida criada com sucesso!', tipo: 'sucesso' });
   };
 
   const handleDeletePartida = async (partida) => {
@@ -409,26 +411,32 @@ export function VisualizarTurma({ turma, onClose, userProfile }) {
       const response = await fetch(endpoints.partida.delete(partida.id), {
         method: 'DELETE',
         headers: getAuthHeaders()
-      });
-
-      if (response.ok) {
+      });      if (response.ok) {
         await carregarPartidas();
+        setToast({ mensagem: 'Partida excluída com sucesso!', tipo: 'sucesso' });
       } else {
         const error = await response.json();
-        alert(error.error || 'Erro ao excluir partida');
+        setToast({ mensagem: error.error || 'Erro ao excluir partida', tipo: 'erro' });
       }
     } catch (err) {
       console.error('Erro ao excluir partida:', err);
-      alert('Erro ao excluir partida');
+      setToast({ mensagem: 'Erro ao excluir partida', tipo: 'erro' });
     }
   };
 
   const isProfessor = userProfile === 'professor';
   const isCoordenador = userProfile === 'coordenador';
   const canCreatePartida = isProfessor || isCoordenador;
-
   return (
     <div className="visualizar-turma-overlay">
+      {/* Toast para mensagens */}
+      <Toast 
+        mensagem={toast.mensagem} 
+        tipo={toast.tipo} 
+        onClose={() => setToast({ mensagem: '', tipo: '' })}
+        duracao={4000}
+      />
+      
       <div className="visualizar-turma-container">
         <div className="visualizar-turma-header">
           <div className="turma-info-header">

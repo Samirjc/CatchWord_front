@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { User, Mail, IdCard, Bell, Type, Lock, Save, Camera } from 'lucide-react';
+import { endpoints } from '../../../services/API/api';
+import { Toast } from '../../../components/Toast/Toast';
 import './Configuracoes.css';
 
 export function ConfiguracoesContent() {
@@ -71,22 +73,18 @@ export function ConfiguracoesContent() {
         return;
       }
       
-      const reader = new FileReader();
-      reader.onloadend = () => {
+      const reader = new FileReader();      reader.onloadend = () => {
         setUsuario({ ...usuario, fotoPerfil: reader.result });
         localStorage.setItem('fotoPerfil', reader.result);
         setMensagem({ tipo: 'sucesso', texto: 'Foto atualizada com sucesso!' });
-        setTimeout(() => setMensagem({ tipo: '', texto: '' }), 3000);
       };
       reader.readAsDataURL(file);
     }
   };
-
   const handleRemoverFoto = () => {
     setUsuario({ ...usuario, fotoPerfil: null });
     localStorage.removeItem('fotoPerfil');
     setMensagem({ tipo: 'sucesso', texto: 'Foto removida com sucesso!' });
-    setTimeout(() => setMensagem({ tipo: '', texto: '' }), 3000);
   };
 
   // Atualiza checkbox de notificações
@@ -103,13 +101,11 @@ export function ConfiguracoesContent() {
     setConfiguracoes({
       ...configuracoes,
       tamanhoTexto: novoTamanho
-    });
-    // Aplica imediatamente
+    });    // Aplica imediatamente
     aplicarTamanhoTexto(novoTamanho);
     // Salva no localStorage
     localStorage.setItem('tamanhoTexto', novoTamanho);
     setMensagem({ tipo: 'sucesso', texto: 'Tamanho do texto alterado!' });
-    setTimeout(() => setMensagem({ tipo: '', texto: '' }), 2000);
   };
 
   // Salva alterações
@@ -122,20 +118,17 @@ export function ConfiguracoesContent() {
       
       // Aplica o tamanho de texto
       aplicarTamanhoTexto(configuracoes.tamanhoTexto);
-      
-      // Aqui você implementaria a chamada à API para salvar as configurações
+        // Aqui você implementaria a chamada à API para salvar as configurações
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       setMensagem({ tipo: 'sucesso', texto: 'Configurações salvas com sucesso!' });
-      setTimeout(() => setMensagem({ tipo: '', texto: '' }), 3000);
     } catch (error) {
       setMensagem({ tipo: 'erro', texto: 'Erro ao salvar configurações.' });
     } finally {
       setLoading(false);
     }
   };
-
-  // Altera senha
+  // Altera senha - conectado ao backend
   const handleAlterarSenha = async (e) => {
     e.preventDefault();
     
@@ -151,18 +144,36 @@ export function ConfiguracoesContent() {
 
     setLoading(true);
     try {
-      // Aqui você implementaria a chamada à API para alterar a senha
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setMensagem({ tipo: 'sucesso', texto: 'Senha alterada com sucesso!' });
+      const token = localStorage.getItem('authToken');
+      const response = await fetch(endpoints.usuario.alterarSenha, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          senhaAtual: senhas.senhaAtual,
+          novaSenha: senhas.novaSenha
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erro ao alterar senha');
+      }
+        setMensagem({ tipo: 'sucesso', texto: 'Senha alterada com sucesso!' });
       setMostrarAlterarSenha(false);
       setSenhas({ senhaAtual: '', novaSenha: '', confirmarSenha: '' });
-      setTimeout(() => setMensagem({ tipo: '', texto: '' }), 3000);
     } catch (error) {
-      setMensagem({ tipo: 'erro', texto: 'Erro ao alterar senha.' });
+      setMensagem({ tipo: 'erro', texto: error.message || 'Erro ao alterar senha.' });
     } finally {
       setLoading(false);
     }
+  };
+  // Função para limpar a mensagem (usada pelo Toast)
+  const limparMensagem = () => {
+    setMensagem({ tipo: '', texto: '' });
   };
 
   return (
@@ -171,11 +182,13 @@ export function ConfiguracoesContent() {
         <h1 className="content-title">Configurações</h1>
         <p className="content-subtitle">Gerencie suas preferências e informações pessoais</p>
         
-        {mensagem.texto && (
-          <div className={`mensagem ${mensagem.tipo}`}>
-            {mensagem.texto}
-          </div>
-        )}
+        {/* Toast para mensagens */}
+        <Toast 
+          mensagem={mensagem.texto} 
+          tipo={mensagem.tipo} 
+          onClose={limparMensagem}
+          duracao={4000}
+        />
 
         <div className="configuracoes-container">
           {/* Seção de Perfil com Imagem */}
