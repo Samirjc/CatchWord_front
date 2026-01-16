@@ -7,6 +7,7 @@ import PasswordScreen from './pages/Cadastro/CriarSenha';
 import Footer from './components/Footer';
 import SuccessScreen from './pages/Cadastro/Sucesso';
 import PrivateRoute from './components/PrivateRoute';
+import ErrorScreen from './pages/Erro/Erro_404'; // Adicione esta linha
 
 function AppContent() {
   const location = useLocation();
@@ -32,6 +33,9 @@ function AppContent() {
               <SidebarMenu/>
             </PrivateRoute>
           }/>
+          
+          {/* Rota catch-all para 404 */}
+          <Route path="*" element={<ErrorScreen />} />
         </Routes>
       </div>
       {showFooter && <Footer/>}
