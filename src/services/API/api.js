@@ -10,8 +10,7 @@ export const endpoints = {
     list: `${API_BASE_URL}/escola`,
     getById: (id) => `${API_BASE_URL}/escola/${id}`,
   },
-  
-  usuario: {
+    usuario: {
     verificarToken: (token) => `${API_BASE_URL}/usuario/verificar-token/${token}`,
     completarCadastro: `${API_BASE_URL}/usuario/completar-cadastro`,
     list: `${API_BASE_URL}/usuario`,
@@ -20,6 +19,7 @@ export const endpoints = {
     update: (id) => `${API_BASE_URL}/usuario/${id}`,
     delete: (id) => `${API_BASE_URL}/usuario/${id}`,
     reenviarConvite: (id) => `${API_BASE_URL}/usuario/${id}/reenviar-convite`,
+    alterarSenha: `${API_BASE_URL}/usuario/alterar-senha`,
   },
     turma: {
     list: `${API_BASE_URL}/turma`,

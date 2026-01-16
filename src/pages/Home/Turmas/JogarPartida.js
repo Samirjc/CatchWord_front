@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { X, Trophy, Clock, CheckCircle, Sparkles, AlertTriangle, Eye } from 'lucide-react';
 import { endpoints } from '../../../services/API/api';
+import { Toast } from '../../../components/Toast/Toast';
 import './styles/JogarPartida.css';
 
 export function JogarPartida({ partida, onClose, onFinish, userProfile }) {
@@ -315,8 +316,7 @@ export function JogarPartida({ partida, onClose, onFinish, userProfile }) {
         </div>
       </div>
     );
-  }
-  if (erro) {
+  }  if (erro) {
     return (
       <div className="jogar-partida-overlay">
         <div className="jogar-partida-container erro">

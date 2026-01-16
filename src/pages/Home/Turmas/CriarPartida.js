@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { X, Gamepad2, Calendar, AlertCircle } from 'lucide-react';
+import { X, Gamepad2, Calendar } from 'lucide-react';
 import { endpoints } from '../../../services/API/api';
+import { Toast } from '../../../components/Toast/Toast';
 import './styles/CriarPartida.css';
 
 const DIFICULDADE_CORES = {
@@ -135,14 +136,13 @@ export function CriarPartida({ turma, onSave, onCancel }) {
           <button type="button" className="btn-close" onClick={onCancel}>
             <X size={24} />
           </button>
-        </div>
-
-        {erro && (
-          <div className="form-error-banner">
-            <AlertCircle size={18} />
-            <span>{erro}</span>
-          </div>
-        )}
+        </div>        {/* Toast para mensagens de erro */}
+        <Toast 
+          mensagem={erro} 
+          tipo="erro" 
+          onClose={() => setErro('')}
+          duracao={5000}
+        />
 
         <form onSubmit={handleSubmit} className="criar-partida-form">
           <div className="form-group">

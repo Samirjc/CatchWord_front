@@ -146,8 +146,8 @@ function RankingCard({ posicao, aluno, pontos, palavrasAchadas, tempoTotal }) {
   );
 }
 
-// Componente Principal
-export function EstatisticasContent({ userProfile }) {
+// Componente Principal - Apenas para Coordenadores
+export function EstatisticasContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [turmas, setTurmas] = useState([]);
@@ -185,16 +185,19 @@ export function EstatisticasContent({ userProfile }) {
 
       const data = await response.json();
       
-      // Buscar partidas para cada turma
+      // Buscar partidas para cada turma usando o endpoint real
       const turmasComPartidas = await Promise.all(
         data.map(async (turma) => {
           try {
-            // TODO: Implementar endpoint para buscar partidas por turma
-            // Por enquanto, usando dados mock
-            return {
-              ...turma,
-              partidas: gerarPartidasMock(turma.id)
-            };
+            const partidasResponse = await fetch(endpoints.partida.getByTurma(turma.id), {
+              headers: getAuthHeaders()
+            });
+            
+            if (partidasResponse.ok) {
+              const partidas = await partidasResponse.json();
+              return { ...turma, partidas };
+            }
+            return { ...turma, partidas: [] };
           } catch (err) {
             console.error(`Erro ao carregar partidas da turma ${turma.id}:`, err);
             return { ...turma, partidas: [] };
@@ -216,86 +219,32 @@ export function EstatisticasContent({ userProfile }) {
       setLoadingRanking(true);
       setError(null);
 
-      // TODO: Implementar endpoint para buscar ranking da partida
-      // Por enquanto, usando dados mock
-      await new Promise(resolve => setTimeout(resolve, 500));
-      const rankingMock = gerarRankingMock();
-      setRanking(rankingMock);
+      const response = await fetch(endpoints.partida.getEstatisticas(partidaId), {
+        headers: getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao carregar ranking');
+      }
+
+      const estatisticas = await response.json();
+      
+      // Transformar estatísticas em formato de ranking
+      const rankingFormatado = estatisticas.map((est, index) => ({
+        posicao: index + 1,
+        aluno: est.aluno,
+        pontos: est.pontuacao,
+        palavrasAchadas: est.palavrasAchadas,
+        tempoTotal: est.inicio && est.fim ? { inicio: est.inicio, fim: est.fim } : null
+      }));
+
+      setRanking(rankingFormatado);
     } catch (err) {
       setError(err.message);
       console.error('Erro ao carregar ranking:', err);
     } finally {
       setLoadingRanking(false);
     }
-  };
-
-  const gerarPartidasMock = (turmaId) => {
-    return [
-      {
-        id: 1,
-        nome: 'Partida - Vocabulário Português',
-        status: 'FINALIZADA',
-        createdAt: new Date('2026-01-10'),
-        _count: { estatisticas: 25 },
-        jogo: { titulo: 'Caça-Palavras Português' }
-      },
-      {
-        id: 2,
-        nome: 'Partida - Gramática Avançada',
-        status: 'FINALIZADA',
-        createdAt: new Date('2026-01-08'),
-        _count: { estatisticas: 22 },
-        jogo: { titulo: 'Caça-Palavras Gramática' }
-      },
-      {
-        id: 3,
-        nome: 'Partida - Literatura Brasileira',
-        status: 'INICIADA',
-        createdAt: new Date('2026-01-14'),
-        _count: { estatisticas: 18 },
-        jogo: { titulo: 'Caça-Palavras Literatura' }
-      }
-    ];
-  };
-
-  const gerarRankingMock = () => {
-    return [
-      {
-        posicao: 1,
-        aluno: { nome: 'Ana Costa' },
-        pontos: 950,
-        palavrasAchadas: 12,
-        tempoTotal: { inicio: new Date('2026-01-10T10:00:00'), fim: new Date('2026-01-10T10:08:30') }
-      },
-      {
-        posicao: 2,
-        aluno: { nome: 'Pedro Lima' },
-        pontos: 920,
-        palavrasAchadas: 12,
-        tempoTotal: { inicio: new Date('2026-01-10T10:00:00'), fim: new Date('2026-01-10T10:09:15') }
-      },
-      {
-        posicao: 3,
-        aluno: { nome: 'Julia Oliveira' },
-        pontos: 890,
-        palavrasAchadas: 11,
-        tempoTotal: { inicio: new Date('2026-01-10T10:00:00'), fim: new Date('2026-01-10T10:09:45') }
-      },
-      {
-        posicao: 4,
-        aluno: { nome: 'Carlos Mendes' },
-        pontos: 870,
-        palavrasAchadas: 11,
-        tempoTotal: { inicio: new Date('2026-01-10T10:00:00'), fim: new Date('2026-01-10T10:10:20') }
-      },
-      {
-        posicao: 5,
-        aluno: { nome: 'Beatriz Souza' },
-        pontos: 850,
-        palavrasAchadas: 10,
-        tempoTotal: { inicio: new Date('2026-01-10T10:00:00'), fim: new Date('2026-01-10T10:10:50') }
-      }
-    ];
   };
 
   const handleSelecionarTurma = (turma) => {
@@ -454,9 +403,7 @@ export function EstatisticasContent({ userProfile }) {
           <div>
             <h1 className="content-title">Estatísticas</h1>
             <p className="content-subtitle">
-              {userProfile === 'aluno' && 'Veja o desempenho das suas turmas'}
-              {userProfile === 'professor' && 'Acompanhe o desempenho das suas turmas'}
-              {userProfile === 'coordenador' && 'Visão geral do desempenho das turmas'}
+              Visão geral do desempenho de todas as turmas da escola
             </p>
           </div>
         </div>
