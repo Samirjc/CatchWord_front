@@ -14,7 +14,7 @@ function ErrorCard({ children }) {
 
 export default function ErrorScreen() {
   return (
-    <div className="error-container">
+    <div className="error-404-container">
       <Sidebar/>
 
       <div className="error-main-content">

@@ -91,7 +91,7 @@ function MainContent({ activeItem, menuItems, bottomItems, userProfile }) {
 
   // Renderiza o conteúdo específico da seção Configurações
   if (activeItem === 'configuracoes') {
-    return <ConfiguracoesContent />;
+    return <ConfiguracoesContent userProfile={userProfile}/>;
   }
 
   return (
