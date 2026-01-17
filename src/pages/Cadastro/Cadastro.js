@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Building2, Lock, Mail, MapPin, FileText, User, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Building2, Lock, Mail, MapPin, FileText, User, ChevronLeft, ChevronRight, IdCard } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '../../components/PageHeader/PageHeader';
 import './styles/Cadastro.css';
@@ -172,7 +172,7 @@ function Step2({ formData, errors, onChange, onCEPChange }) {
 }
 
 // Step 3: Dados do Coordenador
-function Step3({ formData, errors, onChange }) {
+function Step3({ formData, errors, onChange, onCPFChange }) {
   return (
     <div className="step-content">
       <div className="step-header">
@@ -201,6 +201,18 @@ function Step3({ formData, errors, onChange }) {
           onChange={onChange}
           placeholder="email@escola.com.br"
           error={errors.email}
+        />
+
+        <FormInput
+          label="CPF"
+          icon={IdCard}
+          type="text"
+          name="coordenadorCpf"
+          value={formData.coordenadorCpf}
+          onChange={onCPFChange}
+          placeholder="000.000.000-00"
+          maxLength={14}
+          error={errors.coordenadorCpf}
         />
         
         <FormInput
@@ -269,6 +281,7 @@ function useSchoolRegistration() {
     numero: '',
     complemento: '',
     coordenadorNome: '',
+    coordenadorCpf: '',
     email: '',
     password: '',
     confirmPassword: ''
@@ -311,6 +324,17 @@ function useSchoolRegistration() {
     return value;
   };
 
+  const formatCPF = (value) => {
+    const numbers = value.replace(/\D/g, '');
+    if (numbers.length <= 11) {
+      return numbers
+        .replace(/^(\d{3})(\d)/, '$1.$2')
+        .replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3')
+        .replace(/\.(\d{3})(\d)/, '.$1-$2');
+    }
+    return value;
+  };
+
   const handleCNPJChange = (e) => {
     const formatted = formatCNPJ(e.target.value);
     setFormData(prev => ({
@@ -330,6 +354,17 @@ function useSchoolRegistration() {
     }));
     if (errors.cep) {
       setErrors(prev => ({ ...prev, cep: '' }));
+    }
+  };
+
+  const handleCPFChange = (e) => {
+    const formatted = formatCPF(e.target.value);
+    setFormData(prev => ({
+      ...prev,
+      coordenadorCpf: formatted
+    }));
+    if (errors.coordenadorCpf) {
+      setErrors(prev => ({ ...prev, coordenadorCpf: '' }));
     }
   };
 
@@ -379,6 +414,12 @@ function useSchoolRegistration() {
       } else if (!emailRegex.test(formData.email)) {
         newErrors.email = 'Email inválido';
       }
+      const cpfNumbers = formData.coordenadorCpf.replace(/\D/g, '');
+      if (!formData.coordenadorCpf) {
+        newErrors.coordenadorCpf = 'CPF é obrigatório';
+      } else if (cpfNumbers.length !== 11) {
+        newErrors.coordenadorCpf = 'CPF deve conter 11 dígitos';
+      }
       if (!formData.password) {
         newErrors.password = 'Senha é obrigatória';
       } else if (formData.password.length < 6) {
@@ -426,6 +467,7 @@ function useSchoolRegistration() {
       coordenador: {
         nome: formData.coordenadorNome,
         email: formData.email,
+        cpf: formData.coordenadorCpf,
         senha: formData.password
       }
     };
@@ -462,6 +504,7 @@ function useSchoolRegistration() {
     handleChange,
     handleCNPJChange,
     handleCEPChange,
+    handleCPFChange,
     handleNext,
     handlePrev,
     handleSubmit
@@ -478,6 +521,7 @@ export default function SchoolRegistration() {
     handleChange,
     handleCNPJChange,
     handleCEPChange,
+    handleCPFChange,
     handleNext,
     handlePrev,
     handleSubmit
@@ -509,6 +553,7 @@ export default function SchoolRegistration() {
             formData={formData}
             errors={errors}
             onChange={handleChange}
+            onCPFChange={handleCPFChange}
           />
         );
       default:

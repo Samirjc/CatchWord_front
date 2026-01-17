@@ -13,6 +13,7 @@ export function ConfiguracoesContent() {
   const [usuario, setUsuario] = useState({
     nome: '',
     email: '',
+    cpf: '',
     matricula: '',
     role: '',
     fotoPerfil: null
@@ -42,6 +43,7 @@ export function ConfiguracoesContent() {
     setUsuario({
       nome: dadosUsuario.nome || '',
       email: dadosUsuario.email || '',
+      cpf: dadosUsuario.cpf || '',
       matricula: dadosUsuario.matricula || '',
       role: dadosUsuario.role || '',
       fotoPerfil: fotoSalva
