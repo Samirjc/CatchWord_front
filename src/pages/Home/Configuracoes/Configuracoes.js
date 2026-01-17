@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { User, Mail, IdCard, Lock, Save } from 'lucide-react';
+import { User, Mail, IdCard, Lock } from 'lucide-react';
 import { endpoints } from '../../../services/API/api';
 import { Toast } from '../../../components/Toast/Toast';
 import './Configuracoes.css';
@@ -14,7 +14,6 @@ export function ConfiguracoesContent({userProfile}) {
     email: '',
     cpf: '',
     matricula: '',
-    cpf: '',
     role: ''
   });
   
@@ -35,7 +34,6 @@ export function ConfiguracoesContent({userProfile}) {
       email: dadosUsuario.email || '',
       cpf: dadosUsuario.cpf || '',
       matricula: dadosUsuario.matricula || '',
-      cpf: dadosUsuario.cpf || '',
       role: dadosUsuario.role || ''
     });
   }, []);
