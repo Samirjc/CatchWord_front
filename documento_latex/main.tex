@@ -2,7 +2,7 @@
 
 % ==============================================================================
 % PACOTES E CONFIGURAÇÕES SEGUNDO NORMAS ABNT
-% NBR 14724 (Estrutura de Trabalhos Acadêmicos)
+% NBR 14724 (Estrutura de Trabalhos Acadêmicos e Relatórios)
 % NBR 6023 (Referências)
 % NBR 6024 (Numeração Progressiva das Seções)
 % NBR 6027 (Sumário)
@@ -60,20 +60,20 @@
 % Seção Primária: 1 SEÇÃO (Caixa alta, Negrito)
 \titleformat{\section}
   {\normalfont\normalsize\bfseries}{\thesection}{1em}{\MakeUppercase}
-\titlespacing*{\section}{0pt}{18pt}{12pt}
+\titlespacing*{\section}{0pt}{18pt}{10pt}
 
-% Seção Secundária: 1.1 Seção (Caixa alta/baixa, Negrito)
+% Seção Secundária: 1.1 Seção (Caixa alta, Negrito)
 \titleformat{\subsection}
   {\normalfont\normalsize\bfseries}{\thesubsection}{1em}{}
 \titlespacing*{\subsection}{0pt}{14pt}{8pt}
 
-% Seção Terciária: 1.1.1 Seção (Caixa alta/baixa, Itálico)
+% Seção Terciária: 1.1.1 Seção (Itálico)
 \titleformat{\subsubsection}
   {\normalfont\normalsize\itshape}{\thesubsubsection}{1em}{}
 \titlespacing*{\subsubsection}{0pt}{12pt}{6pt}
 
 % --- Configuração de Cabeçalho e Numeração de Páginas (NBR 14724) ---
-% Numeração no canto superior direito, a 2cm da borda, apenas a partir da Introdução
+% Numeração no canto superior direito a partir da Introdução
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[R]{\small\thepage}
@@ -115,29 +115,43 @@
 \begin{document}
 
 % ------------------------------------------------------------------------------
-% 1. CAPA (NBR 14724 - Elemento Pré-textual Obrigatório)
+% 1. CAPA / FOLHA DE IDENTIFICAÇÃO (NBR 14724)
 % ------------------------------------------------------------------------------
 \begin{titlepage}
     \thispagestyle{empty}
     \begin{center}
         \setstretch{1.1}
-        \textbf{\MakeUppercase{Universidade Federal de Juiz de Fora -- UFJF}}\\[0.1cm]
-        \textbf{\MakeUppercase{Instituto de Ciências Exatas -- ICE}}\\[0.1cm]
-        \textbf{\MakeUppercase{Departamento de Ciência da Computação -- DCC}}\\[0.1cm]
+        \textbf{\MakeUppercase{Universidade Federal de Juiz de Fora -- UFJF}}\\[0.15cm]
+        \textbf{\MakeUppercase{Instituto de Ciências Exatas -- ICE}}\\[0.15cm]
+        \textbf{\MakeUppercase{Departamento de Ciência da Computação -- DCC}}\\[0.15cm]
         \textbf{\MakeUppercase{DCC061 -- Engenharia de Software}}
         
-        \vspace{4.0cm}
+        \vspace{2.5cm}
         
-        \textbf{ISAAC DIZOLELE}\\
-        \textbf{SAMIR JOSÉ}\\
-        \textbf{ALUNO 3}\\
-        \textbf{ALUNO 4}\\
-        \textbf{ALUNO 5}
+        \textbf{\MakeUppercase{Isaac Dizolele}}\\[0.1cm]
+        \textbf{\MakeUppercase{Samir José}}\\[0.1cm]
+        \textbf{\MakeUppercase{Aluno 3}}\\[0.1cm]
+        \textbf{\MakeUppercase{Aluno 4}}\\[0.1cm]
+        \textbf{\MakeUppercase{Aluno 5}}
         
-        \vspace{4.0cm}
+        \vspace{2.5cm}
         
-        \textbf{\large\MakeUppercase{Garantia da Qualidade e Testes de Software:}}\\[0.2cm]
+        \textbf{\large\MakeUppercase{Garantia da Qualidade e Testes de Software:}}\\[0.25cm]
         \textbf{\normalsize\MakeUppercase{Fundamentação Teórica e Aplicação Prática na Plataforma Catch Word}}
+        
+        \vspace{2.0cm}
+        
+        \begin{flushright}
+            \begin{minipage}{0.55\textwidth}
+                \setstretch{1.0}
+                \footnotesize
+                Trabalho Prático apresentado ao Departamento de Ciência da Computação da Universidade Federal de Juiz de Fora como requisito de avaliação na disciplina DCC061 -- Engenharia de Software.\\[0.3cm]
+                \textbf{Professor Orientador:} Prof. Dr. Fabrício Martins Mendonça.\\[0.15cm]
+                \textbf{Temas Escolhidos:}\\
+                1. Qualidade de Software\\
+                2. Testes de Software
+            \end{minipage}
+        \end{flushright}
         
         \vfill
         
@@ -147,171 +161,62 @@
 \end{titlepage}
 
 % ------------------------------------------------------------------------------
-% 2. FOLHA DE ROSTO (NBR 14724 - Elemento Pré-textual Obrigatório)
+% 2. RESUMO E SUMÁRIO (Elementos Pré-textuais Integrados)
 % ------------------------------------------------------------------------------
-\newpage
-\thispagestyle{empty}
-\begin{center}
-    \setstretch{1.1}
-    \textbf{ISAAC DIZOLELE}\\
-    \textbf{SAMIR JOSÉ}\\
-    \textbf{ALUNO 3}\\
-    \textbf{ALUNO 4}\\
-    \textbf{ALUNO 5}
-    
-    \vspace{4.5cm}
-    
-    \textbf{\large\MakeUppercase{Garantia da Qualidade e Testes de Software:}}\\[0.2cm]
-    \textbf{\normalsize\MakeUppercase{Fundamentação Teórica e Aplicação Prática na Plataforma Catch Word}}
-    
-    \vspace{3.5cm}
-    
-    \begin{flushright}
-        \begin{minipage}{0.5\textwidth}
-            \setstretch{1.0}
-            \footnotesize
-            Trabalho Prático apresentado ao Departamento de Ciência da Computação do Instituto de Ciências Exatas da Universidade Federal de Juiz de Fora como requisito parcial de avaliação na disciplina DCC061 -- Engenharia de Software.\\[0.4cm]
-            \textbf{Professor Orientador:} Prof. Dr. Fabrício Martins Mendonça.\\[0.2cm]
-            \textbf{Temas Escolhidos:}\\
-            1. Qualidade de Software\\
-            2. Testes de Software
-        \end{minipage}
-    \end{flushright}
-    
-    \vfill
-    
-    \textbf{JUIZ DE FORA -- MG}\\
-    \textbf{2026}
-\end{center}
-
-% ------------------------------------------------------------------------------
-% 3. RESUMO (NBR 6028 - Elemento Pré-textual Obrigatório)
-% ------------------------------------------------------------------------------
-\newpage
 \thispagestyle{empty}
 \begin{center}
     \textbf{\MakeUppercase{Resumo}}
 \end{center}
-\vspace{0.4cm}
+\vspace{0.2cm}
 
-\setstretch{1.5}
-\noindent O presente trabalho prático aborda de forma integrada e aprofundada dois tópicos centrais da Engenharia de Software: Qualidade de Software e Testes de Software. Na dimensão teórica, desenvolvem-se os oito tópicos fundamentais exigidos pelo conteúdo programático: definições formais, evolução histórica na computação, relevância na mitigação do débito técnico e na redução do custo do ciclo de vida (Lei de Boehm), tecnologias e ferramentas contemporâneas, normas internacionais (séries ISO/IEC 25010 e ISO/IEC/IEEE 29119), modelos de maturidade de processos (CMMI e MPS.BR), perfis profissionais no mercado de Tecnologia da Informação, certificações de referência (ISTQB, CSQE, CSDP) e os impactos transformadores da Inteligência Artificial. Na dimensão prática, descreve-se a refatoração arquitetural completa da plataforma educacional \textit{Catch Word}, demonstrando a eliminação do anti-padrão de controladores sobrecarregados (\textit{Fat Controllers}) mediante a transição para uma arquitetura em camadas desacopladas (Controllers, Services e Repositories). Essa reformulação estrutural viabilizou a implementação de uma pirâmide integral de testes automatizados com 282 testes (unitários, integração e componentes de interface), atingindo 100\% de cobertura nas regras de negócio e adaptadores HTTP, integrados a uma esteira de Integração Contínua (CI/CD) no GitHub Actions.
+\setstretch{1.3}
+\noindent\footnotesize O presente trabalho prático aborda de forma integrada e aprofundada dois tópicos centrais da Engenharia de Software: Qualidade de Software e Testes de Software. Na dimensão teórica, desenvolvem-se os oito tópicos fundamentais exigidos pelo conteúdo programático: definições formais, evolução histórica na computação, relevância na mitigação do débito técnico e na redução do custo do ciclo de vida (Lei de Boehm), tecnologias e ferramentas contemporâneas, normas internacionais (séries ISO/IEC 25010 e ISO/IEC/IEEE 29119), modelos de maturidade de processos (CMMI e MPS.BR), perfis profissionais no mercado de Tecnologia da Informação, certificações de referência (ISTQB, CSQE, CSDP) e os impactos transformadores da Inteligência Artificial. Na dimensão prática, descreve-se a refatoração arquitetural completa da plataforma educacional \textit{Catch Word}, demonstrando a eliminação do anti-padrão de controladores sobrecarregados (\textit{Fat Controllers}) mediante a transição para uma arquitetura em camadas desacopladas (Controllers, Services e Repositories). Essa reformulação estrutural viabilizou a implementação de uma pirâmide integral de testes automatizados com 282 testes (unitários, integração e componentes de interface), atingindo 100\% de cobertura nas regras de negócio e adaptadores HTTP, integrados a uma esteira de Integração Contínua (CI/CD) no GitHub Actions.
 
-\vspace{0.6cm}
-\noindent \textbf{Palavras-chave:} Qualidade de software. Testes de software. Arquitetura em camadas. Pirâmide de testes. ISO/IEC 25010. Integração contínua.
+\vspace{0.3cm}
+\noindent\footnotesize \textbf{Palavras-chave:} Qualidade de software. Testes de software. Arquitetura em camadas. Pirâmide de testes. ISO/IEC 25010. Integração contínua.
 
-% ------------------------------------------------------------------------------
-% 4. LISTA DE ILUSTRAÇÕES E TABELAS (Elemento Pré-textual)
-% ------------------------------------------------------------------------------
-\newpage
-\thispagestyle{empty}
-\begin{center}
-    \textbf{\MakeUppercase{Lista de Ilustrações}}
-\end{center}
-\vspace{0.4cm}
-\noindent Figura 1 -- Fluxo Arquitetural Refatorado em Três Camadas no Catch Word \dotfill 8\\
-\noindent Figura 2 -- Pirâmide de Testes Automatizados Implementada no Catch Word \dotfill 9
-
-\vspace{1.5cm}
-
-\begin{center}
-    \textbf{\MakeUppercase{Lista de Tabelas}}
-\end{center}
-\vspace{0.4cm}
-\noindent Tabela 1 -- Características da Qualidade do Produto segundo a Norma ISO/IEC 25010 \dotfill 4\\
-\noindent Tabela 2 -- Métricas Consolidadas de Cobertura de Código no Backend \dotfill 10\\
-\noindent Tabela 3 -- Planejamento e Divisão da Apresentação Oral em Sala de Aula \dotfill 11
-
-% ------------------------------------------------------------------------------
-% 5. LISTA DE ABREVIATURAS E SIGLAS
-% ------------------------------------------------------------------------------
-\newpage
-\thispagestyle{empty}
-\begin{center}
-    \textbf{\MakeUppercase{Lista de Abreviaturas e Siglas}}
-\end{center}
-\vspace{0.4cm}
-\begin{flushleft}
-\setstretch{1.2}
-\begin{tabular}{ll}
-AAA & \textit{Arrange, Act, Assert} \\
-ABNT & Associação Brasileira de Normas Técnicas \\
-API & \textit{Application Programming Interface} \\
-CI/CD & \textit{Continuous Integration / Continuous Delivery} \\
-CMMI & \textit{Capability Maturity Model Integration} \\
-CSQE & \textit{Certified Software Quality Engineer} \\
-DCC & Departamento de Ciência da Computação \\
-DOM & \textit{Document Object Model} \\
-E2E & \textit{End-to-End} (Ponta a Ponta) \\
-IEEE & \textit{Institute of Electrical and Electronics Engineers} \\
-ISO & \textit{International Organization for Standardization} \\
-ISTQB & \textit{International Software Testing Qualifications Board} \\
-JWT & \textit{JSON Web Token} \\
-LLM & \textit{Large Language Model} \\
-MPS.BR & Melhoria de Processo do Software Brasileiro \\
-ORM & \textit{Object-Relational Mapping} \\
-RBAC & \textit{Role-Based Access Control} \\
-REST & \textit{Representational State Transfer} \\
-RTL & \textit{React Testing Library} \\
-SAST & \textit{Static Application Security Testing} \\
-SDET & \textit{Software Development Engineer in Test} \\
-SoC & \textit{Separation of Concerns} (Separação de Preocupações) \\
-SOLID & \textit{Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion} \\
-SPA & \textit{Single Page Application} \\
-SRE & \textit{Site Reliability Engineer} \\
-SRP & \textit{Single Responsibility Principle} (Princípio da Responsabilidade Única) \\
-TCO & \textit{Total Cost of Ownership} (Custo Total de Propriedade) \\
-TDD & \textit{Test-Driven Development} \\
-UFJF & Universidade Federal de Juiz de Fora \\
-\end{tabular}
-\end{flushleft}
-
-% ------------------------------------------------------------------------------
-% 6. SUMÁRIO (NBR 6027 - Elemento Pré-textual Obrigatório)
-% ------------------------------------------------------------------------------
-\newpage
-\thispagestyle{empty}
+\vspace{0.8cm}
 \begin{center}
     \textbf{\MakeUppercase{Sumário}}
 \end{center}
-\vspace{0.4cm}
+\vspace{0.2cm}
 
-% O sumário ABNT apresenta alinhamento limpo com indicativos de seção
-\setstretch{1.3}
-\noindent \textbf{1 INTRODUÇÃO} \dotfill 1\\
-\noindent \textbf{2 TEMA 1: QUALIDADE DE SOFTWARE} \dotfill 2\\
-\noindent 2.1 DEFINIÇÃO DO TEMA \dotfill 2\\
-\noindent 2.2 HISTÓRICO NA COMPUTAÇÃO E ENGENHARIA DE SOFTWARE \dotfill 2\\
-\noindent 2.3 IMPORTÂNCIA EM ENGENHARIA DE SOFTWARE \dotfill 3\\
-\noindent 2.4 TECNOLOGIAS E FERRAMENTAS RELACIONADAS \dotfill 3\\
-\noindent 2.5 PADRÕES E NORMAS APLICÁVEIS \dotfill 4\\
-\noindent 2.6 PROFISSÕES NO MERCADO DE TRABALHO EM TI \dotfill 5\\
-\noindent 2.7 CERTIFICAÇÕES PROFISSIONAIS \dotfill 5\\
-\noindent 2.8 IMPACTOS DA INTELIGÊNCIA ARTIFICIAL \dotfill 5\\
-\noindent \textbf{3 TEMA 2: TESTES DE SOFTWARE} \dotfill 6\\
-\noindent 3.1 DEFINIÇÃO DO TEMA \dotfill 6\\
-\noindent 3.2 HISTÓRICO NA ENGENHARIA DE SOFTWARE \dotfill 6\\
-\noindent 3.3 IMPORTÂNCIA EM ENGENHARIA DE SOFTWARE \dotfill 7\\
-\noindent 3.4 TECNOLOGIAS E FERRAMENTAS RELACIONADAS \dotfill 7\\
-\noindent 3.5 PADRÕES E NORMAS APLICÁVEIS \dotfill 7\\
-\noindent 3.6 PROFISSÕES NO MERCADO DE TRABALHO EM TI \dotfill 8\\
-\noindent 3.7 CERTIFICAÇÕES PROFISSIONAIS \dotfill 8\\
-\noindent 3.8 IMPACTOS DA INTELIGÊNCIA ARTIFICIAL \dotfill 8\\
-\noindent \textbf{4 APLICAÇÃO PRÁTICA NO PROJETO CATCH WORD} \dotfill 8\\
-\noindent 4.1 VISÃO GERAL DO SISTEMA CATCH WORD \dotfill 8\\
-\noindent 4.2 QUALIDADE NA PRÁTICA: REFATORAÇÃO ARQUITETURAL EM CAMADAS \dotfill 8\\
-\noindent 4.3 TESTES NA PRÁTICA: PIRÂMIDE DE TESTES IMPLEMENTADA \dotfill 9\\
-\noindent 4.4 COBERTURA DE CÓDIGO E MÉTRICAS OBTIDAS \dotfill 10\\
-\noindent 4.5 PIPELINE DE INTEGRAÇÃO CONTÍNUA (CI/CD) \dotfill 11\\
-\noindent \textbf{5 ROTEIRO PARA APRESENTAÇÃO EM SALA DE AULA} \dotfill 11\\
-\noindent \textbf{6 CONCLUSÃO} \dotfill 12\\
-\noindent \textbf{REFERÊNCIAS} \dotfill 13
+\setstretch{1.15}
+\noindent\footnotesize \textbf{1 INTRODUÇÃO} \dotfill 1\\
+\noindent\footnotesize \textbf{2 TEMA 1: QUALIDADE DE SOFTWARE} \dotfill 1\\
+\noindent\footnotesize 2.1 DEFINIÇÃO DO TEMA \dotfill 1\\
+\noindent\footnotesize 2.2 HISTÓRICO NA COMPUTAÇÃO E ENGENHARIA DE SOFTWARE \dotfill 2\\
+\noindent\footnotesize 2.3 IMPORTÂNCIA EM ENGENHARIA DE SOFTWARE \dotfill 2\\
+\noindent\footnotesize 2.4 TECNOLOGIAS E FERRAMENTAS RELACIONADAS \dotfill 3\\
+\noindent\footnotesize 2.5 PADRÕES E NORMAS APLICÁVEIS \dotfill 3\\
+\noindent\footnotesize 2.6 PROFISSÕES NO MERCADO DE TRABALHO EM TI \dotfill 4\\
+\noindent\footnotesize 2.7 CERTIFICAÇÕES PROFISSIONAIS \dotfill 4\\
+\noindent\footnotesize 2.8 IMPACTOS DA INTELIGÊNCIA ARTIFICIAL \dotfill 4\\
+\noindent\footnotesize \textbf{3 TEMA 2: TESTES DE SOFTWARE} \dotfill 5\\
+\noindent\footnotesize 3.1 DEFINIÇÃO DO TEMA \dotfill 5\\
+\noindent\footnotesize 3.2 HISTÓRICO NA ENGENHARIA DE SOFTWARE \dotfill 5\\
+\noindent\footnotesize 3.3 IMPORTÂNCIA EM ENGENHARIA DE SOFTWARE \dotfill 6\\
+\noindent\footnotesize 3.4 TECNOLOGIAS E FERRAMENTAS RELACIONADAS \dotfill 6\\
+\noindent\footnotesize 3.5 PADRÕES E NORMAS APLICÁVEIS \dotfill 6\\
+\noindent\footnotesize 3.6 PROFISSÕES NO MERCADO DE TRABALHO EM TI \dotfill 7\\
+\noindent\footnotesize 3.7 CERTIFICAÇÕES PROFISSIONAIS \dotfill 7\\
+\noindent\footnotesize 3.8 IMPACTOS DA INTELIGÊNCIA ARTIFICIAL \dotfill 7\\
+\noindent\footnotesize \textbf{4 APLICAÇÃO PRÁTICA NO PROJETO CATCH WORD} \dotfill 7\\
+\noindent\footnotesize 4.1 VISÃO GERAL DO SISTEMA CATCH WORD \dotfill 7\\
+\noindent\footnotesize 4.2 QUALIDADE NA PRÁTICA: REFATORAÇÃO ARQUITETURAL EM CAMADAS \dotfill 8\\
+\noindent\footnotesize 4.3 TESTES NA PRÁTICA: PIRÂMIDE DE TESTES IMPLEMENTADA \dotfill 8\\
+\noindent\footnotesize 4.4 COBERTURA DE CÓDIGO E MÉTRICAS OBTIDAS \dotfill 9\\
+\noindent\footnotesize 4.5 PIPELINE DE INTEGRAÇÃO CONTÍNUA (CI/CD) \dotfill 10\\
+\noindent\footnotesize \textbf{5 ROTEIRO PARA APRESENTAÇÃO EM SALA DE AULA} \dotfill 10\\
+\noindent\footnotesize \textbf{6 CONCLUSÃO} \dotfill 11\\
+\noindent\footnotesize \textbf{REFERÊNCIAS} \dotfill 12
 
 % ------------------------------------------------------------------------------
-% ELEMENTOS TEXTUAIS (A partir daqui inicia-se a numeração visível da página)
+% ELEMENTOS TEXTUAIS (Início da numeração visível da página)
 % ------------------------------------------------------------------------------
 \newpage
 \setcounter{page}{1}
+\setstretch{1.5}
 
 % ==============================================================================
 % 1. INTRODUÇÃO
@@ -326,7 +231,7 @@ No contexto acadêmico da disciplina DCC061 -- Engenharia de Software, ministrad
     \item \textbf{Testes de Software}: investigando a taxonomia de verificação e validação, a Pirâmide de Testes (unitários, integração e interface), técnicas de teste caixa-preta e caixa-branca, e mecanismos de automação contínua.
 \end{enumerate}
 
-Para cumprir a exigência prática da disciplina, a equipe aplicou os conceitos teóricos diretamente na plataforma educacional **Catch Word**, um sistema web destinado ao ensino interativo por meio de caça-palavras pedagógicos customizáveis. O projeto foi submetido a uma reestruturação arquitetural com eliminação de controladores densos (\textit{Fat Controllers}), criação de uma arquitetura modular em três camadas e desenvolvimento de uma suíte com 282 testes automatizados integrados a uma esteira de Integração Contínua (CI/CD).
+Para cumprir a exigência prática da disciplina, a equipe aplicou os conceitos teóricos diretamente na plataforma educacional \textbf{Catch Word}, um sistema web destinado ao ensino interativo por meio de caça-palavras pedagógicos customizáveis. O projeto foi submetido a uma reestruturação arquitetural com eliminação de controladores densos (\textit{Fat Controllers}), criação de uma arquitetura modular em três camadas e desenvolvimento de uma suíte com 282 testes automatizados integrados a uma esteira de Integração Contínua (CI/CD).
 
 % ==============================================================================
 % 2. TEMA 1: QUALIDADE DE SOFTWARE
@@ -352,7 +257,7 @@ A evolução histórica da Qualidade de Software compreende quatro fases marcant
 \end{enumerate}
 
 \subsection{Importância em Engenharia de Software}
-A ausência de investimento contínuo em qualidade acarreta o acúmulo acelerado de **Débito Técnico** (\textit{Technical Debt}). Segundo a consagrada **Lei de Boehm**, o custo relativo para identificar e sanar um defeito cresce exponencialmente à medida que o software avança pelas etapas do ciclo de vida:
+A ausência de investimento contínuo em qualidade acarreta o acúmulo acelerado de \textbf{Débito Técnico} (\textit{Technical Debt}). Segundo a consagrada \textbf{Lei de Boehm}, o custo relativo para identificar e sanar um defeito cresce exponencialmente à medida que o software avança pelas etapas do ciclo de vida:
 
 \begin{displaymath}
 \text{Custo de Correção em Produção} \approx 50 \text{ a } 100 \times \text{Custo na Fase de Requisitos/Arquitetura}
@@ -387,7 +292,7 @@ A Tabela 1 sintetiza o modelo de qualidade de produto estipulado pela norma inte
 1. Adequação Funcional & Completude funcional, correção funcional e conformidade funcional. \\
 2. Eficiência de Desempenho & Comportamento em relação ao tempo, utilização de recursos e capacidade. \\
 3. Compatibilidade & Coexistência e interoperabilidade com outros sistemas. \\
-4. Usabilidade & Reconhecimento de adequação, aprendibilidade, operabilidade, proteção contra erro e estética. \\
+4. Usabilidade & Reconhecimento de adequação, aprendibilidade, operabilidade, estética. \\
 5. Confiabilidade & Maturidade, disponibilidade, tolerância a falhas e capacidade de recuperação. \\
 6. Segurança & Confidencialidade, integridade, não-repúdio, rastreabilidade e autenticidade. \\
 7. Manutenibilidade & Modularidade, reusabilidade, analisabilidade, modificabilidade e testabilidade. \\
@@ -398,7 +303,7 @@ A Tabela 1 sintetiza o modelo de qualidade de produto estipulado pela norma inte
 {\footnotesize \textbf{Fonte:} Adaptado de ISO/IEC (2011).}
 \end{table}
 
-Além da ISO/IEC 25010, destacam-se o modelo internacional **CMMI** (em 5 níveis de maturidade) e o modelo brasileiro **MPS.BR** (em 7 níveis, do nível G ao nível A).
+Além da ISO/IEC 25010, destacam-se o modelo internacional \textbf{CMMI} (em 5 níveis de maturidade) e o modelo brasileiro \textbf{MPS.BR} (em 7 níveis, do nível G ao nível A).
 
 \subsection{Profissões no Mercado de Trabalho em TI}
 \begin{itemize}
@@ -449,7 +354,7 @@ Segundo a taxonomia oficial do ISTQB (2023), estabelece-se a distinção formal 
     \item \textbf{Anos 1950 a 1960}: Os testes limitavam-se à depuração (\textit{debugging}) manual e assistemática conduzida pelo próprio programador.
     \item \textbf{Anos 1970 a 1980}: Glenford Myers publicou a obra clássica \textit{"The Art of Software Testing"} (1979), formalizando o teste como disciplina independente e evidenciando o Princípio de Dijkstra: ``Testes podem provar a presença de defeitos, mas nunca a sua ausência''.
     \item \textbf{Década de 1990}: Kent Beck difundiu o \textit{Test-Driven Development} (TDD), transformando os testes unitários em instrumentos primários de especificação viva e design de software (BECK, 2002).
-    \item \textbf{Anos 2000 até hoje}: Mike Cohn formulou a **Pirâmide de Testes** (COHN, 2009), enfatizando a preponderância de testes unitários rápidos e isolados na base da estratégia de qualidade.
+    \item \textbf{Anos 2000 até hoje}: Mike Cohn formulou a \textbf{Pirâmide de Testes} (COHN, 2009), enfatizando a preponderância de testes unitários rápidos e isolados na base da estratégia de qualidade.
 \end{itemize}
 
 \subsection{Importância em Engenharia de Software}
@@ -501,16 +406,16 @@ Segundo a taxonomia oficial do ISTQB (2023), estabelece-se a distinção formal 
 \section{Aplicação Prática no Projeto Catch Word}
 
 \subsection{Visão Geral do Sistema Catch Word}
-O **Catch Word** é uma solução educacional desenvolvida para possibilitar que professores elaborem caça-palavras pedagógicos personalizados, gerenciem turmas e acompanhem estatísticas de resolução dos alunos em tempo real. O sistema é estruturado em:
+O \textbf{Catch Word} é uma solução educacional desenvolvida para possibilitar que professores elaborem caça-palavras pedagógicos personalizados, gerenciem turmas e acompanhem estatísticas de resolução dos alunos em tempo real. O sistema é estruturado em:
 \begin{itemize}
-    \item **Backend (\texttt{CatchWord\_back})**: API REST em Node.js (módulos ES), Express, Prisma ORM e PostgreSQL;
-    \item **Frontend (\texttt{CatchWord\_front})**: SPA desenvolvida em React 18, React Router v6 e componentes estilizados em CSS modular.
+    \item \textbf{Backend (\texttt{CatchWord\_back})}: API REST em Node.js (módulos ES), Express, Prisma ORM e PostgreSQL;
+    \item \textbf{Frontend (\texttt{CatchWord\_front})}: SPA desenvolvida em React 18, React Router v6 e componentes estilizados em CSS modular.
 \end{itemize}
 
 \subsection{Qualidade na Prática: Refatoração Arquitetural em Camadas}
 Na versão original, o sistema continha o anti-padrão dos controladores sobrecarregados (\textit{Fat Controllers}), concentrando regras matemáticas de montagem de grid, persistência e envio de e-mails diretamente nas rotas HTTP.
 
-Para restabelecer a alta coesão e o baixo acoplamento, a aplicação foi refatorada aplicando o princípio de **Separação de Preocupações (SoC)**:
+Para restabelecer a alta coesão e o baixo acoplamento, a aplicação foi refatorada aplicando o princípio de \textbf{Separação de Preocupações (SoC)}:
 
 \begin{figure}[H]
 \centering
@@ -519,10 +424,10 @@ Para restabelecer a alta coesão e o baixo acoplamento, a aplicação foi refato
   arrow/.style={->, >=stealth, thick, color=black}
 ]
   \node[box] (req) {\textbf{REQUISIÇÃO HTTP CLIENTE}};
-  \node[box, below=0.5cm of req] (mid) {\textbf{1. MIDDLEWARES} (\texttt{autenticar}, \texttt{autorizarRoles})\\Validação de JWT e Controle de Acesso Baseado em Papéis (RBAC)};
-  \node[box, below=0.5cm of mid] (ctrl) {\textbf{2. CONTROLLERS} (\texttt{*Controller.js})\\Adaptadores HTTP puros: extração de parâmetros e resposta padronizada};
-  \node[box, below=0.5cm of ctrl] (srv) {\textbf{3. SERVICES} (\texttt{*Service.js})\\Regras de Negócio Puras, Cálculos Matriciais e Lançamento de \texttt{ServiceError}};
-  \node[box, below=0.5cm of srv] (repo) {\textbf{4. REPOSITORIES} (\texttt{*Repository.js})\\Isolamento da Camada de Banco de Dados / Prisma ORM};
+  \node[box, below=0.4cm of req] (mid) {\textbf{1. MIDDLEWARES} (\texttt{autenticar}, \texttt{autorizarRoles})\\Validação de JWT e Controle de Acesso Baseado em Papéis (RBAC)};
+  \node[box, below=0.4cm of mid] (ctrl) {\textbf{2. CONTROLLERS} (\texttt{*Controller.js})\\Adaptadores HTTP puros: extração de parâmetros e resposta padronizada};
+  \node[box, below=0.4cm of ctrl] (srv) {\textbf{3. SERVICES} (\texttt{*Service.js})\\Regras de Negócio Puras, Cálculos Matriciais e Lançamento de \texttt{ServiceError}};
+  \node[box, below=0.4cm of srv] (repo) {\textbf{4. REPOSITORIES} (\texttt{*Repository.js})\\Isolamento da Camada de Banco de Dados / Prisma ORM};
 
   \draw[arrow] (req) -- (mid);
   \draw[arrow] (mid) -- (ctrl);
@@ -556,7 +461,7 @@ A suíte de testes foi estruturada conforme a Pirâmide de Testes:
 \end{figure}
 
 \begin{enumerate}
-    \item \textbf{Testes Unitários (Backend -- Jest)}: Padrão AAA (\textit{Arrange, Act, Assert}), técnicas de Análise de Valores Limite (dimensões de 5x5 a 30x30 no \texttt{jogoService}) e Particionamento por Equivalência (direções ortogonais e diagonais válidas vs. ângulos inválidos).
+    \item \textbf{Testes Unitários (Backend -- Jest)}: Padrão AAA (\textit{Arrange, Act, Assert}), técnicas de Análise de Valores Limite (dimensões de 5x5 a 30x30 no \texttt{jogoService}) e Particionamento por Equivalência (direções válidas vs. ângulos inválidos).
     \item \textbf{Testes de Integração (Backend -- Supertest)}: Desacoplamento do \texttt{src/app.js} para instanciar a API em memória e testar rotas autenticadas sob JWT e rotas públicas.
     \item \textbf{Testes de Componentes (Frontend -- React Testing Library)}: Validação de formulários controlados, banners de erro, modais de confirmação e proteção de rotas privadas (\texttt{PrivateRoute}).
 \end{enumerate}
@@ -585,9 +490,9 @@ A Tabela 2 apresenta os resultados consolidados da execução da suíte de teste
 \end{table}
 
 \begin{itemize}
-    \item **Testes de Backend**: **269 testes aprovados** em 16 suítes;
-    \item **Testes de Frontend**: **13 testes aprovados** em 4 suítes;
-    \item **Total de Testes do Sistema**: **282 testes automatizados** com 100\% de aprovação.
+    \item \textbf{Testes de Backend}: \textbf{269 testes aprovados} em 16 suítes;
+    \item \textbf{Testes de Frontend}: \textbf{13 testes aprovados} em 4 suítes;
+    \item \textbf{Total de Testes do Sistema}: \textbf{282 testes automatizados} com 100\% de aprovação.
 \end{itemize}
 
 \subsection{Pipeline de Integração Contínua (CI/CD)}
@@ -626,7 +531,7 @@ A Tabela 3 detalha a divisão da exposição oral estipulada para a apresentaç�
 % ==============================================================================
 \section{Conclusão}
 
-A elaboração deste trabalho permitiu consolidar a compreensão teórica e prática de que **Qualidade de Software** e **Testes de Software** são disciplinas basilares que devem nortear o desenvolvimento de software profissional desde os seus primeiros passos.
+A elaboração deste trabalho permitiu consolidar a compreensão teórica e prática de que \textbf{Qualidade de Software} e \textbf{Testes de Software} são disciplinas basilares que devem nortear o desenvolvimento de software profissional desde os seus primeiros passos.
 
 A refatoração arquitetural aplicada ao projeto Catch Word comprovou na prática que um design modular em três camadas elimina acoplamentos desnecessários e viabiliza suítes de testes determinísticas e de rápida execução. A obtenção de 100\% de cobertura nos serviços de negócio e controladores, aliada à automação via CI/CD no GitHub Actions, garante sustentabilidade ao sistema, mitiga o risco de regressões e atende aos mais elevados padrões da Engenharia de Software contemporânea.
 
@@ -639,7 +544,7 @@ A refatoração arquitetural aplicada ao projeto Catch Word comprovou na prátic
 \end{center}
 \vspace{0.4cm}
 
-\setstretch{1.0}
+\setstretch{1.1}
 \noindent BECK, K. \textbf{Test-driven development: by example}. Boston: Addison-Wesley, 2002.
 
 \vspace{0.3cm}
