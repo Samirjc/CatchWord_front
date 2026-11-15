@@ -73,7 +73,6 @@
 \titlespacing*{\subsubsection}{0pt}{12pt}{6pt}
 
 % --- Configuração de Cabeçalho e Numeração de Páginas (NBR 14724) ---
-% Numeração no canto superior direito a partir da Introdução
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[R]{\small\thepage}
@@ -89,7 +88,7 @@
     citecolor=black,
     urlcolor=black,
     pdftitle={Trabalho Pratico - Qualidade e Testes de Software - UFJF},
-    pdfauthor={DCC061 - Engenharia de Software}
+    pdfauthor={Samir Copar, Isaac Joao, Rian Quintanilha, Gabriel Gribel}
 }
 
 % --- Estilo para Código-fonte ---
@@ -126,13 +125,12 @@
         \textbf{\MakeUppercase{Departamento de Ciência da Computação -- DCC}}\\[0.15cm]
         \textbf{\MakeUppercase{DCC061 -- Engenharia de Software}}
         
-        \vspace{2.5cm}
+        \vspace{2.2cm}
         
-        \textbf{\MakeUppercase{Isaac Dizolele}}\\[0.1cm]
-        \textbf{\MakeUppercase{Samir José}}\\[0.1cm]
-        \textbf{\MakeUppercase{Aluno 3}}\\[0.1cm]
-        \textbf{\MakeUppercase{Aluno 4}}\\[0.1cm]
-        \textbf{\MakeUppercase{Aluno 5}}
+        \textbf{GABRIEL TOLEDO NETTO GRIBEL -- Matrícula: 201976004}\\[0.15cm]
+        \textbf{ISAAC DIZOLELE KAPELA JOÃO -- Matrícula: 202376017}\\[0.15cm]
+        \textbf{RIAN CESAR QUINTANILHA -- Matrícula: 202465080AC}\\[0.15cm]
+        \textbf{SAMIR JABER COPAR -- Matrícula: 202465083AC}
         
         \vspace{2.5cm}
         
@@ -503,7 +501,7 @@ Configurou-se uma esteira no GitHub Actions (\texttt{.github/workflows/ci.yml}) 
 % ==============================================================================
 \section{Roteiro para Apresentação em Sala de Aula}
 
-A Tabela 3 detalha a divisão da exposição oral estipulada para a apresentação do grupo (15 a 20 minutos):
+A Tabela 3 detalha a divisão da exposição oral estipulada para os quatro integrantes do grupo (15 a 20 minutos de duração):
 
 \begin{table}[H]
 \centering
@@ -514,12 +512,11 @@ A Tabela 3 detalha a divisão da exposição oral estipulada para a apresentaç�
 \toprule
 \textbf{Bloco Temático} & \textbf{Tempo} & \textbf{Conteúdo Abordado} & \textbf{Apresentador} \\
 \midrule
-1. Abertura e Contexto & 2 min & Apresentação da equipe, escopo dos temas e introdução ao Catch Word. & Integrante 1 \\
-2. Qualidade de Software & 3 min & Norma ISO/IEC 25010, débito técnico, Lei de Boehm e impacto da IA. & Integrante 2 \\
-3. Testes de Software & 3 min & Pirâmide de Testes, normas ISTQB/ISO 29119 e técnicas caixa-preta/branca. & Integrante 3 \\
-4. Demonstração: Refatoração & 4 min & Comparativo Antes vs. Depois (Fat Controllers vs Camadas) e ganhos de design. & Integrante 4 \\
-5. Demonstração: Testes e CI & 5 min & Execução ao vivo no terminal (\texttt{npm run test:coverage}) e esteira GitHub Actions. & Integrante 5 \\
-6. Conclusão e Dúvidas & 2 min & Síntese dos resultados alcançados e encerramento. & Todos \\
+1. Abertura e Qualidade & 4 min & Introdução à equipe, conceitos de Qualidade (ISO 25010), débito técnico e Lei de Boehm. & Samir Jaber \\
+2. Testes de Software & 4 min & Fundamentação de Testes, Pirâmide de Cohn, normas ISTQB/ISO 29119 e IA. & Isaac João \\
+3. Demonstração: Refatoração & 4 min & Comparativo Antes vs. Depois (Fat Controllers vs Camadas) e isolamento dos Services. & Rian Quintanilha \\
+4. Demonstração: Testes e CI & 4 min & Execução ao vivo (\texttt{npm run test:coverage}), 282 testes e esteira GitHub Actions. & Gabriel Gribel \\
+5. Conclusão e Dúvidas & 2 min & Síntese dos resultados, benefícios alcançados e encerramento com a turma. & Todos \\
 \bottomrule
 \end{tabularx}
 \vspace{0.1cm}

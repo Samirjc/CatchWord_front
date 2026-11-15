@@ -43,16 +43,16 @@ const htmlContent = `<!DOCTYPE html>
   }
 
   .cover-authors {
-    font-size: 12pt;
+    font-size: 11pt;
     font-weight: bold;
     text-transform: uppercase;
     margin-top: 40px;
-    line-height: 1.4;
+    line-height: 1.5;
   }
 
   .cover-title-box {
-    margin-top: 50px;
-    margin-bottom: 30px;
+    margin-top: 40px;
+    margin-bottom: 25px;
   }
 
   .cover-title {
@@ -194,11 +194,10 @@ const htmlContent = `<!DOCTYPE html>
   </div>
 
   <div class="cover-authors">
-    ISAAC DIZOLELE<br>
-    SAMIR JOSÉ<br>
-    ALUNO 3<br>
-    ALUNO 4<br>
-    ALUNO 5
+    GABRIEL TOLEDO NETTO GRIBEL – Matrícula: 201976004<br>
+    ISAAC DIZOLELE KAPELA JOÃO – Matrícula: 202376017<br>
+    RIAN CESAR QUINTANILHA – Matrícula: 202465080AC<br>
+    SAMIR JABER COPAR – Matrícula: 202465083AC
   </div>
 
   <div class="cover-title-box">
@@ -476,16 +475,15 @@ const htmlContent = `<!DOCTYPE html>
       <th style="width: 25%;">Bloco Temático</th>
       <th style="width: 10%;">Tempo</th>
       <th>Conteúdo Abordado</th>
-      <th style="width: 15%;">Apresentador</th>
+      <th style="width: 22%;">Apresentador</th>
     </tr>
   </thead>
   <tbody>
-    <tr><td>1. Abertura e Contexto</td><td>2 min</td><td>Apresentação da equipe, escopo dos temas e introdução ao Catch Word.</td><td>Integrante 1</td></tr>
-    <tr><td>2. Qualidade de Software</td><td>3 min</td><td>Norma ISO/IEC 25010, débito técnico, Lei de Boehm e impacto da IA.</td><td>Integrante 2</td></tr>
-    <tr><td>3. Testes de Software</td><td>3 min</td><td>Pirâmide de Testes, normas ISTQB/ISO 29119 e técnicas caixa-preta/branca.</td><td>Integrante 3</td></tr>
-    <tr><td>4. Demonstração: Refatoração</td><td>4 min</td><td>Comparativo Antes vs. Depois (Fat Controllers vs Camadas) e ganhos de design.</td><td>Integrante 4</td></tr>
-    <tr><td>5. Demonstração: Testes e CI</td><td>5 min</td><td>Execução ao vivo no terminal (<code>npm run test:coverage</code>) e esteira GitHub Actions.</td><td>Integrante 5</td></tr>
-    <tr><td>6. Conclusão e Dúvidas</td><td>2 min</td><td>Síntese dos resultados alcançados e encerramento.</td><td>Todos</td></tr>
+    <tr><td>1. Abertura e Qualidade</td><td>4 min</td><td>Introdução à equipe, conceitos de Qualidade (ISO 25010), débito técnico e Lei de Boehm.</td><td>Samir Jaber</td></tr>
+    <tr><td>2. Testes de Software</td><td>4 min</td><td>Fundamentação de Testes, Pirâmide de Cohn, normas ISTQB/ISO 29119 e IA.</td><td>Isaac João</td></tr>
+    <tr><td>3. Demonstração: Refatoração</td><td>4 min</td><td>Comparativo Antes vs. Depois (Fat Controllers vs Camadas) e isolamento dos Services.</td><td>Rian Quintanilha</td></tr>
+    <tr><td>4. Demonstração: Testes e CI</td><td>4 min</td><td>Execução ao vivo (<code>npm run test:coverage</code>), 282 testes e esteira GitHub Actions.</td><td>Gabriel Gribel</td></tr>
+    <tr><td>5. Conclusão e Dúvidas</td><td>2 min</td><td>Síntese dos resultados, benefícios alcançados e encerramento com a turma.</td><td>Todos</td></tr>
   </tbody>
 </table>
 <p class="source-bottom"><strong>Fonte:</strong> Elaborada pelos autores (2026).</p>
@@ -539,7 +537,7 @@ async function generateDocx() {
             spacing: { after: 800 }
           }),
           new Paragraph({
-            text: "ISAAC DIZOLELE\nSAMIR JOSÉ\nALUNO 3\nALUNO 4\nALUNO 5",
+            text: "GABRIEL TOLEDO NETTO GRIBEL – Matrícula: 201976004\nISAAC DIZOLELE KAPELA JOÃO – Matrícula: 202376017\nRIAN CESAR QUINTANILHA – Matrícula: 202465080AC\nSAMIR JABER COPAR – Matrícula: 202465083AC",
             heading: HeadingLevel.HEADING_3,
             alignment: AlignmentType.CENTER,
             spacing: { after: 1000 }
@@ -814,7 +812,7 @@ async function generateDocx() {
             spacing: { before: 400, after: 200 }
           }),
           new Paragraph({
-            text: "Divisão do Tempo de Apresentação (15 a 20 minutos):\n1. Abertura e Contexto (2 min) – Apresentador: Integrante 1;\n2. Qualidade de Software (3 min) – Apresentador: Integrante 2;\n3. Testes de Software (3 min) – Apresentador: Integrante 3;\n4. Demonstração: Refatoração (4 min) – Apresentador: Integrante 4;\n5. Demonstração: Testes e CI (5 min) – Apresentador: Integrante 5;\n6. Conclusão e Dúvidas (2 min) – Apresentadores: Todos.",
+            text: "Divisão do Tempo de Apresentação (15 a 20 minutos):\n1. Abertura e Qualidade (4 min) – Apresentador: Samir Jaber;\n2. Testes de Software (4 min) – Apresentador: Isaac João;\n3. Demonstração: Refatoração (4 min) – Apresentador: Rian Quintanilha;\n4. Demonstração: Testes e CI (4 min) – Apresentador: Gabriel Gribel;\n5. Conclusão e Dúvidas (2 min) – Apresentadores: Todos.",
             spacing: { after: 400 }
           }),
 
