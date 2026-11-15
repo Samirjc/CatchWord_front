@@ -1,8 +1,14 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+describe('App Root', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  test('renderiza a tela de login na rota inicial', () => {
+    render(<App />);
+    expect(screen.getByText(/Bem-vindo!/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Entrar/i })).toBeInTheDocument();
+  });
 });
