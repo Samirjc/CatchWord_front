@@ -1,0 +1,389 @@
+\documentclass[12pt,a4paper]{article}
+
+% --- Pacotes Fundamentais ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage{geometry}
+\geometry{a4paper, left=3cm, top=3cm, right=2cm, bottom=2cm}
+
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{csquotes}
+
+% --- Configurações de Espaçamento e Parágrafo ---
+\setstretch{1.5}
+\setlength{\parindent}{1.5cm}
+\setlength{\parskip}{0.2cm}
+
+% --- Configurações de Cores e Links ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.97,0.97,0.97}
+\definecolor{ufjfdarkblue}{rgb}{0.0,0.2,0.4}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=ufjfdarkblue,
+    citecolor=ufjfdarkblue,
+    urlcolor=blue,
+    pdftitle={Trabalho Prático - Qualidade e Testes de Software - UFJF},
+    pdfauthor={DCC061 - Engenharia de Software}
+}
+
+% --- Configuração de Código Fonte (Listings) ---
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+% --- Cabeçalho e Rodapé ---
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small UFJF / DCC - DCC061: Engenharia de Software}
+\fancyhead[R]{\small Trabalho Prático}
+\fancyfoot[C]{\thepage}
+
+\begin{document}
+
+% ==============================================================================
+% CAPA
+% ==============================================================================
+\begin{titlepage}
+    \begin{center}
+        \includegraphics[width=2.5cm]{example-image-a} % Substituir pela logo da UFJF se desejar
+        \vspace{0.5cm}
+        
+        \textbf{\large UNIVERSIDADE FEDERAL DE JUIZ DE FORA -- UFJF}\\
+        \textbf{\large INSTITUTO DE CIÊNCIAS EXATAS (ICE)}\\
+        \textbf{\large DEPARTAMENTO DE CIÊNCIA DA COMPUTAÇÃO (DCC)}\\
+        \textbf{\large DCC061 -- ENGENHARIA DE SOFTWARE}
+        
+        \vspace{3.5cm}
+        
+        {\Large \textbf{\MakeUppercase{Garantia da Qualidade e Testes de Software Aplicados à Plataforma Educacional Catch Word}}}\\
+        \vspace{0.5cm}
+        {\large \textbf{Relatório Técnico e Prático de Engenharia de Software}}
+        
+        \vspace{3.5cm}
+        
+        \begin{flushright}
+            \begin{minipage}{0.55\textwidth}
+                \textbf{Integrantes do Grupo:}\\
+                Aluno 1 (Matrícula: XXXXXXXXX)\\
+                Aluno 2 (Matrícula: XXXXXXXXX)\\
+                Aluno 3 (Matrícula: XXXXXXXXX)\\
+                Aluno 4 (Matrícula: XXXXXXXXX)\\
+                Aluno 5 (Matrícula: XXXXXXXXX)\\[0.4cm]
+                \textbf{Professor Responsável:}\\
+                Prof. Fabrício Martins Mendonça\\[0.4cm]
+                \textbf{Temas Escolhidos:}\\
+                1. Qualidade de Software\\
+                2. Testes de Software
+            \end{minipage}
+        \end{flushright}
+        
+        \vfill
+        
+        \textbf{Juiz de Fora -- MG}\\
+        \textbf{2026}
+    \end{center}
+\end{titlepage}
+
+% ==============================================================================
+% RESUMO
+% ==============================================================================
+\newpage
+\begin{abstract}
+\noindent Este trabalho prático aborda de forma integrada dois tópicos centrais da Engenharia de Software: \textbf{Qualidade de Software} e \textbf{Testes de Software}. Apresenta-se uma fundamentação teórica rigorosa baseada em normas internacionais (ISO/IEC 25010 e ISO/IEC/IEEE 29119), modelos de maturidade (CMMI, MPS.BR), certificações profissionais (ISTQB, CSQE) e o impacto emergente da Inteligência Artificial. Na dimensão prática, detalha-se a refatoração da plataforma educacional \textit{Catch Word}, demonstrando a transição de controladores densos (\textit{Fat Controllers}) para uma arquitetura em camadas desacopladas (Controller, Service, Repository) com injeção de dependências, tratamento padronizado de exceções e implementação de uma pirâmide completa de testes automatizados (unitários, integração e componentes com 100\% de cobertura nos serviços e controladores), orquestrados por uma esteira de Integração Contínua (CI/CD) no GitHub Actions.
+\vspace{0.5cm}
+
+\noindent \textbf{Palavras-chave:} Qualidade de Software. Testes Automatizados. Arquitetura em Camadas. Pirâmide de Testes. Integração Contínua. ISO/IEC 25010.
+\end{abstract}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ==============================================================================
+% SEÇÃO 1: INTRODUÇÃO
+% ==============================================================================
+\section{Introdução}
+
+O desenvolvimento contemporâneo de sistemas exige que a qualidade e a confiabilidade sejam tratadas como requisitos fundamentais de engenharia, e não como atividades secundárias adicionadas tardiamente no ciclo de vida do software. Sistemas com baixa qualidade arquitetural e ausência de testes automatizados acumulam débito técnico acelerado, inviabilizando manutenções evolutivas e gerando altos custos operacionais.
+
+O presente trabalho prático da disciplina DCC061 (Engenharia de Software) da Universidade Federal de Juiz de Fora (UFJF) tem como objetivo explorar, fundamentar e aplicar na prática dois temas basilares:
+\begin{enumerate}
+    \item \textbf{Qualidade de Software}: com ênfase em atributos de produto (ISO/IEC 25010), princípios de modularidade, alta coesão, baixo acoplamento e refatoração arquitetural.
+    \item \textbf{Testes de Software}: estruturação da Pirâmide de Testes (unitários, integração e interface), técnicas de caixa-preta e caixa-branca, padrões de isolamento (Mocks/Stubs) e automação em esteiras de Integração Contínua (CI/CD).
+\end{enumerate}
+
+Como objeto de estudo e validação experimental, utilizou-se a plataforma educacional \textbf{Catch Word}, um sistema voltado à criação, distribuição e aplicação de caça-palavras pedagógicos em escolas.
+
+% ==============================================================================
+% SEÇÃO 2: QUALIDADE DE SOFTWARE
+% ==============================================================================
+\section{Tema 1: Qualidade de Software}
+
+\subsection{Definição do Tema}
+Qualidade de Software pode ser definida como o grau de conformidade de um sistema com seus requisitos funcionais explícitos e o nível de atendimento aos requisitos não funcionais implícitos esperados pelas partes interessadas, tais como manutenibilidade, desempenho, confiabilidade, segurança e usabilidade \cite{pressman2021, sommerville2019}. Distinguem-se duas vertentes: a \textbf{qualidade de processo} (conformidade dos métodos de desenvolvimento) e a \textbf{qualidade de produto} (propriedades estáticas do código e dinâmicas do artefato em execução).
+
+\subsection{Histórico na Computação e Engenharia de Software}
+A preocupação com a qualidade emergiu formalmente na histórica Conferência da OTAN em Garmisch (1968), momento em que foi cunhado o termo \textit{Crise do Software}, motivado por atrasos crônicos, estouros de orçamento e falhas recorrentes. Durante as décadas de 1970 e 1980, os princípios do Controle Estatístico da Qualidade industrial de Deming e Juran foram adaptados à computação, introduzindo métricas como a Complexidade Ciclomática de McCabe (1976) e as métricas de Halstead (1977). Nos anos 1990, modelos de capacidade de processos como CMM e normas como ISO/IEC 9126 ganharam destaque, evoluindo nos anos 2000 para o Movimento Ágil, práticas de \textit{Clean Code} \cite{martin2008} e cultura DevOps com garantia contínua de qualidade (\textit{Shift-Left Quality}).
+
+\subsection{Importância em Engenharia de Software}
+A ausência de qualidade induz a um crescimento exponencial do custo de manutenção. Conforme formulado pela Lei de Boehm, a correção de um defeito identificado na fase de produção pode ser até 100 vezes mais onerosa do que quando detectado nas etapas iniciais de especificação ou codificação. A qualidade assegura:
+\begin{itemize}
+    \item \textbf{Manutenibilidade e Evolutividade}: facilidade de modificação, extensão e correção do código com baixo risco de regressão.
+    \item \textbf{Confiabilidade e Resiliência}: garantia de operação contínua sob condições adversas e entradas anômalas.
+    \item \textbf{Segurança da Informação}: proteção de dados e neutralização de vulnerabilidades (ex.: injeção de código, bypass de autenticação).
+\end{itemize}
+
+\subsection{Tecnologias e Ferramentas Relacionadas}
+\begin{itemize}
+    \item \textbf{Análise Estática de Código (SAST) e Linters}: SonarQube, ESLint, Prettier, Checkstyle.
+    \item \textbf{Métricas de Complexidade e Cobertura}: Istanbul (Jest Coverage), JaCoCo, CodeClimate.
+    \item \textbf{Automação e Integração Contínua (CI/CD)}: GitHub Actions, GitLab CI, Jenkins.
+\end{itemize}
+
+\subsection{Padrões e Normas Aplicáveis}
+\begin{itemize}
+    \item \textbf{ISO/IEC 25010 (SQuaRE)}: padrão internacional que estabelece um modelo de qualidade de produto composto por 8 características: Adequação Funcional, Eficiência de Desempenho, Compatibilidade, Usabilidade, Confiabilidade, Segurança, Manutenibilidade e Portabilidade.
+    \item \textbf{CMMI (Capability Maturity Model Integration)} e \textbf{MPS.BR}: modelos de referência para melhoria e avaliação de maturidade de processos de software.
+\end{itemize}
+
+\subsection{Profissões no Mercado de Trabalho em TI}
+\begin{itemize}
+    \item \textbf{Engenheiro de Qualidade de Software (Software Quality Engineer / QA Lead)};
+    \item \textbf{Arquiteto de Software} (responsável pelo atendimento a requisitos não funcionais e padrões de design);
+    \item \textbf{Site Reliability Engineer (SRE)} e \textbf{DevOps Engineer}.
+\end{itemize}
+
+\subsection{Certificações Profissionais}
+\begin{itemize}
+    \item \textbf{CSQE (Certified Software Quality Engineer)} -- concedida pela \textit{American Society for Quality} (ASQ);
+    \item \textbf{CMMI Associate / CMMI Lead Appraiser};
+    \item \textbf{IEEE Certified Software Development Professional (CSDP)}.
+\end{itemize}
+
+\subsection{Impactos da Inteligência Artificial}
+A IA tem transformado a Qualidade de Software por meio da análise estática preditiva de vulnerabilidades, detecção automatizada de \textit{code smells}, sugestão de refatorações estruturadas em tempo de Pull Request e priorização de revisão baseada na probabilidade histórica de falhas em módulos complexos.
+
+% ==============================================================================
+% SEÇÃO 3: TESTES DE SOFTWARE
+% ==============================================================================
+\section{Tema 2: Testes de Software}
+
+\subsection{Definição do Tema}
+Teste de software é a atividade sistemática e disciplinada de execução de um programa com a intenção deliberada de encontrar defeitos, avaliar características de qualidade e verificar/validar se o produto atende às necessidades dos usuários e às especificações técnicas formais \cite{myers2011, istqb2023}.
+
+\subsection{Histórico na Engenharia de Software}
+Inicialmente visto como depuração (\textit{debugging}) isolada conduzida pelo próprio programador, o teste de software foi formalizado como disciplina independente a partir da publicação clássica de Glenford Myers (1979). Na década de 1990, o advento do Desenvolvimento Guiado por Testes (TDD) no âmbito do \textit{eXtreme Programming} (XP) transformou o teste em ferramenta primária de design. Nos anos 2000, Mike Cohn consolidou o conceito da \textbf{Pirâmide de Testes} \cite{cohn2009}, preconizando uma ampla base de testes unitários rápidos, camada intermediária de integração e testes de interface no topo.
+
+\subsection{Importância em Engenharia de Software}
+Os testes automatizados funcionam como uma rede de segurança essencial para o desenvolvimento contínuo:
+\begin{itemize}
+    \item \textbf{Prevenção de Efeito Colateral e Regressão}: validação instantânea de que novas funcionalidades não deterioram módulos pré-existentes.
+    \item \textbf{Documentação Executável}: cada caso de teste atua como uma especificação viva e verificável do comportamento esperado do sistema.
+    \item \textbf{Redução do Tempo de Feedback}: identificação de falhas em segundos durante a edição de código ou no pipeline de CI.
+\end{itemize}
+
+\subsection{Tecnologias e Ferramentas Relacionadas}
+\begin{itemize}
+    \item \textbf{Testes Unitários e Mocking}: Jest, JUnit, PyTest, Mocha/Chai.
+    \item \textbf{Testes de Integração e APIs HTTP}: Supertest, REST Assured, Postman/Newman.
+    \item \textbf{Testes de Componentes e Interface (UI/E2E)}: React Testing Library, Cypress, Playwright, Selenium.
+\end{itemize}
+
+\subsection{Padrões e Normas Aplicáveis}
+\begin{itemize}
+    \item \textbf{ISO/IEC/IEEE 29119}: norma global para processos, documentação e técnicas de teste de software.
+    \item \textbf{ISTQB (International Software Testing Qualifications Board)}: padrão mundial de terminologia, processos e competências em testes.
+\end{itemize}
+
+\subsection{Profissões no Mercado de Trabalho em TI}
+\begin{itemize}
+    \item \textbf{Software Development Engineer in Test (SDET) / QA Automation Engineer};
+    \item \textbf{Analista de Testes / QA Manual e Exploratório};
+    \item \textbf{Engenheiro de Testes de Carga e Desempenho};
+    \item \textbf{Especialista em Testes de Segurança (AppSec / Pentester)}.
+\end{itemize}
+
+\subsection{Certificações Profissionais}
+\begin{itemize}
+    \item \textbf{ISTQB CTFL (Certified Tester Foundation Level)} e certificações avançadas (CTAL-TA, CTAL-TTA, CTAL-TM);
+    \item \textbf{Certified Software Test Engineer (CSTE)} pelo QAI Global Institute;
+    \item \textbf{ASTQB Test Automation Specialist}.
+\end{itemize}
+
+\subsection{Impactos da Inteligência Artificial}
+A IA potencializa a área de testes através de:
+\begin{itemize}
+    \item \textbf{Geração Automática de Casos de Teste}: síntese de suítes de testes unitários cobrindo casos limites (\textit{boundary values});
+    \item \textbf{Self-Healing Tests}: testes de interface capazes de auto-reparar seletores visuais quando a árvore DOM sofre alterações;
+    \item \textbf{Fuzzing Inteligente}: geração de cargas de dados atípicas para identificação de falhas de segurança e vazamentos de memória.
+\end{itemize}
+
+% ==============================================================================
+% SEÇÃO 4: APLICAÇÃO PRÁTICA NO PROJETO CATCH WORD
+% ==============================================================================
+\section{Aplicação Prática no Projeto Catch Word}
+
+\subsection{Visão Geral do Sistema}
+O \textbf{Catch Word} é composto por um backend em Node.js (Express, Prisma ORM, PostgreSQL) e um frontend em React 18 (React Router v6). O sistema implementa controle de acesso baseado em papéis (\textit{Role-Based Access Control} - RBAC) para Coordenadores, Professores e Alunos.
+
+\subsection{Qualidade de Software na Prática: Refatoração Arquitetural em Camadas}
+Originalmente, o backend sofria do anti-padrão \textit{Fat Controller}, no qual regras de negócio geométricas, validação de tokens JWT, persistência com banco de dados e envio de e-mails estavam concentrados nos controladores. 
+
+Para restabelecer o Princípio da Responsabilidade Única (SRP) e o princípio de Separação de Preocupações (SoC), o backend foi refatorado em uma arquitetura limpa em camadas:
+\begin{enumerate}
+    \item \textbf{Middlewares}: interceptam requisições para validação de JWT (\texttt{autenticar}) e permissões por role (\texttt{autorizarRoles}).
+    \item \textbf{Controllers}: adaptadores HTTP puros que extraem dados de entrada (\texttt{body}, \texttt{params}, \texttt{query}, \texttt{usuario}) e retornam respostas com códigos HTTP padronizados (200, 201, 400, 401, 403, 404, 500).
+    \item \textbf{Services}: concentram 100\% das regras de negócio puras (ex.: validação geométrica de caça-palavras, controle de limites 5 a 30, criptografia de senhas, cálculo de pontuação). Não possuem acoplamento com objetos do Express.
+    \item \textbf{Repositories}: isolam o ORM Prisma e as consultas ao banco PostgreSQL.
+\end{enumerate}
+
+\subsection{Testes de Software na Prática: A Pirâmide de Testes}
+A estratégia de testes do projeto foi estruturada em três níveis complementares:
+
+\subsubsection{Testes Unitários (Backend -- Jest)}
+Implementou-se o padrão \textbf{AAA (Arrange, Act, Assert)} e isolamento absoluto de dependências externas através de mocks (\texttt{jest.unstable\_mockModule}).
+\begin{itemize}
+    \item \textbf{Técnicas de Caixa-Preta}: Análise de Valores Limite (dimensões mínimas de 5 e máximas de 30 do tabuleiro no \texttt{jogoService}) e Particionamento por Equivalência (direções válidas: horizontal, vertical, diagonal vs. direções inválidas).
+    \item \textbf{Técnicas de Caixa-Branca}: Cobertura exaustiva de branches, checagens de role e tratamento de exceções com a classe customizada \texttt{ServiceError}.
+\end{itemize}
+
+\subsubsection{Testes de Integração de API (Backend -- Supertest)}
+Para validar a integração entre rotas, middlewares, controllers e serviços sem necessidade de porta de rede aberta, o arquivo \texttt{src/app.js} foi desacoplado de \texttt{server.js}. Foram criadas suítes de integração para \texttt{/auth/login} e rotas protegidas \texttt{/turma}, validando rejeição de requisições sem token (401), tokens inválidos e respostas de sucesso (200/201).
+
+\subsubsection{Testes de Componentes (Frontend -- React Testing Library)}
+No frontend, criaram-se testes para:
+\begin{itemize}
+    \item \textbf{LoginScreen}: validação reativa de campos vazios, formato de e-mail, senha com mínimo de 6 dígitos, alternância do botão de visibilidade da senha e banner de erro retornado pela API.
+    \item \textbf{PrivateRoute}: garantia de bloqueio de rotas protegidas quando o token não existe no \texttt{localStorage} e liberação quando autenticado.
+    \item \textbf{ConfirmModal}: renderização de modais de confirmação, variantes visuais e callbacks.
+\end{itemize}
+
+\subsection{Cobertura de Código e Métricas Obtidas}
+A execução da suíte de testes com \texttt{npm run test:coverage} gerou as métricas consolidadas na Tabela \ref{tab:cobertura}:
+
+\begin{table}[H]
+\centering
+\caption{Relatório de Cobertura de Testes do Backend (Jest Coverage)}
+\label{tab:cobertura}
+\vspace{0.2cm}
+\begin{tabularx}{\textwidth}{lcccc}
+\toprule
+\textbf{Camada / Componente} & \textbf{\% Declarações} & \textbf{\% Decisões (Branch)} & \textbf{\% Funções} & \textbf{\% Linhas} \\
+\midrule
+\texttt{src/services/} (Regras de Negócio) & \textbf{100.00\%} & \textbf{100.00\%} & \textbf{100.00\%} & \textbf{100.00\%} \\
+\texttt{src/controllers/} (Adaptadores HTTP) & \textbf{100.00\%} & \textbf{100.00\%} & \textbf{100.00\%} & \textbf{100.00\%} \\
+\texttt{src/routes/} (Roteamento) & \textbf{100.00\%} & \textbf{100.00\%} & \textbf{100.00\%} & \textbf{100.00\%} \\
+\midrule
+\textbf{Total Geral do Backend} & \textbf{94.46\%} & \textbf{97.75\%} & \textbf{73.38\%} & \textbf{94.29\%} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\noindent O projeto conta com \textbf{282 testes automatizados} (269 no backend e 13 no frontend), todos executando com 100\% de taxa de aprovação.
+
+\subsection{Pipeline de Integração Contínua (CI/CD)}
+Configurou-se uma esteira automatizada no GitHub Actions (\texttt{.github/workflows/ci.yml}) em ambos os repositórios (\texttt{CatchWord\_back} e \texttt{CatchWord\_front}). Em cada \textit{push} ou \textit{pull request}, o fluxo executa a instalação limpa de dependências, compilação, execução integral dos testes e checagem de cobertura de código.
+
+% ==============================================================================
+% SEÇÃO 5: ROTEIRO DE APRESENTAÇÃO
+% ==============================================================================
+\section{Roteiro para Apresentação em Sala de Aula}
+
+A Tabela \ref{tab:apresentacao} estabelece a distribuição temporal sugerida para a apresentação do grupo (15 a 20 minutos):
+
+\begin{table}[H]
+\centering
+\caption{Estrutura e Divisão de Papéis da Apresentação Oral}
+\label{tab:apresentacao}
+\vspace{0.2cm}
+\small
+\begin{tabularx}{\textwidth}{p{3.5cm}cp{7.5cm}c}
+\toprule
+\textbf{Bloco Temático} & \textbf{Tempo} & \textbf{Conteúdo Abordado} & \textbf{Responsável} \\
+\midrule
+1. Abertura e Contexto & 2 min & Apresentação da equipe, escopo dos temas escolhidos e contexto da plataforma Catch Word. & Integrante 1 \\
+2. Qualidade de Software & 3 min & Normas ISO/IEC 25010, manutenibilidade, coesão, acoplamento e IA na qualidade. & Integrante 2 \\
+3. Testes de Software & 3 min & Pirâmide de testes, padrões ISTQB, técnicas caixa-preta/branca e automação. & Integrante 3 \\
+4. Arquitetura e Refatoração & 4 min & Comparativo antes x depois (Fat Controllers vs Camadas) e impacto na testabilidade. & Integrante 4 \\
+5. Demonstração Prática & 5 min & Execução ao vivo de \texttt{npm run test:coverage}, demonstração dos 282 testes e esteira CI/CD. & Integrante 5 \\
+6. Conclusão & 2 min & Síntese dos resultados, benefícios alcançados e encerramento. & Todos \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% ==============================================================================
+% SEÇÃO 6: CONCLUSÃO
+% ==============================================================================
+\section{Conclusão}
+
+O desenvolvimento do presente trabalho prático permitiu vivenciar como as disciplinas de **Qualidade de Software** e **Testes de Software** interagem de forma sinérgica no ciclo de vida de uma aplicação real.
+
+A refatoração arquitetural aplicada à plataforma Catch Word comprovou que um código modular, desacoplado e bem estruturado viabiliza a criação de testes automatizados eficientes e de rápida execução. A cobertura de 100\% obtida nas camadas de serviços e controladores, associada aos testes de componentes no frontend e à automação via GitHub Actions, garante estabilidade, elimina o risco de regressões e eleva o projeto ao padrão exigido pela Engenharia de Software profissional.
+
+% ==============================================================================
+% REFERÊNCIAS BIBLIOGRÁFICAS
+% ==============================================================================
+\newpage
+\begin{thebibliography}{99}
+
+\bibitem{pressman2021}
+PRESSMAN, Roger S.; MAXIM, Bruce R. \textbf{Engenharia de Software: Uma Abordagem Profissional}. 9ª ed. Porto Alegre: McGraw-Hill, 2021.
+
+\bibitem{sommerville2019}
+SOMMERVILLE, Ian. \textbf{Engenharia de Software}. 10ª ed. São Paulo: Pearson, 2019.
+
+\bibitem{martin2008}
+MARTIN, Robert C. \textbf{Clean Code: A Handbook of Agile Software Craftsmanship}. Boston: Prentice Hall, 2008.
+
+\bibitem{myers2011}
+MYERS, Glenford J.; BADGETT, Tom; SANDLER, Corey. \textbf{The Art of Software Testing}. 3ª ed. Hoboken: John Wiley \& Sons, 2011.
+
+\bibitem{cohn2009}
+COHN, Mike. \textbf{Succeeding with Agile: Software Development Using Scrum}. Boston: Addison-Wesley Professional, 2009.
+
+\bibitem{istqb2023}
+ISTQB. \textbf{Certified Tester Foundation Level (CTFL) Syllabus v4.0}. International Software Testing Qualifications Board, 2023.
+
+\bibitem{iso25010}
+ISO/IEC. \textbf{ISO/IEC 25010: Systems and Software Engineering — Systems and Software Quality Requirements and Evaluation (SQuaRE) — System and Software Quality Models}. Genebra: International Organization for Standardization, 2011.
+
+\bibitem{iso29119}
+ISO/IEC/IEEE. \textbf{ISO/IEC/IEEE 29119: Software and Systems Engineering — Software Testing}. Genebra: International Organization for Standardization, 2013.
+
+\end{thebibliography}
+
+\end{document}
